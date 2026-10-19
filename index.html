@@ -1,0 +1,2488 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>اسکنر پول هوشمند بورس ایران | v5.8.1</title>
+<style>
+:root{--bg:#f1f5f9;--card:#fff;--ink:#172033;--muted:#64748b;--line:#dbe3ef;
+--blue:#2563eb;--green:#15803d;--red:#dc2626;--purple:#6d28d9;--amber:#b45309;--teal:#0f766e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:13px Tahoma,Arial,sans-serif}
+.wrap{max-width:1900px;margin:auto;padding:16px}
+h1{font-size:22px;margin:0 0 8px}h2{font-size:16px;margin:0 0 14px}h3{font-size:14px;margin:16px 0 10px}
+.sub,.muted{color:var(--muted);font-size:11px;line-height:1.9}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.pill{padding:7px 11px;background:#dbeafe;color:#1d4ed8;border-radius:30px;font-size:11px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px;margin-bottom:14px;box-shadow:0 3px 12px #0f172a08}
+.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.mi{background:#fff;border:1px solid var(--line);border-radius:11px;padding:12px;min-width:0}
+.mi .label{color:var(--muted);font-size:11px;margin-bottom:9px}
+.mi .value{font-size:18px;font-weight:bold;direction:ltr;text-align:right;overflow-wrap:anywhere}
+.mi .note{font-size:10px;color:var(--muted);margin-top:7px;line-height:1.8}
+.mi.blue{background:#eff6ff;border-color:#bfdbfe}.mi.gold{background:#fffbeb;border-color:#fde68a}
+.row{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin:10px 0}
+label{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:11px;color:#475569}
+input,select{font:12px Tahoma;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;background:white;color:var(--ink);max-width:100%}
+input[type=number]{width:105px}input[type=text]{min-width:175px}
+input[type=checkbox]{width:auto!important;margin:0}
+button{font:12px Tahoma;padding:9px 12px;border:0;border-radius:8px;background:var(--blue);color:white;cursor:pointer}
+button:hover{filter:brightness(.93)}button:disabled{opacity:.45;cursor:not-allowed}
+.green{background:var(--green)}.purple{background:var(--purple)}.gray{background:#475569}.red{background:var(--red)}.light{background:#e2e8f0;color:#334155}
+.searchbox{background:linear-gradient(120deg,#1d4ed8,#6d28d9);color:white}
+.searchbox h2{color:white}.searchbox input{min-width:230px;padding:12px;font-size:14px}
+.searchbox button{background:white;color:#3730a3;font-weight:bold}
+#status{padding:12px 14px;border-radius:10px;margin:12px 0;line-height:1.9;background:#e0f2fe;color:#075985}
+#status.success{background:#dcfce7;color:#166534}#status.warn{background:#fef3c7;color:#92400e}#status.error{background:#fee2e2;color:#991b1b}
+#progress{display:none;background:white;border:1px solid var(--line);padding:12px;border-radius:10px;margin:10px 0}
+.track{height:8px;background:#e2e8f0;border-radius:20px;overflow:hidden}
+#fill{height:100%;width:0;background:linear-gradient(90deg,#2563eb,#10b981)}
+.progress-line{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:11px;color:var(--muted);margin-top:8px}
+.tw{overflow:auto;border:1px solid var(--line);border-radius:11px;background:white}
+table{border-collapse:collapse;width:100%;white-space:nowrap}
+table.main{min-width:2060px}table.sectors{min-width:1300px}table.validate{min-width:900px}table.bigmoney{min-width:1100px}
+th,td{padding:8px 7px;text-align:center;border-bottom:1px solid #edf2f7;font-size:11px}
+thead th{position:sticky;top:0;background:#1e293b;color:white;z-index:1;font-weight:normal}
+th[data-sort],th[data-accum-sort]{cursor:pointer}th[data-sort]:hover,th[data-accum-sort]:hover{background:#334155}
+tr:hover td{background:#f8fafc}
+.symbol{color:#1d4ed8;font-weight:bold;cursor:pointer}
+.num{direction:ltr;font-variant-numeric:tabular-nums}
+.pos{color:var(--green);font-weight:bold}.neg{color:var(--red);font-weight:bold}
+.na{color:#94a3b8;font-style:italic}
+.g5{background:#0f766e!important}.glive{background:#6d28d9!important}
+.score{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:28px;padding:0 6px;border-radius:8px;color:white;font-weight:bold;font-size:13px;cursor:help}
+.s1{background:#94a3b8}.s2{background:#64748b}.s3{background:#d97706}.s4{background:#16a34a}.s5{background:#047857}
+.signal{display:inline-block;padding:4px 7px;border-radius:7px;font-size:10px;font-weight:bold;white-space:normal}
+.buy{background:#dcfce7;color:#166534}.sell{background:#fee2e2;color:#991b1b}
+.wait{background:#fef3c7;color:#92400e}.neutral{background:#e2e8f0;color:#334155}
+.badge{display:inline-block;padding:2px 6px;border-radius:5px;font-size:9px;font-weight:bold}
+.badge.est{background:#fef3c7;color:#92400e}.badge.live{background:#dcfce7;color:#166534}
+.badge.stale{background:#fee2e2;color:#991b1b}.badge.fresh{background:#e0f2fe;color:#075985}
+.badge.queue-buy{background:#dc2626;color:white;border:1px solid #991b1b}
+.badge.queue-sell{background:#dc2626;color:white;border:1px solid #991b1b}
+.badge.accum{background:#f3e8ff;color:#6b21a8}
+.badge.bigmoney{background:#fef3c7;color:#b45309;border:1px solid #fde68a}
+.badge.rot-up{background:#dcfce7;color:#166534}
+.badge.rot-down{background:#fee2e2;color:#991b1b}
+.flag{display:inline-block;padding:1px 5px;border-radius:4px;font-size:9px;background:#fef3c7;color:#92400e;margin:0 1px}
+.live-card{display:none}.live-card.show{display:block}
+.symbol-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.symbol-name{font-size:23px;font-weight:bold}
+.section-title{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 12px;border-radius:9px;margin:15px 0 10px}
+.section-title.five{background:#ccfbf1;color:#115e59}
+.section-title.today{background:#ede9fe;color:#5b21b6}
+.section-title.one{background:#dbeafe;color:#1e40af}
+.section-title.checks{background:#fef3c7;color:#92400e}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.metric{border:1px solid var(--line);border-radius:10px;padding:11px;background:white;min-width:0}
+.metric .label{font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.8}
+.metric .value{font-size:17px;font-weight:bold;direction:ltr;text-align:right;overflow-wrap:anywhere}
+.metric .unit{font-size:10px;font-weight:normal;color:var(--muted);margin-right:4px}
+.metric.good{background:#f0fdf4;border-color:#bbf7d0}
+.metric.bad{background:#fff1f2;border-color:#fecdd3}
+.metric.blue{background:#eff6ff;border-color:#bfdbfe}
+.metric.purple{background:#faf5ff;border-color:#e9d5ff}
+.metric.na{background:#f8fafc;border-style:dashed}
+.small-note{font-size:11px;color:var(--muted);line-height:2;margin-top:10px}
+.footer{text-align:center;color:var(--muted);font-size:10px;margin-top:14px}
+.rate-input{width:120px!important;direction:ltr;text-align:left;margin-top:5px}
+.tabs{display:flex;gap:6px;margin-bottom:14px;border-bottom:2px solid var(--line);flex-wrap:wrap}
+.tabs .tab{background:transparent;color:var(--muted);border-radius:10px 10px 0 0;padding:11px 14px;font-weight:normal;font-size:13px}
+.tabs .tab.active{background:white;color:var(--blue);font-weight:bold;box-shadow:0 -3px 8px #0f172a08}
+.tab-panel{display:none}.tab-panel.active{display:block}
+.check-list{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.check-list li{padding:7px 9px;border-radius:7px;font-size:11px;border:1px solid var(--line);display:flex;justify-content:space-between;gap:8px}
+.check-list li.pass{background:#f0fdf4;border-color:#bbf7d0}
+.check-list li.fail{background:#fef2f2;border-color:#fecaca}
+.check-list li .k{color:var(--muted)}
+.check-list li .v{font-weight:bold;direction:ltr}
+.money-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px}
+.money-grid.three{grid-template-columns:repeat(3,1fr)}
+.money-grid.four{grid-template-columns:repeat(4,1fr)}
+.money-card{background:white;border:1px solid var(--line);border-radius:11px;padding:12px}
+.money-card h4{margin:0 0 10px;font-size:13px;color:#1e293b;border-bottom:1px solid var(--line);padding-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.money-list{list-style:none;padding:0;margin:0;max-height:500px;overflow:auto}
+.money-list li{display:grid;grid-template-columns:auto 1fr auto;gap:8px;padding:6px 8px;border-radius:6px;font-size:11px;align-items:center;cursor:pointer}
+.money-list li:hover{background:#f1f5f9}
+.money-list .s{color:#1d4ed8;font-weight:bold}
+.money-list .v{font-weight:bold;direction:ltr}
+.hist-list{list-style:none;padding:0;margin:0}
+.hist-list li{padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin-bottom:8px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
+.hist-list .h-meta{color:var(--muted);font-size:11px}
+.rank-up{color:#15803d;font-weight:bold}.rank-down{color:#dc2626;font-weight:bold}.rank-new{color:#6d28d9;font-weight:bold}
+.filter-chip{background:#fef3c7;padding:6px 10px;border-radius:8px;border:1px solid #fde68a}
+.sector-bars{margin-top:6px}
+.sector-bar-row{display:grid;grid-template-columns:170px 1fr 100px;gap:10px;align-items:center;margin-bottom:7px}
+.sector-bar-label{font-size:11px;color:#334155;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sector-bar-track{height:16px;background:#f1f5f9;border-radius:8px;overflow:hidden}
+.sector-bar-fill{height:100%;border-radius:8px}
+.sector-bar-fill.pos{background:linear-gradient(90deg,#22c55e,#15803d)}
+.sector-bar-fill.neg{background:linear-gradient(90deg,#f87171,#dc2626)}
+.sector-bar-value{font-size:11px;font-weight:bold;direction:ltr;text-align:right}
+.pill2{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:bold;background:#e0f2fe;color:#075985}
+.pill2.high{background:#dcfce7;color:#166534}.pill2.low{background:#fee2e2;color:#991b1b}
+.breadth-bar{display:flex;align-items:center;justify-content:center;gap:20px;padding:12px;background:white;border:1px solid var(--line);border-radius:11px;margin-bottom:14px;flex-wrap:wrap;font-size:12px}
+.breadth-item{display:flex;align-items:center;gap:6px}
+.breadth-item b{font-size:15px;direction:ltr}
+.breadth-item.up b{color:var(--green)}
+.breadth-item.down b{color:var(--red)}
+.breadth-item.flat b{color:var(--muted)}
+.sig-kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.sig-col{background:white;border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;min-height:200px}
+.sig-col-head{padding:10px 12px;color:white;font-weight:bold;font-size:12px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sig-col-head .cnt{font-size:14px;background:rgba(255,255,255,.25);padding:1px 8px;border-radius:10px}
+.sig-col.s5 .sig-col-head{background:linear-gradient(90deg,#047857,#059669)}
+.sig-col.strong5 .sig-col-head{background:linear-gradient(90deg,#16a34a,#22c55e)}
+.sig-col.battle .sig-col-head{background:linear-gradient(90deg,#dc2626,#ef4444)}
+.sig-col.bigmoney .sig-col-head{background:linear-gradient(90deg,#d97706,#f59e0b)}
+.sig-col.netval .sig-col-head{background:linear-gradient(90deg,#1d4ed8,#2563eb)}
+.sig-col.accum .sig-col-head{background:linear-gradient(90deg,#6d28d9,#7c3aed)}
+.sig-col.sustain .sig-col-head{background:linear-gradient(90deg,#0e7490,#0891b2)}
+.sig-col.spike .sig-col-head{background:linear-gradient(90deg,#c2410c,#ea580c)}
+.sig-col-body{list-style:none;padding:0;margin:0;overflow:auto;max-height:520px;flex:1}
+.sig-col-body li{display:grid;grid-template-columns:auto 1fr;gap:6px;padding:7px 10px;border-bottom:1px solid #edf2f7;font-size:11px;cursor:pointer;align-items:center}
+.sig-col-body li:hover{background:#f1f5f9}
+.sig-col-body li .s{color:#1d4ed8;font-weight:bold}
+.sig-col-body li .meta{color:var(--muted);font-size:9px;direction:ltr;text-align:left}
+.sig-col-empty{padding:16px;color:var(--muted);text-align:center;font-size:11px}
+.diag-box{background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:12px;margin-top:10px;font-size:11px;line-height:2}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}.metrics{grid-template-columns:repeat(3,1fr)}.money-grid,.money-grid.three,.money-grid.four{grid-template-columns:1fr}.check-list{grid-template-columns:1fr}.sector-bar-row{grid-template-columns:120px 1fr 80px}.sig-kanban{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.wrap{padding:8px}.grid{grid-template-columns:repeat(2,1fr)}.metrics{grid-template-columns:repeat(2,1fr)}.sector-bar-row{grid-template-columns:90px 1fr 65px}.card{padding:10px}.sig-kanban{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="top">
+ <div><h1>🧠 اسکنر پول هوشمند بورس ایران</h1>
+  <div class="sub">سیگنال · پول درشت · جدال · چرخش صنایع · انباشت · اعتبارسنجی</div></div>
+ <span class="pill">v5.8.1 · فهرست کامل</span>
+</div>
+
+<div class="breadth-bar" id="breadthBar">
+ <span class="muted">برای مشاهده شاخص‌های کلی بازار، ابتدا اسکن کن.</span>
+</div>
+
+<div class="grid" style="margin-bottom:14px">
+ <div class="mi blue"><div class="label">شاخص کل</div><div class="value" id="mIndex">—</div><div class="note" id="mIndexNote">در انتظار</div></div>
+ <div class="mi"><div class="label">تغییر شاخص</div><div class="value" id="mIndexChange">—</div><div class="note">درصد</div></div>
+ <div class="mi gold">
+  <div class="label">ارزش بازار (همت)</div><div class="value" id="mCap">—</div>
+  <div class="label" style="margin-top:10px">نرخ دلار</div>
+  <input id="usdRate" class="rate-input" type="number" min="1" step="100" oninput="updateDollarCap()" onchange="saveDollarRate()">
+  <div class="note">ارزش دلاری (میلیارد $)</div><div class="value" id="mCapUsd" style="font-size:14px">—</div>
+ </div>
+ <div class="mi"><div class="label">وضعیت بازار</div><div class="value" id="mState">—</div><div class="note" id="mTime">—</div></div>
+ <div class="mi"><div class="label">نمادهای قابل اسکن</div><div class="value" id="mCount">۰</div><div class="note" id="mCountNote">—</div></div>
+ <div class="mi"><div class="label">صف‌های فعال</div><div class="value" id="mQueues">—</div><div class="note">خرید / فروش</div></div>
+</div>
+
+<div class="tabs">
+ <button class="tab active" data-tab="scanner">🔍 اسکنر</button>
+ <button class="tab" data-tab="signals">🎯 سیگنال</button>
+ <button class="tab" data-tab="money">💸 پول هوشمند</button>
+ <button class="tab" data-tab="bigmoney">💰 پول درشت</button>
+ <button class="tab" data-tab="battle">⚔️ جدال</button>
+ <button class="tab" data-tab="sectors">🏭 صنایع</button>
+ <button class="tab" data-tab="accum">🎯 انباشت</button>
+ <button class="tab" data-tab="validate">🧪 اعتبارسنجی</button>
+ <button class="tab" data-tab="history">📚 تاریخچه</button>
+ <button class="tab" data-tab="diag">🛠 تشخیص</button>
+</div>
+
+<!-- SCANNER -->
+<div class="tab-panel active" id="panel-scanner">
+<div class="card searchbox">
+ <h2>🔎 جستجو و تحلیل نماد</h2>
+ <div class="row">
+  <input id="symbolInput" type="text" placeholder="مثلاً فولاد، وبملت">
+  <button onclick="lookupSymbol()">جستجو</button>
+  <button onclick="clearCard()">پاک کردن</button>
+  <button onclick="refreshActive()">به‌روزرسانی</button>
+ </div>
+ <div id="searchMsg" class="small-note" style="color:white"></div>
+</div>
+
+<div class="card live-card" id="symbolCard">
+ <div class="symbol-head">
+  <div><div class="symbol-name" id="scName">—</div><div class="sub" id="scFull">—</div><div class="sub" id="scUpdated">—</div></div>
+  <div><div style="margin-bottom:7px">سیگنال امروز</div><span class="signal neutral" id="scLiveSignal">—</span></div>
+  <div><div style="margin-bottom:7px">۵روزه</div><span class="signal neutral" id="scFiveSignal">—</span></div>
+  <div><div style="margin-bottom:7px">صف</div><span class="signal neutral" id="scQueue">—</span></div>
+  <div><div style="margin-bottom:7px">امتیاز</div><span class="score s1" id="scScore">—</span></div>
+  <button class="light" onclick="clearCard()">بستن</button>
+ </div>
+ <div class="section-title today"><b>⚡ لحظه‌ای</b></div>
+ <div class="metrics" id="scLiveGrid"></div>
+ <div class="section-title five"><b>📊 پنج‌روزه</b></div>
+ <div class="metrics" id="scFiveGrid"></div>
+ <div class="section-title checks"><b>🎯 بررسی امتیاز</b></div>
+ <ul class="check-list" id="scChecks"></ul>
+ <div class="section-title one"><b>📅 روزانه</b></div>
+ <div class="tw"><table><thead><tr>
+  <th>تاریخ</th><th>خرید حقیقی (م.ت)</th><th>فروش حقیقی (م.ت)</th>
+  <th>خالص (م.ت)</th><th>سرانه خرید</th><th>سرانه فروش</th><th>قدرت</th>
+ </tr></thead><tbody id="scDays"></tbody></table></div>
+ <div class="small-note" id="scCaution"></div>
+</div>
+
+<div class="card">
+ <h2>⚙️ تنظیمات اسکن</h2>
+ <div class="row">
+  <button class="light" onclick="preset('strong')">🔥 سخت‌گیرانه</button>
+  <button class="light" onclick="preset('medium')">⚖️ متعادل</button>
+  <button class="light" onclick="preset('loose')">🌊 گسترده</button>
+  <button class="light" onclick="preset('all')">📋 بدون فیلتر</button>
+ </div>
+ <div class="row">
+  <label>حداقل خالص ۵ر (م.ت)<input id="minNet5" type="number" value="20"></label>
+  <label>سرانه خرید (م.ت)<input id="minSavane5" type="number" value="50"></label>
+  <label>روز مثبت<input id="minPos" type="number" value="3" min="0" max="5"></label>
+  <label>قدرت خریدار<input id="minPower" type="number" value="1.5" step=".1"></label>
+  <label>حداقل ارزش (م.ت)<input id="minValue" type="number" value="1"></label>
+  <label>حداکثر نماد<input id="topN" type="number" value="500" min="50" max="3000"></label>
+  <label>هم‌زمانی<input id="concurrency" type="number" value="8" min="1" max="20"></label>
+  <label class="filter-chip"><input id="excludeDerivatives" type="checkbox" checked onchange="rebuildSymsView()">حذف حق تقدم (ض/ط/ح)</label>
+  <label class="filter-chip"><input id="excludeNumericSuffix" type="checkbox" onchange="rebuildSymsView()">حذف نمادهای عددی</label>
+  <label class="filter-chip"><input id="applyFilters" type="checkbox">فیلتر روی جدول اعمال شود</label>
+ </div>
+ <div class="row">
+  <button class="purple" id="loadBtn" onclick="loadSymbols()">📡 دریافت فهرست</button>
+  <button class="green" id="scanBtn" onclick="runScan()">🔍 اسکن</button>
+  <button class="red" id="stopBtn" onclick="stopScan()" disabled>⏹ توقف</button>
+  <button class="gray" onclick="refreshMarket()">🔄 بازار</button>
+  <button class="light" id="csvBtn" onclick="downloadCSV()" disabled>📥 CSV</button>
+  <input id="tableSearch" type="text" placeholder="فیلتر" oninput="render()">
+ </div>
+ <div class="row" style="border-top:1px solid var(--line);padding-top:12px;margin-top:8px">
+  <button class="light" id="notifBtn" onclick="requestNotif()">🔔 فعال‌سازی نوتیفیکیشن</button>
+  <label class="filter-chip"><input id="autoScan" type="checkbox" onchange="onAutoScanToggle()">⏱ اسکن خودکار</label>
+  <label>هر چند دقیقه<input id="autoScanMin" type="number" value="10" min="3" max="60" onchange="onAutoScanIntervalChange()"></label>
+  <button class="light" onclick="clearHistCache().then(()=>status('کش تاریخچه پاک شد','success'))">🗑 پاک کردن کش</button>
+ </div>
+ <div class="small-note">
+  <b>دریافت کامل:</b> MarketWatch + جستجوی الفبایی + GetInstrumentInfo برای نمادهای ناقص<br>
+  <b>صف خرید/فروش:</b> از BestLimits تازه (فقط برای نمادهای مشکوک) — MarketWatch قابل‌اعتماد نیست<br>
+  <b>اعلان:</b> ۳ لایه (سیستم + Toast + صدا + Flash عنوان)
+ </div>
+</div>
+
+<div id="status">در حال آماده‌سازی…</div>
+<div id="progress"><div class="track"><div id="fill"></div></div>
+ <div class="progress-line"><span id="pStage">—</span><span id="pCurrent">—</span><span id="pCount">۰</span></div></div>
+
+<div class="card" id="diffCard" style="display:none">
+ <h2>🆕 تغییرات نسبت به اسکن قبلی</h2>
+ <div class="money-grid three">
+  <div class="money-card"><h4>🔥 سیگنال جدید</h4><ul class="money-list" id="diffNewSignals"></ul></div>
+  <div class="money-card"><h4>📈 تقویت امتیاز</h4><ul class="money-list" id="diffStrengthened"></ul></div>
+  <div class="money-card"><h4>📉 تضعیف امتیاز</h4><ul class="money-list" id="diffWeakened"></ul></div>
+ </div>
+</div>
+
+<div class="tw"><table class="main"><thead>
+ <tr>
+  <th rowspan="2">#</th>
+  <th rowspan="2" data-sort="symbol">نماد ↕</th>
+  <th rowspan="2" data-sort="sector">صنعت ↕</th>
+  <th rowspan="2" data-sort="score">امتیاز ↕</th>
+  <th rowspan="2" data-sort="rankChange">Δ</th>
+  <th rowspan="2" data-sort="ageDays">تازگی ↕</th>
+  <th colspan="7" class="glive">⚡ امروز</th>
+  <th colspan="6" class="g5">📊 پنج‌روزه</th>
+  <th rowspan="2" data-sort="ret5">۵ر ↕</th>
+  <th rowspan="2">صف / پرچم</th>
+ </tr>
+ <tr>
+  <th data-sort="liveSignal" class="glive">سیگنال</th>
+  <th data-sort="netToday" class="glive">خالص (م.ت)</th>
+  <th data-sort="netValueRatio" class="glive">Net/Val</th>
+  <th data-sort="value" class="glive">ارزش (م.ت)</th>
+  <th data-sort="valueVsYesterday" class="glive">ارزش/دیروز</th>
+  <th data-sort="valueVsAvg20" class="glive">ارزش/میانگین۲۰</th>
+  <th data-sort="buySellRatio" class="glive">سرانه خرید/فروش</th>
+  <th data-sort="fiveSignal" class="g5">سیگنال</th>
+  <th data-sort="net5" class="g5">خالص (م.ت)</th>
+  <th data-sort="savane5" class="g5">سرانه</th>
+  <th data-sort="power5" class="g5">قدرت</th>
+  <th data-sort="posDays" class="g5">مثبت</th>
+  <th data-sort="sustain" class="g5">استمرار</th>
+ </tr>
+</thead><tbody id="tbody"></tbody></table></div>
+<div id="summary" class="small-note"></div>
+</div>
+
+<!-- SIGNALS -->
+<div class="tab-panel" id="panel-signals">
+<div class="card">
+ <h2>🎯 سیگنال‌ها</h2>
+ <div class="row">
+  <label class="filter-chip">
+   <span>فیلتر صف:</span>
+   <select id="sigQueueMode" onchange="renderSignals()" style="padding:5px 8px">
+    <option value="heavy" selected>حذف صف خرید</option>
+    <option value="none">بدون فیلتر صف</option>
+   </select>
+  </label>
+ </div>
+ <div class="row">
+  <label>حداقل Net/Value<input id="sigMinNetVal" type="number" value="0.20" step="0.05" oninput="renderSignals()"></label>
+  <label>حداقل نسبت سرانه (پول درشت)<input id="sigMinBS" type="number" value="1.5" step="0.1" oninput="renderSignals()"></label>
+  <label>حداقل سرانه خرید (م.ت)<input id="sigMinBuySav" type="number" value="50" step="5" oninput="renderSignals()"></label>
+  <label>حداقل جدال (قدرت)<input id="sigMinPower" type="number" value="1.0" step="0.1" oninput="renderSignals()"></label>
+  <label>حداقل سرانه فروش (م.ت)<input id="sigMinSellSav" type="number" value="1" step="0.5" oninput="renderSignals()"></label>
+  <label>حداقل استمرار (روز)<input id="sigMinSustain" type="number" value="3" step="1" oninput="renderSignals()"></label>
+  <label>حداقل ارزش غیرعادی<input id="sigMinSpike" type="number" value="2" step="0.5" oninput="renderSignals()"></label>
+  <label>حداقل ارزش معاملات (م.ت)<input id="sigMinValue" type="number" value="2" step="1" oninput="renderSignals()"></label>
+  <label class="filter-chip"><input id="sigOnlyMulti" type="checkbox" onchange="renderSignals()">فقط ۳+ سیگنال</label>
+  <label class="filter-chip"><input id="sigOnlyLive" type="checkbox" checked onchange="renderSignals()">فقط داده امروز</label>
+ </div>
+ <div class="small-note" id="sigSummary"></div>
+</div>
+<div class="sig-kanban" id="sigKanban"></div>
+</div>
+
+<!-- SMART MONEY -->
+<div class="tab-panel" id="panel-money">
+<div class="card"><h2>💸 پول هوشمند</h2>
+<div class="row"><span class="muted">مبنا: </span><span class="badge" id="moneyTag">—</span></div></div>
+<div class="money-grid">
+ <div class="money-card"><h4>🚀 ورود پول</h4><ul class="money-list" id="moneyInToday"></ul></div>
+ <div class="money-card"><h4>📉 خروج پول</h4><ul class="money-list" id="moneyOutToday"></ul></div>
+ <div class="money-card"><h4>📈 ارزش غیرعادی</h4><ul class="money-list" id="moneyValueSpike"></ul></div>
+ <div class="money-card"><h4>🚦 صف خرید</h4><ul class="money-list" id="moneyQueueBuy"></ul></div>
+ <div class="money-card"><h4>⚠️ صف فروش</h4><ul class="money-list" id="moneyQueueSell"></ul></div>
+ <div class="money-card"><h4>🔁 استمرار ورود پول</h4><ul class="money-list" id="moneyStreak"></ul></div>
+</div>
+</div>
+
+<!-- BIG MONEY -->
+<div class="tab-panel" id="panel-bigmoney">
+<div class="card"><h2>💰 ورود پول درشت</h2>
+<div class="muted">فقط از داده امروز (live). بدون fallback به تاریخچه.</div>
+<div class="row">
+ <label>حداقل نسبت<input id="bmMinRatio" type="number" value="1.5" step="0.1" oninput="renderBigMoney()"></label>
+ <label>حداقل سرانه خرید (م.ت)<input id="bmMinBuySav" type="number" value="50" step="5" oninput="renderBigMoney()"></label>
+ <label>حداقل ارزش (م.ت)<input id="bmMinValue" type="number" value="3" oninput="renderBigMoney()"></label>
+ <label class="filter-chip"><input id="bmOnlyQueue" type="checkbox" onchange="renderBigMoney()">فقط صف خرید/نزدیک سقف</label>
+</div></div>
+<div class="money-grid">
+ <div class="money-card"><h4>🔥 ورود پول درشت</h4><ul class="money-list" id="bmIn"></ul></div>
+ <div class="money-card"><h4>📉 خروج پول درشت</h4><ul class="money-list" id="bmOut"></ul></div>
+</div>
+<div class="card"><h3>📋 جدول کامل</h3><div class="tw"><table class="bigmoney"><thead><tr>
+ <th>#</th><th>نماد</th><th>صنعت</th><th>امتیاز</th>
+ <th>سرانه خرید</th><th>سرانه فروش</th><th>نسبت</th>
+ <th>خالص امروز</th><th>صف</th>
+</tr></thead><tbody id="bmTbody"></tbody></table></div></div>
+</div>
+
+<!-- BATTLE -->
+<div class="tab-panel" id="panel-battle">
+<div class="card"><h2>⚔️ جدال خریدار و فروشنده</h2>
+<div class="row">
+ <label>مرز «خریدار مسلط»<input id="btStrongThreshold" type="number" value="2" step="0.1" oninput="renderBattle()"></label>
+ <label>مرز «خریدار برتر»<input id="btBuyThreshold" type="number" value="1.2" step="0.1" oninput="renderBattle()"></label>
+ <label>مرز «فروشنده مسلط»<input id="btSellThreshold" type="number" value="0.8" step="0.1" oninput="renderBattle()"></label>
+ <label class="filter-chip"><input id="btHideInvalid" type="checkbox" checked onchange="renderBattle()">حذف سرانه فروش کم</label>
+ <label class="filter-chip"><input id="btOnlyLive" type="checkbox" checked onchange="renderBattle()">فقط داده امروز</label>
+</div>
+<div class="small-note" id="btSummary"></div></div>
+<div class="money-grid four">
+ <div class="money-card"><h4>🔥 خریدار مسلط <span class="muted" id="btStrongCount" style="font-size:10px"></span></h4><ul class="money-list" id="btStrongBuy"></ul></div>
+ <div class="money-card"><h4>📈 خریدار برتر <span class="muted" id="btBuyCount" style="font-size:10px"></span></h4><ul class="money-list" id="btBuy"></ul></div>
+ <div class="money-card"><h4>⚖️ متعادل <span class="muted" id="btNeutralCount" style="font-size:10px"></span></h4><ul class="money-list" id="btNeutral"></ul></div>
+ <div class="money-card"><h4>📉 فروشنده مسلط <span class="muted" id="btSellCount" style="font-size:10px"></span></h4><ul class="money-list" id="btSell"></ul></div>
+</div>
+</div>
+
+<!-- SECTORS -->
+<div class="tab-panel" id="panel-sectors">
+<div class="card"><h2>🏭 چرخش صنایع</h2>
+<div class="row">
+ <label>مرتب‌سازی<select id="sectorSort" onchange="renderSectors()">
+  <option value="netToday">خالص پول امروز</option>
+  <option value="netValueRatio">Net/Value صنعت</option>
+  <option value="breadth">گستردگی</option>
+  <option value="rotation">چرخش</option>
+  <option value="net5">خالص ۵روزه</option>
+  <option value="value">ارزش</option>
+  <option value="count">تعداد</option>
+ </select></label>
+ <label>حداقل تعداد نماد<input id="sectorMinCount" type="number" min="1" value="2" onchange="renderSectors()"></label>
+ <label class="filter-chip"><input id="sectorOnlyPos" type="checkbox" onchange="renderSectors()">فقط با ورود پول مثبت</label>
+ <button class="light" onclick="refetchAllSectors(this)">🔄 به‌روزرسانی صنایع</button>
+</div>
+<div class="small-note" id="sectorProgress"></div></div>
+<div class="money-grid">
+ <div class="money-card"><h4>🚀 ورود پول</h4><ul class="money-list" id="sectorTopIn"></ul></div>
+ <div class="money-card"><h4>📉 خروج پول</h4><ul class="money-list" id="sectorTopOut"></ul></div>
+ <div class="money-card"><h4>💎 Net/Value بالاتر</h4><ul class="money-list" id="sectorTopNetVal"></ul></div>
+ <div class="money-card"><h4>🔄 چرخش مثبت</h4><ul class="money-list" id="sectorTopRotation"></ul></div>
+</div>
+<div class="card"><h3>📊 نمودار خالص پول امروز</h3><div class="sector-bars" id="sectorBars"><div class="muted">هنوز اسکن نشده.</div></div></div>
+<div class="card"><h3>📋 جدول صنایع</h3><div class="tw"><table class="sectors"><thead><tr>
+ <th>#</th><th>صنعت</th><th>تعداد</th><th>با داده</th><th>گستردگی</th>
+ <th>خالص امروز (م.ت)</th><th>Net/Value</th><th>چرخش</th><th>خالص ۵ر (م.ت)</th>
+ <th>ارزش (م.ت)</th><th>میانگین قدرت</th><th>برترین‌ها</th>
+</tr></thead><tbody id="sectorTbody"></tbody></table></div></div>
+</div>
+
+<!-- ACCUMULATION -->
+<div class="tab-panel" id="panel-accum">
+<div class="card"><h2>🎯 انباشت</h2>
+<div class="row">
+ <label>حداقل Net/Value<input id="accumMinNetVal" type="number" value="0.05" step="0.01" oninput="renderAccum()"></label>
+ <label>حداکثر |تغییر ٪|<input id="accumMaxChange" type="number" value="1" step="0.5" oninput="renderAccum()"></label>
+ <label>حداقل ارزش (م.ت)<input id="accumMinValue" type="number" value="5" oninput="renderAccum()"></label>
+ <label class="filter-chip"><input id="accumHideLimit" type="checkbox" checked onchange="renderAccum()">حذف نزدیک سقف/کف</label>
+</div></div>
+<div class="card"><h3>📋 نامزدهای انباشت</h3>
+<div class="tw"><table class="sectors"><thead><tr>
+ <th>#</th>
+ <th data-accum-sort="symbol">نماد ↕</th>
+ <th data-accum-sort="sector">صنعت ↕</th>
+ <th data-accum-sort="score">امتیاز ↕</th>
+ <th data-accum-sort="percent">تغییر ٪ ↕</th>
+ <th data-accum-sort="net">خالص امروز ↕</th>
+ <th data-accum-sort="netValueRatio">Net/Value ↕</th>
+ <th data-accum-sort="power">قدرت ↕</th>
+ <th data-accum-sort="net5">۵روزه ↕</th>
+ <th data-accum-sort="posDays">روز مثبت ↕</th>
+ <th>پرچم</th>
+</tr></thead><tbody id="accumTbody"></tbody></table></div></div>
+</div>
+
+<!-- VALIDATE -->
+<div class="tab-panel" id="panel-validate">
+<div class="card"><h2>🧪 اعتبارسنجی سیگنال</h2>
+<div class="row">
+ <button class="light" onclick="runValidation()">▶️ اجرای اعتبارسنجی</button>
+ <label>حداقل امتیاز<input id="valMinScore" type="number" value="4" min="1" max="5" style="width:70px"></label>
+ <label>تعداد اسکن اخیر<input id="valScans" type="number" value="10" min="1" max="30" style="width:70px"></label>
+</div>
+<div class="small-note" id="valProgress"></div></div>
+<div class="card" id="valSummaryCard" style="display:none">
+ <h3>📊 خلاصهٔ عملکرد</h3>
+ <div class="metrics" id="valSummary"></div>
+</div>
+<div class="card"><h3>📋 جزئیات</h3>
+<div class="tw"><table class="validate"><thead><tr>
+ <th>تاریخ اسکن</th><th>نماد</th><th>امتیاز</th>
+ <th>قیمت اسکن (ت)</th><th>قیمت فعلی (ت)</th><th>بازده ٪</th><th>خالص پول (م.ت)</th>
+</tr></thead><tbody id="valTbody"></tbody></table></div></div>
+</div>
+
+<!-- HISTORY -->
+<div class="tab-panel" id="panel-history">
+<div class="card"><h2>📚 تاریخچه</h2>
+<div class="row">
+ <button class="light" onclick="renderHistory()">🔄 بازخوانی</button>
+ <button class="red" onclick="clearHistory()">🗑 پاک کردن</button>
+</div></div>
+<ul class="hist-list" id="histList"></ul>
+</div>
+
+<!-- DIAG -->
+<div class="tab-panel" id="panel-diag">
+<div class="card"><h2>🛠 تشخیص API</h2>
+<div class="row">
+ <button class="light" onclick="testHealth()">🔌 تست سرورها</button>
+ <input id="diagCode" type="text" placeholder="insCode یا نماد">
+ <button class="light" onclick="diagFetch()">📥 ClosingPriceInfo</button>
+ <button class="light" onclick="diagBestLimits()">📊 BestLimits</button>
+ <button class="light" onclick="diagMarketWatch()">📡 MarketWatch</button>
+ <button class="light" onclick="diagInstrumentInfo()">🔍 InstrumentInfo</button>
+</div>
+<pre id="diagOut" style="background:#0f172a;color:#e2e8f0;padding:12px;border-radius:8px;overflow:auto;max-height:500px;font-size:11px;direction:ltr;text-align:left"></pre></div>
+
+<div class="card">
+ <h3>🔍 تشخیص فیلترها</h3>
+ <div class="row">
+  <button class="purple" onclick="diagFilters()">📊 چرا نمادها رد می‌شوند؟</button>
+  <button class="light" onclick="showAllSymbols()">👁 نمایش همه بدون فیلتر</button>
+  <button class="light" onclick="diagSearchSym()">🔍 جستجوی نماد در لیست خام</button>
+ </div>
+ <div id="diagFiltersOut" class="diag-box"></div>
+</div>
+</div>
+
+<div class="footer">تحلیل آزمایشی؛ جایگزین بررسی نمودار، صف، خبر و مدیریت ریسک نیست.</div>
+</div>
+
+<script>
+"use strict";
+// ============================================================
+// v5.8.1 — نهایی با ۳ لایه اعلان + خودراه‌انداز اسکن خودکار
+// ============================================================
+const API="https://cdn.tsetmc.com/api";
+const FALLBACKS=["https://cdn.tsetmc.com/api","https://tsetmc.com/api"];
+const $=id=>document.getElementById(id);
+const B=1e9,M=1e6;
+const LS_SYMS="scanner_v581_syms",LS_RATE="scanner_v581_rate",LS_SECTORS="scanner_v581_sectors";
+const DB_NAME="scanner_v581",DB_VERSION=2;
+
+const norm=s=>String(s||"").replace(/[يى]/g,"ی").replace(/ك/g,"ک").replace(/\s+/g,"").trim().toLowerCase();
+const n=v=>{if(v===null||v===undefined||v==="")return null;const x=Number(v);return Number.isFinite(x)?x:null};
+const nz=v=>{const x=n(v);return x===null?0:x};
+const fmt=(v,d=1)=>v===null||v===undefined?"—":Number(v).toLocaleString("en-US",{maximumFractionDigits:d});
+const fmt0=v=>v===null||v===undefined?"—":Number(v).toLocaleString("en-US",{maximumFractionDigits:0});
+const pct=v=>v===null||v===undefined?"—":(v>0?"+":"")+Number(v).toFixed(2)+"%";
+const dateFmt=v=>{const s=String(v||"");return /^\d{8}$/.test(s)?s.slice(0,4)+"/"+s.slice(4,6)+"/"+s.slice(6):(s||"—")};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+let allSymsRaw=[],allSyms=[],results=[],active=null;
+let stopped=false,scanning=false,loading=false,liveTimer=null;
+let sortKey="score",sortDir="desc",marketTimer=null,marketCapRaw=0,db=null;
+let accumSortKey="netValueRatio",accumSortDir="desc";
+let sectorCache={},_sectorSaveTimer=null;
+let autoScanTimer=null;
+
+function status(s,t=""){const e=$("status");if(e){e.textContent=s;e.className=t}}
+function bar(done,total,stage,current=""){
+ $("progress").style.display="block";
+ $("fill").style.width=(total?Math.min(100,done/total*100):0)+"%";
+ $("pStage").textContent=stage;$("pCurrent").textContent=current;
+ $("pCount").textContent=fmt0(done)+" از "+fmt0(total);}
+let _hideTimer=null;
+function hideBar(){if(_hideTimer)clearTimeout(_hideTimer);_hideTimer=setTimeout(()=>$("progress").style.display="none",900)}
+function stopScan(){stopped=true;status("درخواست توقف…","warn")}
+
+// ============================================================
+// IndexedDB
+// ============================================================
+function openDB(){return new Promise((res,rej)=>{
+ const r=indexedDB.open(DB_NAME,DB_VERSION);
+ r.onupgradeneeded=e=>{const d=e.target.result;
+  if(!d.objectStoreNames.contains("scans")){
+   const s=d.createObjectStore("scans",{keyPath:"id",autoIncrement:true});
+   s.createIndex("timestamp","timestamp");s.createIndex("dateKey","dateKey");}
+  if(!d.objectStoreNames.contains("histCache")){
+   const s=d.createObjectStore("histCache",{keyPath:"key"});
+   s.createIndex("ts","ts");}};
+ r.onsuccess=e=>{db=e.target.result;res(db)};r.onerror=e=>rej(e.target.error);});}
+
+async function saveScanToDB(list,meta){
+ try{if(!db)await openDB();
+  return await new Promise((res,rej)=>{
+   const tx=db.transaction("scans","readwrite");
+   const st=tx.objectStore("scans");
+   const rec={timestamp:Date.now(),dateKey:todayTehranKey(),meta:meta||{},
+    results:list.map(r=>({insCode:r.insCode,symbol:r.symbol,name:r.name,sector:r.sector,
+     score:r.score,net5:r.net5,netToday:r.netToday,power:r.power,power5:r.power5,
+     value:r.value,price:r.live?.price||null,liveSignal:r.liveSignal,fiveSignal:r.fiveSignal,
+     ret5:r.ret5,posDays:r.posDays,savane5:r.savane5,queue:r.queue}))};
+   const rq=st.add(rec);rq.onsuccess=()=>res(rq.result);rq.onerror=()=>rej(rq.error);});}
+ catch(e){return null}}
+async function getLastScan(){try{if(!db)await openDB();
+ return await new Promise((res,rej)=>{
+  const tx=db.transaction("scans","readonly");const st=tx.objectStore("scans");
+  const idx=st.index("timestamp");const rq=idx.openCursor(null,"prev");
+  rq.onsuccess=e=>res(e.target.result?e.target.result.value:null);rq.onerror=e=>rej(e.target.error);});}
+ catch(e){return null}}
+async function getRecentScans(limit=30){try{if(!db)await openDB();
+ return await new Promise((res,rej)=>{
+  const tx=db.transaction("scans","readonly");const st=tx.objectStore("scans");
+  const idx=st.index("timestamp");const rq=idx.openCursor(null,"prev");
+  const out=[];rq.onsuccess=e=>{const c=e.target.result;
+   if(!c||out.length>=limit)return res(out);out.push(c.value);c.continue();};
+  rq.onerror=e=>rej(e.target.error);});}
+ catch(e){return[]}}
+async function clearHistory(){if(!confirm("همه پاک شود؟"))return;
+ try{if(!db)await openDB();await new Promise((res,rej)=>{
+  const tx=db.transaction("scans","readwrite");const st=tx.objectStore("scans");
+  const rq=st.clear();rq.onsuccess=()=>res();rq.onerror=e=>rej(e.target.error);});
+  renderHistory();}catch(e){}}
+
+// ============================================================
+// کش تاریخچه — ۱۵ دقیقه TTL
+// ============================================================
+const HIST_TTL_MS = 15 * 60 * 1000;
+let histCacheMap = new Map();
+let histCacheLoaded = false;
+
+async function loadHistCache(){
+ try{
+  if(!db)await openDB();
+  histCacheMap.clear();
+  const all = await new Promise((res,rej)=>{
+   const tx=db.transaction("histCache","readonly");
+   const rq=tx.objectStore("histCache").getAll();
+   rq.onsuccess=()=>res(rq.result||[]);rq.onerror=()=>rej(rq.error);
+  });
+  const now = Date.now();
+  for(const e of all){
+   if(now - e.ts < HIST_TTL_MS) histCacheMap.set(e.key, e);
+  }
+  if(all.length > histCacheMap.size){
+   try{
+    const tx=db.transaction("histCache","readwrite");
+    const st=tx.objectStore("histCache");
+    for(const e of all){
+     if(now - e.ts >= HIST_TTL_MS) st.delete(e.key);
+    }
+   }catch(e){}
+  }
+  histCacheLoaded = true;
+ }catch(e){ histCacheLoaded = true; }
+}
+
+function getCachedHistSync(insCode, type){
+ const key = insCode + ":" + type;
+ const entry = histCacheMap.get(key);
+ if(!entry) return null;
+ if(Date.now() - entry.ts > HIST_TTL_MS){
+  histCacheMap.delete(key);
+  return null;
+ }
+ return entry.data;
+}
+
+function setCachedHistFireAndForget(insCode, type, data){
+ const key = insCode + ":" + type;
+ const entry = { key, insCode, type, data, ts: Date.now() };
+ histCacheMap.set(key, entry);
+ if(db){
+  try{
+   const tx=db.transaction("histCache","readwrite");
+   tx.objectStore("histCache").put(entry);
+  }catch(e){}
+ }
+}
+
+async function clearHistCache(){
+ histCacheMap.clear();
+ try{
+  if(!db)await openDB();
+  const tx=db.transaction("histCache","readwrite");
+  tx.objectStore("histCache").clear();
+ }catch(e){}
+}
+
+function todayTehranKey(){const p=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Tehran",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
+ const o={};for(const x of p)o[x.type]=x.value;return o.year+o.month+o.day;}
+function dateKey(v){const s=String(v||"").replace(/\D/g,"");return s.length>=8?s.slice(0,8):s}
+function dataAgeDays(ds){const k=dateKey(ds);if(!/^\d{8}$/.test(k))return null;
+ const y=+k.slice(0,4),m=+k.slice(4,6)-1,d=+k.slice(6);
+ const t=new Date(y,m,d).getTime();const now=Date.now();
+ return Math.max(0,Math.floor((now-t)/864e5));}
+
+const HEALTHY={bases:null,at:0};
+async function checkHealth(){const now=Date.now();
+ if(HEALTHY.bases&&now-HEALTHY.at<60000)return HEALTHY.bases;
+ const alive=[];for(const b of FALLBACKS){
+  try{const c=new AbortController();const t=setTimeout(()=>c.abort(),5000);
+   const r=await fetch(b+"/MarketData/GetMarketOverview/1",{signal:c.signal,cache:"no-store"});
+   clearTimeout(t);if(r.ok)alive.push(b);}catch(e){}}
+ HEALTHY.bases=alive.length?alive:FALLBACKS;HEALTHY.at=now;return HEALTHY.bases;}
+let _reqLast=0,_reqGap=12;
+async function throttle(){const now=Date.now();const w=Math.max(0,_reqGap-(now-_reqLast));
+ if(w>0)await sleep(w);_reqLast=Date.now();}
+async function getJSON(path,retries=1){const bases=await checkHealth();let err;
+ for(let a=0;a<=retries;a++){for(const base of bases){
+  try{await throttle();const c=new AbortController();
+   const t=setTimeout(()=>c.abort(),14000);let r;
+   try{r=await fetch(base+path,{signal:c.signal,cache:"no-store"});}finally{clearTimeout(t);}
+   if(r.status===429||r.status===503){await sleep(800*(a+1));throw Error("HTTP "+r.status);}
+   if(!r.ok)throw Error("HTTP "+r.status);
+   let txt=await r.text();txt=txt.replace(/^\uFEFF/,"");
+   if(!txt.trim().startsWith("{")&&!txt.trim().startsWith("["))throw Error("Not JSON");
+   return JSON.parse(txt);}catch(e){err=e;}}
+  if(a<retries)await sleep(400*(a+1));}
+ throw err||Error("connect error");}
+
+function readNum(o,ks){for(const k of ks){const v=n(o?.[k]);if(v!==null)return v}return null}
+function readText(o,ks){for(const k of ks){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim())return String(v).trim()}return""}
+function firstNonZero(o,ks){for(const k of ks){const v=n(o?.[k]);if(v!==null&&v!==0)return v}return null}
+function unwrap(d,key){const v=d?.[key];return Array.isArray(v)?v[0]||{}:v||d||{}}
+
+function setValue(id,v,c=""){const e=$(id);e.textContent=v;e.className="value "+(c||"")}
+function setIndexChange(v){const x=$("mIndexChange");if(v===null||v===undefined){x.textContent="—";return}
+ x.textContent=(v>0?"+":"")+fmt(v,2)+"%";x.className="value "+(v>0?"pos":v<0?"neg":"")}
+
+async function refreshMarket(){
+ const [d1,d2,d3]=await Promise.allSettled([
+  getJSON("/MarketData/GetMarketOverview/1",1),
+  getJSON("/MarketData/GetMarketOverview/2",1),
+  getJSON("/Index/GetIndexB1LastAll/SelectedIndexes/1",1)]);
+ const ov=d1.status==="fulfilled"?unwrap(d1.value,"marketOverview"):{};
+ let idx=null,chg=null;
+ if(d3.status==="fulfilled"){const ar=Array.isArray(d3.value.indexB1)?d3.value.indexB1:[];
+  const ix=ar.find(x=>String(x.insCode)==="32097828799138957")||ar.find(x=>String(x.lVal30||"").includes("شاخص كل"));
+  if(ix){idx=firstNonZero(ix,["xDrNivJIdx004","lVal30"]);chg=readNum(ix,["xVarIdxJRfV","indexChange"]);}}
+ if(idx===null){idx=firstNonZero(ov,["indexLastValue","indexValue"]);chg=readNum(ov,["indexChangePercent","indexChange"]);}
+ setValue("mIndex",idx!==null?fmt0(idx):"دریافت نشد");
+ setIndexChange(chg);
+ $("mIndexNote").textContent=idx!==null?"داده شاخص دریافت شد":"API پاسخ معتبر نداد";
+ const caps=[];for(const p of [d1,d2]){if(p.status==="fulfilled"){
+  const o=unwrap(p.value,"marketOverview");
+  const v=firstNonZero(o,["marketValue","totalMarketValue","marketCapitalization"]);
+  if(v!==null)caps.push(v);}}
+ marketCapRaw=caps.reduce((a,b)=>a+b,0);
+ $("mCap").textContent=marketCapRaw?fmt(marketCapRaw/1e13,2):"—";
+ updateDollarCap();
+ $("mState").textContent=ov.marketStateTitle||ov.marketState||"—";
+ $("mTime").textContent="آخرین: "+new Date().toLocaleTimeString("fa-IR");
+}
+function updateDollarCap(){const rate=n($("usdRate").value);
+ if(!marketCapRaw||!rate||rate<=0){$("mCapUsd").textContent="—";return}
+ const capT=marketCapRaw/10;$("mCapUsd").textContent=fmt(capT/rate/1e9,2)}
+function saveDollarRate(){try{const r=n($("usdRate").value);
+ if(r&&r>0)localStorage.setItem(LS_RATE,String(r));else localStorage.removeItem(LS_RATE);}catch(e){}
+ updateDollarCap();}
+
+// ============================================================
+// فیلترها
+// ============================================================
+function rejectionReason(it){
+ const sym=String(it.lva||it.lVal18AFC||it.symbol||"").trim();
+ if(!sym) return null;
+ if(sym.length>2 && /ح$/.test(sym)) return "پسوند ح (حق تقدم)";
+ if(sym.length>=3 && /^[ضط]/.test(sym)) return "پیشوند ض/ط (حق تقدم)";
+ return null;
+}
+function isTradableStock(it){return rejectionReason(it)===null}
+function isTradableFromClean(s){
+ if(s.isTradable!==undefined && !s.needsInfo)return s.isTradable;
+ return rejectionReason(s)===null;
+}
+
+function cleanSymbol(it){
+ const flow=nz(it.flow);
+ const insCode=String(it.insCode||it.instrumentID||"");
+ const sym=String(it.lva||it.lVal18AFC||it.symbol||"").trim();
+ const nm=String(it.lvc||it.lVal30||it.name||"").trim();
+ const insID=String(it.insID||it.instrumentID||"");
+ return {
+  insCode: insCode, symbol: sym, name: nm, insID: insID, flow: flow,
+  type: flow===2?"فرابورس":(flow===3||flow===4)?"بازار پایه":"بورس",
+  isTradable: !sym ? undefined : isTradableStock(it),
+  needsInfo: !sym
+ };
+}
+
+function rebuildSymsView(){
+ const ex=$("excludeDerivatives")?.checked??true;
+ const exNum=$("excludeNumericSuffix")?.checked??false;
+ allSyms=allSymsRaw.filter(s=>{
+  if(!s.symbol || !s.insCode) return false;
+  if(ex&&s.isTradable===false)return false;
+  if(exNum&&/[0-9]+$/.test(s.symbol)&&s.symbol.length>3)return false;
+  return true;});
+ $("mCount").textContent=fmt0(allSyms.length);
+ const removed=allSymsRaw.length-allSyms.length;
+ $("mCountNote").textContent=fmt0(removed)+" از "+fmt0(allSymsRaw.length)+" حذف شد";
+ $("scanBtn").disabled=!allSyms.length;
+ // ← خودراه‌انداز: اگر اسکن خودکار فعال است ولی تایمر نیست، راه‌اندازی کن
+ try{
+  if(allSyms.length > 0 && !autoScanTimer && localStorage.getItem("scanner_autoscan") === "1"){
+   console.log("[autoscan] restarting timer from rebuildSymsView");
+   startAutoScan();
+  }
+ }catch(e){}
+ if(results.length){
+  const good=new Set(allSyms.map(s=>s.insCode));
+  const b=results.length;
+  results=results.filter(r=>good.has(r.insCode));
+  if(results.length!==b){render();renderSmartMoney();renderSectors();renderAccum();renderBigMoney();renderBattle();renderSignals();}}
+}
+function showAllSymbols(){
+ const cb=$("excludeDerivatives");
+ if(cb){cb.checked=false;rebuildSymsView();status("همه نمادها: "+fmt0(allSyms.length),"success");}
+}
+function diagFilters(){
+ if(!allSymsRaw.length){$("diagFiltersOut").innerHTML="اول فهرست را دریافت کن";return;}
+ const reasons={};
+ let tradable=0;
+ for(const s of allSymsRaw){
+  const r=rejectionReason(s);
+  if(r===null) tradable++;
+  else reasons[r]=(reasons[r]||0)+1;
+ }
+ const sorted=Object.entries(reasons).sort((a,b)=>b[1]-a[1]);
+ let html=`<div><b>کل خام:</b> ${fmt0(allSymsRaw.length)} | <b>قابل اسکن:</b> ${fmt0(tradable)} | <b>رد شده:</b> ${fmt0(allSymsRaw.length-tradable)}</div><hr>`;
+ html+='<div><b>دلایل رد:</b></div><ul style="list-style:none;padding:0">';
+ for(const [k,v] of sorted){
+  html+=`<li>${esc(k)}: <b>${fmt0(v)}</b> نماد</li>`;
+ }
+ html+='</ul>';
+ $("diagFiltersOut").innerHTML=html;
+}
+function diagSearchSym(){
+ const raw=prompt("نماد مورد نظر:");
+ if(!raw)return;
+ const found=allSymsRaw.find(s=>s.symbol===raw);
+ if(found){
+  $("diagFiltersOut").innerHTML="<b>پیدا شد:</b><br>"+JSON.stringify(found,null,2)+"<br><b>دلیل رد:</b> "+(rejectionReason(found)||"هیچ (قابل اسکن)");
+ } else {
+  $("diagFiltersOut").innerHTML="<b>در لیست خام نیست.</b>";
+ }
+}
+
+async function loadSymbols(){
+ if(scanning||loading)return;loading=true;
+ $("loadBtn").disabled=true;$("scanBtn").disabled=true;
+ status("در حال دریافت فهرست کامل…");
+ try{
+  const map=new Map();
+  const pt=Array.from({length:9},(_,i)=>`paperTypes[${i}]=${i+1}`).join("&");
+  const url=`/ClosingPrice/GetMarketWatch?market=0&${pt}&withBestLimits=false&hEven=0&RefID=0`;
+  try{
+   const d=await getJSON(url,2);
+   for(const it of (d.marketwatch||[])){
+    const s=cleanSymbol(it);
+    if(s.insCode && s.symbol) map.set(s.insCode,s);
+   }
+  }catch(e){console.warn("MarketWatch failed:",e.message);}
+  status("MarketWatch: "+fmt0(map.size)+" | جستجوی الفبایی…");
+
+  const letters="اآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهی0123456789";
+  let i=0;
+  for(const ch of letters){
+   if(stopped)break;
+   try{
+    const q=await getJSON("/Instrument/GetInstrumentSearch/"+encodeURIComponent(ch),0);
+    for(const it of (q.instrumentSearch||[])){
+     const s=cleanSymbol(it);
+     if(!s.insCode) continue;
+     if(map.has(s.insCode)) continue;
+     map.set(s.insCode, s);
+    }
+   }catch(e){}
+   bar(++i,letters.length,"جستجو",ch);
+   await sleep(60);
+  }
+
+  const needInfo=[...map.values()].filter(s=>!s.symbol);
+  status("دریافت اطلاعات "+fmt0(needInfo.length)+" نماد از "+fmt0(map.size)+"…");
+  let infoDone=0, infoOk=0;
+  for(const s of needInfo){
+   if(stopped)break;
+   try{
+    const d=await getJSON("/Instrument/GetInstrumentInfo/"+s.insCode,0);
+    const info=d?.instrumentInfo||d?.data||{};
+    const sym=String(info.lVal18AFC||info.symbol||"").trim();
+    const nm=String(info.lVal30||info.name||"").trim();
+    const insID=String(info.insID||info.instrumentID||s.insID||"");
+    const flow=nz(info.flow);
+    if(sym){
+     s.symbol=sym; s.name=nm; s.insID=insID;
+     if(flow) s.flow=flow;
+     s.isTradable=isTradableStock(s);
+     s.needsInfo=false; infoOk++;
+    }
+    const sec=info.sector;
+    if(sec&&typeof sec==="object"){
+     const nmS=sec.lSecVal||sec.sectorName||sec.name;
+     const cS=nz(sec.cSecVal??sec.sectorCode??sec.code);
+     if(nmS){
+      sectorCache[s.insCode]={code:cS,name:String(nmS).trim()};
+      s.sector=String(nmS).trim(); s.groupCode=cS;
+     }
+    }
+   }catch(e){}
+   infoDone++;
+   if(infoDone%20===0||infoDone===needInfo.length){
+    bar(infoDone,needInfo.length,"دریافت info",s.symbol||s.insCode);
+   }
+   await sleep(30);
+  }
+  if(infoOk>0) saveSectorCacheDebounced();
+
+  allSymsRaw=[...map.values()].filter(s=>s.symbol && s.insCode);
+  allSymsRaw.forEach(s=>{
+   if(s.isTradable===undefined) s.isTradable=isTradableFromClean(s);
+   if(!s.sector||s.sector==="نامشخص"){
+    const sc=sectorCache[s.insCode];
+    if(sc){s.sector=sc.name;s.groupCode=sc.code;}
+   }
+  });
+
+  if(allSymsRaw.length<20) throw Error("فهرست کافی دریافت نشد.");
+  rebuildSymsView();
+  try{localStorage.setItem(LS_SYMS,JSON.stringify(allSymsRaw));}catch(e){}
+  status("فهرست کامل: "+fmt0(allSymsRaw.length)+" نماد خام، "+fmt0(allSyms.length)+" قابل اسکن (info: "+fmt0(infoOk)+"/"+fmt0(needInfo.length)+")","success");
+ }catch(e){
+  try{
+   const old=JSON.parse(localStorage.getItem(LS_SYMS)||"[]");
+   if(old.length>20){
+    allSymsRaw=old;
+    allSymsRaw.forEach(s=>{if(s.isTradable===undefined)s.isTradable=isTradableFromClean(s)});
+    rebuildSymsView();
+    status("اتصال ناموفق؛ کش: "+fmt0(allSyms.length)+" نماد","warn");
+   }else status("خطا: "+e.message,"error");
+  }catch(_){status("خطا: "+e.message,"error");}
+ }finally{
+  loading=false;
+  $("loadBtn").disabled=false;
+  $("scanBtn").disabled=!allSyms.length;
+  hideBar();
+ }
+}
+
+// ============================================================
+// کش صنایع
+// ============================================================
+function loadSectorCache(){
+ sectorCache={};
+ const keys=[LS_SECTORS,"scanner_v58_sectors","scanner_v57_sectors","scanner_v56_sectors","scanner_v55_sectors","scanner_v54_sectors","scanner_v53_sectors"];
+ for(const k of keys){
+  try{
+   const v=JSON.parse(localStorage.getItem(k)||"{}")||{};
+   for(const [code,s] of Object.entries(v)){
+    if(!sectorCache[code] && s && s.name){
+     sectorCache[code]=s;
+    }
+   }
+  }catch(e){}
+ }
+ try{localStorage.setItem(LS_SECTORS,JSON.stringify(sectorCache));}catch(e){}
+}
+
+async function bootstrapSectorsFromDB(){
+ try{
+  if(!db)await openDB();
+  const scans=await getRecentScans(30);
+  let added=0;
+  for(const sc of scans){
+   for(const r of (sc.results||[])){
+    if(r.sector && r.sector!=="نامشخص" && r.insCode && !sectorCache[r.insCode]){
+     sectorCache[r.insCode]={name:r.sector,code:null};
+     added++;
+    }
+   }
+  }
+  if(added>0){
+   try{localStorage.setItem(LS_SECTORS,JSON.stringify(sectorCache));}catch(e){}
+  }
+ }catch(e){}
+}
+
+function saveSectorCacheDebounced(){if(_sectorSaveTimer)clearTimeout(_sectorSaveTimer);
+ _sectorSaveTimer=setTimeout(()=>{try{localStorage.setItem(LS_SECTORS,JSON.stringify(sectorCache))}catch(e){}},2500)}
+
+async function fetchSector(insCode){
+ if(!insCode)return null;
+ if(sectorCache[insCode])return sectorCache[insCode];
+ try{const d=await getJSON("/Instrument/GetInstrumentInfo/"+insCode,0);
+  const info=d?.instrumentInfo||d?.data||d||{};
+  const sec=info.sector;
+  if(sec&&typeof sec==="object"){
+   const nm=sec.lSecVal||sec.sectorName||sec.name;
+   const c=nz(sec.cSecVal??sec.sectorCode??sec.code);
+   if(nm){
+    const val={code:c,name:String(nm).trim()};
+    sectorCache[insCode]=val;
+    saveSectorCacheDebounced();
+    return val;
+   }
+  }
+ }catch(e){}
+ return null;}
+
+function getTodayNet(r){
+ if(r.netToday!==null&&r.netToday!==undefined)return r.netToday;
+ if(r.five&&Array.isArray(r.five.days)){
+  for(const d of r.five.days){
+   if(d.valid&&d.net!==null&&d.net!==undefined)return d.net/B;}}
+ return null;}
+function getTodayPercent(r){
+ if(r.live&&r.live.percent!==null&&r.live.percent!==undefined)return r.live.percent;
+ if(r.ret5!==null&&r.ret5!==undefined)return r.ret5;
+ return null;}
+function getLastValidDate(r){
+ if(r.live&&r.live.ageDays===0)return null;
+ if(r.five&&Array.isArray(r.five.days)){
+  for(const d of r.five.days){
+   if(d.valid&&d.date)return dateFmt(d.date);}}
+ return null;}
+function isMarketLive(){
+ const liveFresh=results.filter(r=>r.live&&r.live.ageDays===0&&r.live.hasClient).length;
+ return liveFresh>3;}
+function todayLabel(){
+ if(isMarketLive())return "امروز";
+ let anyDate=null;
+ for(const r of results){const d=getLastValidDate(r);if(d){anyDate=d;break;}}
+ return anyDate?"آخرین روز: "+anyDate:"آخرین روز معاملاتی";}
+
+function getLiveBS(r){
+ const minSellSav=1;
+ if(r.live&&r.live.hasClient&&r.live.buySav!==null&&r.live.sellSav!==null){
+  const valid=r.live.sellSav>=minSellSav;
+  return{buySav:r.live.buySav,sellSav:r.live.sellSav,
+   power:valid?r.live.power:null,
+   ratio:valid?r.live.buySellRatio:null,source:'live'};}
+ if(r.five&&Array.isArray(r.five.days)){
+  for(const d of r.five.days){
+   if(d.valid&&d.buySav!==null&&d.sellSav!==null){
+    const valid=d.sellSav>=minSellSav;
+    const ratio=valid&&d.sellSav>0?d.buySav/d.sellSav:null;
+    return{buySav:d.buySav,sellSav:d.sellSav,
+     power:valid?d.power:null,ratio,source:'history'};}}}
+ if(r.power5!==null&&r.savane5!==null){
+  const sellSav=r.power5>0?r.savane5/r.power5:null;
+  const valid=sellSav!==null&&sellSav>=minSellSav;
+  return{buySav:r.savane5,sellSav,
+   power:valid?r.power5:null,ratio:valid?r.power5:null,source:'avg5'};}
+ return null;}
+
+function dailyMetrics(hist){
+ if(!Array.isArray(hist)||!hist.length)return null;
+ let rows=[...hist];
+ const today=todayTehranKey();
+ if(rows.length&&dateKey(rows[0].recDate)===today)rows=rows.slice(1);
+ const rec=rows.slice(0,5);
+ if(!rec.length)return null;
+ const days=rec.map(d=>{
+  const buyRaw=n(d.buy_I_Value),sellRaw=n(d.sell_I_Value);
+  const bc=nz(d.buy_I_Count||d.buy_CountI),sc=nz(d.sell_I_Count||d.sell_CountI);
+  const ok=buyRaw!==null&&sellRaw!==null&&(buyRaw>0||sellRaw>0);
+  const buy=ok?buyRaw/10:null,sell=ok?sellRaw/10:null,net=ok?buy-sell:null;
+  const bSav=(buy!==null&&bc>0)?buy/bc/M:null,sSav=(sell!==null&&sc>0)?sell/sc/M:null;
+  const pw=(bSav!==null&&sSav!==null&&sSav>0)?bSav/sSav:null;
+  return{date:d.recDate,buy,sell,net,buySav:bSav,sellSav:sSav,power:pw,valid:ok};});
+ const vd=days.filter(d=>d.valid);
+ if(!vd.length)return null;
+ const tb=vd.reduce((s,d)=>s+d.buy,0),ts=vd.reduce((s,d)=>s+d.sell,0);
+ const net=tb-ts,pos=vd.filter(d=>d.net>0).length;
+ const bs=vd.map(d=>d.buySav).filter(x=>x!==null&&x>0);
+ const ss=vd.map(d=>d.sellSav).filter(x=>x!==null&&x>0);
+ const sav=bs.length?bs.reduce((a,b)=>a+b,0)/bs.length:null;
+ const sSav=ss.length?ss.reduce((a,b)=>a+b,0)/ss.length:null;
+ const pw=(sav!==null&&sSav!==null&&sSav>0)?sav/sSav:null;
+ const ratio=ts>0?tb/ts:(tb>0?5:null);
+ const scoreInfo=score5Ex(net/B,sav,pw,ratio,pos,vd.length);
+ return{days,validDays:vd.length,net5:net/B,avg5:net/B/vd.length,posDays:pos,
+  savane5:sav,power5:pw,ratio5:ratio,scoreFive:scoreInfo.score,scoreChecks:scoreInfo.checks,
+  fiveSignal:signal5(net/B,pw,pos,ratio,vd.length)};}
+function score5Ex(net,sav,pw,ratio,pos,vd){
+ const checks=[];let p=0;
+ let w=0;if(net!==null&&net>0)w=net>=100?1:net>=30?.7:.35;
+ checks.push({key:"net5",label:"خالص ۵روزه",value:net,weight:w,pass:w>=.7});p+=w;
+ w=0;if(sav!==null)w=sav>=300?1:sav>=150?.7:sav>=50?.35:0;
+ checks.push({key:"savane5",label:"سرانه",value:sav,weight:w,pass:w>=.7});p+=w;
+ w=0;if(pw!==null)w=pw>=3?1:pw>=2?.75:pw>=1.5?.45:0;
+ checks.push({key:"power5",label:"قدرت",value:pw,weight:w,pass:w>=.7});p+=w;
+ w=0;if(ratio!==null)w=ratio>=1.5?1:ratio>=1.2?.7:ratio>=1?.35:0;
+ checks.push({key:"ratio5",label:"نسبت",value:ratio,weight:w,pass:w>=.7});p+=w;
+ w=0;if(vd>0){const r=pos/vd;w=r>=.8?1:r>=.6?.7:r>=.4?.35:0}
+ checks.push({key:"posDays",label:"روز مثبت",value:pos,weight:w,pass:w>=.7});p+=w;
+ let score=Math.max(1,Math.min(5,Math.round(p)));
+ if(net!==null&&net<0)score=Math.min(score,2);
+ return{score,checks,raw:p};}
+function signal5(net,pw,pos,ratio,vd){
+ if(vd<3)return"داده ناکافی";
+ if(net>=30&&pw!==null&&pw>=2&&pos>=3&&ratio!==null&&ratio>=1.2)return"ورود پول قوی";
+ if(net>0&&pos>=3&&pw!==null&&pw>=1.3)return"مثبت";
+ if(net<0&&pos<=2)return"خروج پول";
+ if(net<0)return"منفی";
+ return"خنثی";}
+
+// ============================================================
+// BestLimits و Snapshot
+// ============================================================
+async function getBestLimits(insCode){
+ try{
+  const d=await getJSON("/BestLimits/"+insCode,0);
+  let node=null;
+  if(Array.isArray(d?.bestLimits)&&d.bestLimits.length) node=d.bestLimits[0];
+  else if(Array.isArray(d?.BestLimits)&&d.BestLimits.length) node=d.BestLimits[0];
+  else if(Array.isArray(d)&&d.length) node=d[0];
+  else if(d&&typeof d==="object") node=d;
+  if(!node) return null;
+  const pd1 = nz(readNum(node,["pd1","pMeDem","pDemand"]));
+  const qd1 = nz(readNum(node,["qd1","qTitMeDem","qDemand"]));
+  const po1 = nz(readNum(node,["po1","pMeOf","pOffer"]));
+  const qo1 = nz(readNum(node,["qo1","qTitMeOf","qOffer"]));
+  if(pd1===0 && po1===0) return null;
+  return { pd1, qd1, po1, qo1 };
+ }catch(e){ return null; }
+}
+
+const _mwCache = { map: null, at: 0 };
+async function getMarketSnapshot(force=false){
+ const now = Date.now();
+ if(!force && _mwCache.map && now - _mwCache.at < 30000) return _mwCache.map;
+ const pt = Array.from({length:9},(_,i)=>`paperTypes[${i}]=${i+1}`).join("&");
+ const url = `/ClosingPrice/GetMarketWatch?market=0&${pt}&withBestLimits=true&hEven=0&RefID=0`;
+ try{
+  const d = await getJSON(url, 1);
+  const map = new Map();
+  for(const item of (d.marketwatch || [])){
+   map.set(String(item.insCode), {
+    pMax: nz(item.pMax), pMin: nz(item.pMin),
+    py: nz(item.py), pdv: nz(item.pDrCotVal), pcl: nz(item.pClosing)
+   });
+  }
+  _mwCache.map = map; _mwCache.at = now;
+  return map;
+ }catch(e){ return _mwCache.map || new Map(); }
+}
+
+async function getLive(sym, mwSnap){
+ const mwItem = (mwSnap && mwSnap.get(String(sym.insCode))) || null;
+
+ const mwPMax = mwItem?.pMax || 0;
+ const mwPMin = mwItem?.pMin || 0;
+ const mwPdv  = mwItem?.pdv  || 0;
+ const mwPcl  = mwItem?.pcl  || 0;
+ const needBL = mwPMax > 0 && (
+   mwPdv === 0 ||
+   mwPdv >= mwPMax ||
+   (mwPMin > 0 && mwPdv > 0 && mwPdv <= mwPMin) ||
+   mwPcl >= mwPMax ||
+   (mwPMin > 0 && mwPcl > 0 && mwPcl <= mwPMin)
+ );
+
+ const [pRes,cRes,blRes]=await Promise.allSettled([
+  getJSON("/ClosingPrice/GetClosingPriceInfo/"+sym.insCode,1),
+  getJSON("/ClientType/GetClientType/"+sym.insCode+"/1/0",1),
+  needBL ? getBestLimits(sym.insCode) : Promise.resolve(null)
+ ]);
+ if(pRes.status!=="fulfilled")throw Error("قیمت لحظه‌ای دریافت نشد");
+ const p=unwrap(pRes.value,"closingPriceInfo");
+ const c=cRes.status==="fulfilled"?unwrap(cRes.value,"clientType"):{};
+ const bl=blRes.status==="fulfilled"?blRes.value:null;
+
+ const last=nz(readNum(p,["pDrCotVal","last"])) || (mwItem?.pdv||0);
+ const close=nz(readNum(p,["pClosing","pc"])) || (mwItem?.pcl||0);
+ const yesterday=nz(readNum(p,["priceYesterday","py"])) || (mwItem?.py||0);
+ const volume=nz(readNum(p,["qTotTran5J","tvol"]));
+ const valueRaw=nz(readNum(p,["qTotCap","tval"]));
+ const trades=nz(readNum(p,["zTotTran","tno"]));
+ const pMax = mwPMax || nz(readNum(p,["pMax"]));
+ const pMin = mwPMin || nz(readNum(p,["pMin"]));
+
+ const price=last>0?last/10:(close>0?close/10:null);
+ const percent=(last>0&&yesterday>0)?(last-yesterday)/yesterday*100:null;
+ const valueT=valueRaw>0?valueRaw/10/B:null;
+ const ageDays=dataAgeDays(p.dEven||p.recDate||"");
+ const tradingToday = ageDays === 0;
+
+ const bv=nz(readNum(c,["buy_I_Value","buyIValue"]));
+ const sv=nz(readNum(c,["sell_I_Value","sellIValue"]));
+ const bvol=nz(readNum(c,["buy_I_Volume","buyIVolume"]));
+ const svol=nz(readNum(c,["sell_I_Volume","sellIVolume"]));
+ const bc=nz(readNum(c,["buy_I_Count","buy_CountI","buyI_Count"]));
+ const sc=nz(readNum(c,["sell_I_Count","sell_CountI","sellI_Count"]));
+ let buy=null,sell=null,net=null,estimated=false,hasClient=false;
+ if(bv>0||sv>0){buy=bv/10;sell=sv/10;net=(bv-sv)/10;hasClient=true;estimated=false;}
+ else if((bvol>0||svol>0)&&last>0){buy=bvol*last/10;sell=svol*last/10;net=buy-sell;hasClient=true;estimated=true;}
+ const buySav=(buy!==null&&bc>0)?buy/bc/M:null;
+ const sellSav=(sell!==null&&sc>0)?sell/sc/M:null;
+ const power=(buySav!==null&&sellSav!==null&&sellSav>0)?buySav/sellSav:null;
+
+ let queue="—", queueStrength=null;
+ if(bl){
+  const bl_pd1 = bl.pd1||0, bl_qd1 = bl.qd1||0;
+  const bl_po1 = bl.po1||0, bl_qo1 = bl.qo1||0;
+  if(bl_pd1 > 0 && pMax > 0 && bl_pd1 >= pMax && bl_qd1 > 0){
+   queue = "صف خرید";
+   queueStrength = (bl_pd1 * bl_qd1) / 1e7;
+  } else if(bl_po1 > 0 && pMin > 0 && bl_po1 <= pMin && bl_qo1 > 0){
+   queue = "صف فروش";
+   queueStrength = (bl_po1 * bl_qo1) / 1e7;
+  }
+ }
+
+ let liveSignal="داده ناکافی",reason="داده حقیقی کافی نیست.";
+ if(!hasClient){liveSignal="داده ناکافی";reason="حقیقی/حقوقی نیست.";}
+ else if(!tradingToday){liveSignal="بازار بسته";reason="معامله‌ای ثبت نشده.";}
+ else if(percent===null){liveSignal="داده ناکافی";reason="قیمت دیروز موجود نیست.";}
+ else{
+  const sp=power!==null&&power>=1.5;
+  const gr=(svol>0&&bvol>0)?bvol/svol:(bvol>0?5:null);
+  const gvr=gr!==null&&gr>=1.2;
+  if(net<0&&percent<0&&power!==null&&power<1){liveSignal="فشار فروش";reason="پول منفی، قیمت منفی.";}
+  else if(net<0){liveSignal="خروج پول";reason="فروش > خرید.";}
+  else if(percent<0&&net>0){liveSignal="ورود پول؛ تأیید";reason="پول مثبت، قیمت منفی.";}
+  else if(net>0&&percent>0&&gvr&&sp){liveSignal="خرید قوی";reason="قیمت+پول+حجم+قدرت.";}
+  else if(net>0&&percent>0){liveSignal="مثبت با احتیاط";reason=power!==null&&power<1?"سرانه خرید کم.":"تأیید بیشتر.";}
+  else if(net>0&&percent>=0){liveSignal="مثبت با احتیاط";reason="پول مثبت.";}
+  else{liveSignal="انتظار";reason="نشانه‌ها هم‌جهت نیستند.";}}
+ return{price,close:close>0?close/10:null,percent,volume,value:valueT,trades,
+  netToday:net!==null?net/B:null,buySav,sellSav,power,buySellRatio:power,
+  liveSignal,liveReason:reason,estimated,hasClient,tradingToday,
+  queue,queueStrength,date:p.dEven||p.recDate||"",ageDays,
+  limits:{pMax:pMax?pMax/10:null,pMin:pMin?pMin/10:null},
+  _raw:{pMax,pMin,pd1:bl?.pd1??null,qd1:bl?.qd1??null,po1:bl?.po1??null,qo1:bl?.qo1??null,blUsed:needBL,mwFound:!!mwItem}};}
+
+async function getFive(sym){
+ const cached = getCachedHistSync(sym.insCode, "history");
+ if(cached) return dailyMetrics(cached.clientType||[]);
+ const d = await getJSON("/ClientType/GetClientTypeHistory/"+sym.insCode,1);
+ setCachedHistFireAndForget(sym.insCode, "history", d);
+ return dailyMetrics(d.clientType||[]);}
+
+async function getHistoryPrice(sym){
+ try{
+  let d = getCachedHistSync(sym.insCode, "prices");
+  if(!d){
+   d = await getJSON("/ClosingPrice/GetClosingPriceDailyList/"+sym.insCode+"/30",1);
+   setCachedHistFireAndForget(sym.insCode, "prices", d);
+  }
+  const a=d.closingPriceDaily||[];
+  if(!a.length)return{ret5:null,price:null,value:null,valueYesterday:null,valueAvg20:null,avgVolume20:null,days:0};
+  const px=x=>{const p=n(x?.pClosing);if(p!==null&&p>0)return p;
+   const dr=n(x?.pDrCotVal);return dr!==null&&dr>0?dr:null;};
+  const prices=a.map(px).filter(x=>x!==null);
+  const today=todayTehranKey();
+  const closingPrices=prices.slice(0,6);
+  const ret5=(closingPrices.length>=5)?((closingPrices[0]-closingPrices[4])/closingPrices[4]*100):null;
+  const validValues=a.map(x=>({raw:nz(readNum(x,["qTotCap"])),dv:dateKey(x.dEven)})).filter(v=>v.raw>0);
+  const valuesNoToday=validValues.filter(v=>v.dv!==today);
+  const valueToday=valuesNoToday[0]?valuesNoToday[0].raw/10/B:null;
+  const valueYesterday=valuesNoToday[1]?valuesNoToday[1].raw/10/B:null;
+  const valueAvg20=valuesNoToday.length>=5?valuesNoToday.slice(0,20).reduce((s,v)=>s+v.raw/10/B,0)/Math.min(20,valuesNoToday.length):null;
+  const volNoToday=a.filter(x=>dateKey(x.dEven)!==today).map(x=>nz(readNum(x,["qTotTran5J","tvol"]))).filter(v=>v>0);
+  const avgVolume20=volNoToday.length>=5?volNoToday.slice(0,20).reduce((s,v)=>s+v,0)/Math.min(20,volNoToday.length):null;
+  return{ret5,price:closingPrices[0]?closingPrices[0]/10:null,value:valueToday,
+   valueYesterday,valueAvg20,avgVolume20,days:closingPrices.length};
+ }catch(e){return{ret5:null,price:null,value:null,valueYesterday:null,valueAvg20:null,avgVolume20:null,days:0};}}
+
+function combinedScore(live,five,ret){
+ let score=five?five.scoreFive:1;
+ if(live&&live.hasClient&&live.tradingToday){
+  if(live.liveSignal==="خرید قوی")score=Math.min(5,score+1);
+  if(["خروج پول","فشار فروش"].includes(live.liveSignal))score=Math.max(1,score-1);}
+ if(five&&five.net5!==null&&five.net5<0)score=Math.min(score,2);
+ if(ret!==null&&ret<0&&score>3)score--;
+ return Math.max(1,Math.min(5,score));}
+function combinedSignal(live,five){
+ if(!live||!five)return"داده ناکافی";
+ if(live.liveSignal==="داده ناکافی")return"داده ناکافی";
+ if(live.liveSignal==="بازار بسته")return"بازار بسته";
+ const posL=["خرید قوی","مثبت با احتیاط"].includes(live.liveSignal);
+ const sell=["خروج پول","فشار فروش"].includes(live.liveSignal);
+ const div=live.liveSignal==="ورود پول؛ تأیید";
+ const fiveStrong=["ورود پول قوی","مثبت"].includes(five.fiveSignal);
+ if(posL&&fiveStrong)return live.liveSignal==="خرید قوی"?"بررسی برای ورود":"مثبت با احتیاط";
+ if(div)return"ورود پول؛ تأیید";
+ if(sell&&fiveStrong)return"احتیاط؛ واگرایی";
+ if(sell&&!fiveStrong)return"فعلاً دوری";
+ if(posL&&!fiveStrong)return"مثبت؛ تأیید روند لازم";
+ return"انتظار";}
+function isAccumulation(r){
+ if(!r.live||!r.live.hasClient||!r.live.tradingToday)return false;
+ const net=getTodayNet(r);
+ if(net===null||net<=0)return false;
+ if(r.netValueRatio===null||r.netValueRatio<0.05)return false;
+ const p=getTodayPercent(r);
+ if(p===null)return false;
+ if(Math.abs(p)>1)return false;
+ return true;}
+function computeFlags(r){
+ const flags=[];
+ if(r.live&&r.live.percent!==null&&Math.abs(r.live.percent)>=4.9)flags.push("دامنه");
+ if(r.live&&r.avgVolume20&&r.live.volume>r.avgVolume20*5)flags.push("حجم بالا");
+ if(r.live&&r.live.limits&&r.live.limits.pMax&&r.live.limits.pMin&&r.live.price){
+  const range=r.live.limits.pMax-r.live.limits.pMin;
+  if(range>0){
+   const pos=(r.live.price-r.live.limits.pMin)/range;
+   if(pos>0.95)flags.push("نزدیک سقف");
+   if(pos<0.05)flags.push("نزدیک کف");}}
+ if(r.ageDays!==null&&r.ageDays>5)flags.push("داده کهنه");
+ return flags;}
+
+async function analyzeSymbol(sym, mwSnap){
+ let fs=sym.sector||"نامشخص",fc=sym.groupCode??null;
+ if(!fs||fs==="نامشخص"){
+  const cached=sectorCache[sym.insCode];
+  if(cached){fs=cached.name;fc=cached.code;}
+ }
+ const [lr,fr,pr]=await Promise.allSettled([
+  getLive(sym, mwSnap),getFive(sym),getHistoryPrice(sym)]);
+ const live=lr.status==="fulfilled"?lr.value:null;
+ const five=fr.status==="fulfilled"?fr.value:null;
+ const hp=pr.status==="fulfilled"?pr.value:{ret5:null,price:null,value:null,valueYesterday:null,valueAvg20:null,avgVolume20:null,days:0};
+ const value=(live&&live.value!==null&&live.value>0)?live.value:(hp.value!==null?hp.value:null);
+ const valueVsYesterday=(value!==null&&hp.valueYesterday&&hp.valueYesterday>0)?value/hp.valueYesterday:null;
+ const valueVsAvg20=(value!==null&&hp.valueAvg20&&hp.valueAvg20>0)?value/hp.valueAvg20:null;
+ const netValueRatio=(live&&live.netToday!==null&&value!==null&&value>0)?live.netToday/value:null;
+ const score=combinedScore(live,five,hp.ret5);
+ const combined=combinedSignal(live,five);
+ const r={
+  insCode:sym.insCode,symbol:sym.symbol,name:sym.name,insID:sym.insID,type:sym.type,
+  sector:fs,groupCode:fc,live,five,ret5:hp.ret5,value,valueYesterday:hp.valueYesterday,
+  valueAvg20:hp.valueAvg20,valueVsYesterday,valueVsAvg20,avgVolume20:hp.avgVolume20,
+  netValueRatio,ageDays:live?live.ageDays:null,score,combined,
+  netToday:live?live.netToday:null,power:live?live.power:null,
+  buySellRatio:live?live.buySellRatio:null,
+  liveSignal:live?live.liveSignal:"داده ناکافی",
+  liveReason:live?live.liveReason:"داده لحظه‌ای دریافت نشد.",
+  fiveSignal:five?five.fiveSignal:"داده ناکافی",
+  net5:five?five.net5:null,savane5:five?five.savane5:null,power5:five?five.power5:null,
+  posDays:five?five.posDays:0,validDays:five?five.validDays:0,
+  sustain:computeSustain(five),
+  queue:live?live.queue:"—",queueStrength:live?live.queueStrength:null,
+  lastUpdate:Date.now()};
+ r.accum=isAccumulation(r);
+ r.flags=computeFlags(r);
+ return r;}
+function computeSustain(five){
+ if(!five||!five.days||!five.days.length)return 0;
+ let c=0;for(const d of five.days){if(d.valid&&d.net!==null&&d.net>0)c++;else break;}return c;}
+
+function computeBreadth(){
+ let up=0,down=0,flat=0,noData=0;
+ for(const r of results){
+  const p=getTodayPercent(r);
+  if(p===null){noData++;continue;}
+  if(p>0.05)up++;else if(p<-0.05)down++;else flat++;}
+ return{up,down,flat,noData,total:results.length};}
+function renderBreadth(){
+ const b=computeBreadth();
+ const el=$("breadthBar");
+ if(!results.length){el.innerHTML='<span class="muted">برای مشاهده شاخص‌های کلی بازار، ابتدا اسکن کن.</span>';return}
+ el.innerHTML=
+  `<div class="breadth-item up"><span>صعودی</span><b>${fmt0(b.up)}</b></div>
+   <div class="breadth-item down"><span>نزولی</span><b>${fmt0(b.down)}</b></div>
+   <div class="breadth-item flat"><span>بی‌تغییر</span><b>${fmt0(b.flat)}</b></div>
+   <div class="breadth-item"><span>بدون داده</span><b>${fmt0(b.noData)}</b></div>
+   <div class="breadth-item"><span>کل</span><b>${fmt0(b.total)}</b></div>
+   <div class="breadth-item"><span>نسبت صعودی</span><b>${b.total>0?fmt(b.up/b.total*100,1)+"%":"—"}</b></div>`;}
+
+// ============================================================
+// Diff
+// ============================================================
+function signalStrength(s){
+ if(!s)return 0;
+ if(/خرید قوی|ورود پول قوی|بررسی برای ورود/.test(s))return 3;
+ if(/مثبت/.test(s))return 2;
+ if(/انتظار|بسته|داده ناکافی|—|^$/.test(s))return 0;
+ if(/خروج پول|فشار فروش|دوری/.test(s))return -1;
+ return 0;}
+
+function computeDiff(prevList, currList){
+ if(!prevList || !prevList.length) return null;
+ const prevMap = new Map();
+ for(const r of prevList) prevMap.set(r.insCode, r);
+ const newSignals = [];
+ const strengthened = [];
+ const weakened = [];
+ for(const curr of currList){
+  const prev = prevMap.get(curr.insCode);
+  if(!prev) continue;
+  const prevScore = prev.score ?? 0;
+  const currScore = curr.score ?? 0;
+  if(currScore > prevScore){
+   strengthened.push({symbol: curr.symbol, insCode: curr.insCode,
+    from: prevScore, to: currScore, delta: currScore - prevScore});
+  } else if(currScore < prevScore){
+   weakened.push({symbol: curr.symbol, insCode: curr.insCode,
+    from: prevScore, to: currScore, delta: currScore - prevScore});
+  }
+  const sigs = [];
+  if(currScore === 5 && prevScore < 5){
+   sigs.push({label: "⭐ به امتیاز ۵ رسید", key: "score5_new", priority: 10});
+  }
+  const prevL = signalStrength(prev.liveSignal);
+  const currL = signalStrength(curr.liveSignal);
+  if(currL > prevL && currL > 0){
+   sigs.push({label: `${prev.liveSignal||"—"} → ${curr.liveSignal}`, key: "live", priority: 7});
+  }
+  const prevF = signalStrength(prev.fiveSignal);
+  const currF = signalStrength(curr.fiveSignal);
+  if(currF > prevF && currF > 0){
+   sigs.push({label: `۵ر: ${prev.fiveSignal||"—"} → ${curr.fiveSignal}`, key: "five", priority: 5});
+  }
+  if(curr.queue === "صف خرید" && prev.queue !== "صف خرید"){
+   sigs.push({label: "🚦 صف خرید جدید", key: "queue_buy", priority: 6});
+  }
+  if(curr.queue === "صف فروش" && prev.queue !== "صف فروش"){
+   sigs.push({label: "⚠️ صف فروش جدید", key: "queue_sell", priority: 6, negative: true});
+  }
+  if(sigs.length > 0){
+   newSignals.push({symbol: curr.symbol, insCode: curr.insCode, sigs});
+  }
+ }
+ const maxPrio = x => Math.max(...x.sigs.map(s => s.priority));
+ newSignals.sort((a,b) => maxPrio(b) - maxPrio(a));
+ strengthened.sort((a,b) => b.delta - a.delta || b.to - a.to);
+ weakened.sort((a,b) => a.delta - b.delta || a.to - b.to);
+ return {newSignals, strengthened, weakened};
+}
+
+function renderDiff(diff){
+ const card = $("diffCard");
+ if(!diff || (diff.newSignals.length===0 && diff.strengthened.length===0 && diff.weakened.length===0)){
+  card.style.display = "none";
+  return;
+ }
+ card.style.display = "block";
+ const renderList = (arr, em, fn) =>
+  arr.length ? arr.slice(0, 20).map(fn).join("") : `<li class="muted">${em}</li>`;
+ $("diffNewSignals").innerHTML = renderList(diff.newSignals, "—", x => {
+  const hasNew5 = x.sigs.some(s => s.key === "score5_new");
+  const hasNeg = x.sigs.some(s => s.negative);
+  const cls = hasNeg ? "neg" : "pos";
+  const labels = x.sigs.map(s => esc(s.label)).join(" · ");
+  return `<li data-code="${esc(x.insCode)}">
+   <span class="s">${esc(x.symbol)}${hasNew5 ? ' ⭐' : ''}</span>
+   <span class="muted" style="font-size:9px">${labels}</span>
+   <span class="v ${cls}">${x.sigs.length}</span></li>`;
+ });
+ $("diffStrengthened").innerHTML = renderList(diff.strengthened, "—", x =>
+  `<li data-code="${esc(x.insCode)}">
+   <span class="s">${esc(x.symbol)}</span>
+   <span class="muted">${x.from}/5 → ${x.to}/5</span>
+   <span class="v pos">▲${x.delta}</span></li>`);
+ $("diffWeakened").innerHTML = renderList(diff.weakened, "—", x =>
+  `<li data-code="${esc(x.insCode)}">
+   <span class="s">${esc(x.symbol)}</span>
+   <span class="muted">${x.from}/5 → ${x.to}/5</span>
+   <span class="v neg">▼${Math.abs(x.delta)}</span></li>`);
+ card.querySelectorAll("li[data-code]").forEach(el => {
+  el.addEventListener("click", () => {
+   const r = results.find(x => x.insCode === el.dataset.code);
+   if(r){ showCard(r, false); switchTab("scanner"); }
+  });
+ });
+}
+
+// ============================================================
+// اعلان سه‌لایه (Toast + صدا + Flash عنوان + نوتیف سیستم)
+// ============================================================
+function showToast(title, body){
+ try{
+  document.querySelectorAll(".scanner-toast").forEach(t=>t.remove());
+  const toast = document.createElement("div");
+  toast.className = "scanner-toast";
+  toast.style.cssText = `
+   position: fixed; top: 20px; left: 20px; z-index: 99999;
+   background: linear-gradient(135deg, #dc2626, #f59e0b);
+   color: white; padding: 14px 18px; border-radius: 12px;
+   box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+   font: 13px Tahoma; max-width: 380px; min-width: 260px;
+   direction: rtl; text-align: right;
+   cursor: pointer;
+  `;
+  toast.innerHTML = `
+   <div style="font-weight:bold;font-size:14px;margin-bottom:6px">${esc(title)}</div>
+   <div style="font-size:11px;line-height:1.7;opacity:0.95">${esc(body)}</div>
+   <div style="position:absolute;top:6px;left:8px;font-size:18px;opacity:0.6">×</div>
+  `;
+  toast.addEventListener("click", () => toast.remove());
+  document.body.appendChild(toast);
+  setTimeout(() => { try{ toast.remove(); }catch(e){} }, 8000);
+ }catch(e){ console.error("toast error:", e); }
+}
+
+function playBeep(){
+ try{
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if(!AC) return;
+  const ctx = new AC();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.frequency.value = 880;
+  osc.type = "sine";
+  gain.gain.setValueAtTime(0.35, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+  osc.start(ctx.currentTime);
+  osc.stop(ctx.currentTime + 0.35);
+ }catch(e){}
+}
+
+let _titleFlashTimer = null;
+const _origTitle = document.title;
+function flashTitle(msg){
+ try{
+  if(_titleFlashTimer) clearInterval(_titleFlashTimer);
+  let toggle = false;
+  _titleFlashTimer = setInterval(() => {
+   document.title = toggle ? msg : _origTitle;
+   toggle = !toggle;
+  }, 800);
+  setTimeout(() => {
+   if(_titleFlashTimer){clearInterval(_titleFlashTimer);_titleFlashTimer=null;}
+   document.title = _origTitle;
+  }, 10000);
+ }catch(e){}
+}
+
+function sendNotification(title, body){
+ // ۱. نوتیف سیستم
+ try{
+  if("Notification" in window && Notification.permission === "granted"){
+   new Notification(title, {
+    body,
+    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>"
+   });
+  }
+ }catch(e){}
+ // ۲. Toast درون‌صفحه
+ showToast(title, body);
+ // ۳. صدا
+ playBeep();
+ // ۴. Flash عنوان
+ flashTitle("🆕 سیگنال جدید!");
+}
+
+function requestNotif(){
+ if(!("Notification" in window)){
+  status("مرورگر از نوتیفیکیشن پشتیبانی نمی‌کند","warn");return;
+ }
+ if(Notification.permission === "granted"){
+  $("notifBtn").textContent = "🔔 فعال";
+  $("notifBtn").disabled = true;
+  status("نوتیفیکیشن از قبل فعال است","success");
+  sendNotification("اسکنر پول هوشمند", "نوتیفیکیشن فعال است ✅");
+  return;
+ }
+ if(Notification.permission === "denied"){
+  status("نوتیفیکیشن رد شده — از تنظیمات مرورگر فعال کنید","warn");return;
+ }
+ Notification.requestPermission().then(perm => {
+  if(perm === "granted"){
+   $("notifBtn").textContent = "🔔 فعال";
+   $("notifBtn").disabled = true;
+   status("نوتیفیکیشن فعال شد ✅","success");
+   sendNotification("اسکنر پول هوشمند", "از این پس سیگنال‌های جدید اطلاع داده می‌شوند");
+  } else {
+   status("نوتیفیکیشن رد شد","warn");
+  }
+ });
+}
+
+// ============================================================
+// اسکن خودکار
+// ============================================================
+function onAutoScanToggle(){
+ const on = $("autoScan").checked;
+ if(on) startAutoScan();
+ else { stopAutoScan(); status("⏱ اسکن خودکار خاموش شد"); }
+}
+
+function onAutoScanIntervalChange(){
+ if($("autoScan").checked) startAutoScan();
+}
+
+function startAutoScan(){
+ stopAutoScan();
+ if(!allSyms.length){
+  status("ابتدا فهرست را دریافت کن","warn");
+  $("autoScan").checked = false;
+  try{ localStorage.setItem("scanner_autoscan","0"); }catch(e){}
+  return;
+ }
+ const mins = Math.max(3, Math.min(60, parseInt($("autoScanMin").value) || 10));
+ autoScanTimer = setInterval(async () => {
+  if(scanning || loading || !allSyms.length) return;
+  try{ await runScan(); }catch(e){}
+ }, mins * 60 * 1000);
+ try{ localStorage.setItem("scanner_autoscan","1"); }catch(e){}
+ try{ localStorage.setItem("scanner_autoscan_min",String(mins)); }catch(e){}
+ status(`⏱ اسکن خودکار هر ${mins} دقیقه فعال شد`,"success");
+ console.log("[autoscan] started, timer:", autoScanTimer, "every", mins, "min");
+}
+
+function stopAutoScan(){
+ if(autoScanTimer){clearInterval(autoScanTimer);autoScanTimer=null;}
+ try{ localStorage.setItem("scanner_autoscan","0"); }catch(e){}
+}
+
+// ============================================================
+// runScan
+// ============================================================
+async function runScan(){
+ if(scanning||loading)return;
+ if(!allSyms.length){status("ابتدا فهرست را دریافت کن.","warn");return;}
+ scanning=true;stopped=false;results=[];
+ $("scanBtn").disabled=true;$("loadBtn").disabled=true;$("stopBtn").disabled=false;$("csvBtn").disabled=true;
+ const started=Date.now();
+ try{
+  status("بارگذاری کش تاریخچه…");
+  try{ await loadHistCache(); }catch(e){}
+  status("دریافت Snapshot بازار…");
+  const mwSnap = await getMarketSnapshot(true);
+  status("شروع تحلیل "+fmt0(allSyms.length)+" نماد (هم‌زمانی "+($("concurrency").value||8)+")…");
+  const max=Math.max(50,Math.min(3000,parseInt($("topN").value)||500));
+  const conc=Math.max(1,Math.min(20,parseInt($("concurrency").value)||8));
+  const syms=allSyms.slice(0,max);
+  const last=await getLastScan();
+  const lastResults = (last&&last.results) ? last.results : null;
+  const lastRankMap=new Map();
+  if(lastResults){
+   const sorted=[...lastResults].sort((a,b)=>(b.score||0)-(a.score||0)||((b.net5||-1e9)-(a.net5||-1e9)));
+   sorted.forEach((r,i)=>lastRankMap.set(r.insCode,i+1));}
+  let next=0,done=0,errors=0;
+  const out=new Array(syms.length);
+  bar(0,syms.length,"تحلیل نمادها");
+  async function worker(){
+   while(!stopped){
+    const i=next++;if(i>=syms.length)return;
+    try{const r=await analyzeSymbol(syms[i], mwSnap);if(r.live||r.five)out[i]=r;else errors++;}
+    catch(e){errors++;}
+    done++;bar(done,syms.length,"تحلیل",syms[i].symbol);
+    if(done%10===0)await sleep(30);}}
+  await Promise.all(Array.from({length:conc},worker));
+  results=out.filter(Boolean);
+  results.sort((a,b)=>b.score-a.score||((b.net5??-1e9)-(a.net5??-1e9)));
+  results.forEach((r,i)=>{r.rankNow=i+1;
+   const prev=lastRankMap.get(r.insCode);
+   r.rankChange=prev?prev-r.rankNow:null;});
+  const applyF=$("applyFilters").checked;
+  if(applyF){
+   const minNet=nz($("minNet5").value),minSav=nz($("minSavane5").value),
+    minPos=nz($("minPos").value),minPow=nz($("minPower").value),
+    minVal=nz($("minValue").value);
+   results=results.filter(r=>{
+    if(minVal>0&&(r.value===null||r.value<minVal))return false;
+    if(r.net5===null||r.net5<minNet)return false;
+    if(minSav>0&&(r.savane5===null||r.savane5<minSav))return false;
+    if(minPos>0&&r.posDays<minPos)return false;
+    if(minPow>0&&(r.power5===null||r.power5<minPow))return false;
+    return true;});}
+  await saveScanToDB(results,{duration:Date.now()-started,scanned:results.length,errors});
+  render();renderSmartMoney();renderSectors();renderAccum();renderBigMoney();renderBattle();renderBreadth();renderSignals();
+  let diff = null;
+  try{ diff = computeDiff(lastResults, results); }catch(e){ console.warn("diff error:",e); }
+  renderDiff(diff);
+  try{
+   const liveCount = results.filter(r => r.live && r.live.ageDays === 0).length;
+   if(liveCount > 10 && diff && diff.newSignals.length > 0){
+    const cnt = diff.newSignals.length;
+    const top = diff.newSignals.slice(0,3).map(x=>x.symbol).join("، ");
+    const extra = cnt > 3 ? ` و ${cnt-3} دیگر` : "";
+    sendNotification(`🆕 ${cnt} سیگنال جدید`, `برترین: ${top}${extra}`);
+   }
+  }catch(e){}
+  $("csvBtn").disabled=!results.length;
+  const qBuy=results.filter(r=>r.queue==="صف خرید").length;
+  const qSell=results.filter(r=>r.queue==="صف فروش").length;
+  status((stopped?"متوقف. ":"تمام. ")+"تحلیل: "+fmt0(results.length)+
+   " | خطا: "+fmt0(errors)+" | صف: خرید "+qBuy+" / فروش "+qSell+
+   " | زمان: "+((Date.now()-started)/1000).toFixed(1)+"s",
+   stopped?"warn":"success");
+ }catch(e){status("خطا: "+e.message,"error");}
+ finally{scanning=false;$("scanBtn").disabled=false;$("loadBtn").disabled=false;$("stopBtn").disabled=true;hideBar();}}
+
+function preset(k){
+ const p={strong:[100,100,4,2,5],medium:[20,50,3,1.5,1],loose:[0,10,1,1,0],all:[0,0,0,0,0]}[k];
+ if(!p)return;
+ ["minNet5","minSavane5","minPos","minPower","minValue"].forEach((id,i)=>$(id).value=p[i]);}
+
+function computeSignals(r){
+ const sig=[];
+ if(r.score===5) sig.push({key:"score5",label:"امتیاز ۵"});
+ if(r.fiveSignal==="ورود پول قوی") sig.push({key:"strong5",label:"ورود پول قوی ۵ر"});
+
+ const hasFreshLive = r.live && r.live.hasClient && r.live.tradingToday && 
+                     r.live.ageDays === 0 &&
+                     r.live.power !== null && r.live.buySellRatio !== null;
+
+ if(hasFreshLive){
+  const minPower=Number($("sigMinPower").value)||1;
+  if(r.live.power >= minPower){
+   sig.push({key:"battle",label:`جدال ${fmt(r.live.power,2)}×`});
+  }
+  const minBS=Number($("sigMinBS").value)||1.5;
+  const minBuySav=Number($("sigMinBuySav").value)||50;
+  const netOk = r.live.netToday !== null && r.live.netToday > 0;
+  const buyOk = r.live.buySav !== null && r.live.buySav >= minBuySav;
+  if(r.live.buySellRatio >= minBS && netOk && buyOk){
+   sig.push({key:"bigmoney",label:`پول درشت ${fmt(r.live.buySellRatio,2)}×`});
+  }
+ }
+
+ const minNV=Number($("sigMinNetVal").value)||0.15;
+ if(r.netValueRatio!==null && r.netValueRatio>=minNV){
+  sig.push({key:"netval",label:`Net/Val ${fmt(r.netValueRatio,2)}`});}
+ if(r.accum) sig.push({key:"accum",label:"انباشت"});
+ const minSus=Number($("sigMinSustain").value)||3;
+ if(r.sustain>=minSus) sig.push({key:"sustain",label:`استمرار ${r.sustain}ر`});
+ const minSp=Number($("sigMinSpike").value)||2;
+ if(r.valueVsAvg20!==null && r.valueVsAvg20>=minSp){
+  sig.push({key:"spike",label:`ارزش ${fmt(r.valueVsAvg20,1)}×`});}
+ return sig;}
+
+function renderSignals(){
+ const kanban=$("sigKanban");
+ const sumEl=$("sigSummary");
+ if(!results.length){kanban.innerHTML='<div class="muted">ابتدا اسکن کن.</div>';sumEl.textContent="";return;}
+ const queueMode=$("sigQueueMode").value;
+ const minValue=Number($("sigMinValue").value)||2;
+ const minSellSav=Number($("sigMinSellSav").value)||1;
+ const onlyMulti=$("sigOnlyMulti").checked;
+ const onlyLive=$("sigOnlyLive").checked;
+ const enriched=results.map(r=>{
+  const sig=computeSignals(r);
+  let queueBlocked=false;
+  if(queueMode==="heavy" && r.queue==="صف خرید") queueBlocked=true;
+  const valueOk=r.value!==null && r.value>=minValue;
+  const liveOk = !onlyLive || (r.live && r.live.hasClient && r.live.tradingToday && r.live.ageDays===0);
+  const bs=getLiveBS(r);
+  const sellSavOk=!bs || bs.sellSav===null || bs.sellSav>=minSellSav;
+  return {r,sig,queueBlocked,valueOk,sellSavOk,liveOk};});
+ let filtered=enriched.filter(e=>e.valueOk&&!e.queueBlocked&&e.sellSavOk&&e.liveOk&&e.sig.length>0);
+ if(onlyMulti) filtered=filtered.filter(e=>e.sig.length>=3);
+ const keys=["score5","strong5","battle","bigmoney","netval","accum","sustain","spike"];
+ const labels={score5:"⭐ امتیاز ۵",strong5:"🔥 ورود پول قوی ۵ر",
+  battle:"⚔️ جدال قوی",bigmoney:"💰 پول درشت",netval:"📊 Net/Value",
+  accum:"🎯 انباشت",sustain:"📈 استمرار",spike:"⚡ ارزش غیرعادی"};
+ const grouped={};
+ for(const k of keys) grouped[k]=[];
+ for(const e of filtered){
+  for(const s of e.sig){if(grouped[s.key]) grouped[s.key].push(e.r);}}
+ for(const k of keys){grouped[k].sort((a,b)=>b.score-a.score||((b.net5??-1e9)-(a.net5??-1e9)));}
+ kanban.innerHTML=keys.map(k=>{
+  const arr=grouped[k];
+  return`<div class="sig-col ${k}">
+   <div class="sig-col-head"><span>${labels[k]}</span><span class="cnt">${fmt0(arr.length)}</span></div>
+   <ul class="sig-col-body">
+    ${arr.length?arr.map(r=>{
+     let qb="";
+     if(r.queue==="صف خرید") qb=' <span class="badge queue-buy" style="font-size:8px">صف</span>';
+     return`<li data-code="${esc(r.insCode)}"><span class="s">${esc(r.symbol)}${qb}</span><span class="meta">امتیاز ${r.score}/5</span></li>`;
+    }).join(""):'<div class="sig-col-empty">—</div>'}
+   </ul>
+  </div>`;
+ }).join("");
+ const queueLabelTxt={heavy:"حذف صف خرید",none:"بدون فیلتر صف"}[queueMode];
+ const removed=enriched.filter(e=>e.queueBlocked).length;
+ sumEl.innerHTML=
+  `از ${fmt0(results.length)} نماد، <b>${fmt0(filtered.length)}</b> سیگنال دارند `+
+  `| فیلتر صف: <b>${queueLabelTxt}</b>`+
+  `| فقط امروز: <b>${onlyLive?"فعال":"غیرفعال"}</b>`+
+  (removed>0?` — <span class="neg">${fmt0(removed)} حذف شد</span>`:"");
+ kanban.querySelectorAll("li[data-code]").forEach(el=>{
+  el.addEventListener("click",()=>{const r=results.find(x=>x.insCode===el.dataset.code);
+   if(r){showCard(r,false);switchTab("scanner");}});});}
+
+function signalClass(s){
+ if(!s)return"neutral";
+ if(/داده ناکافی/.test(s))return"neutral";
+ if(/خرید قوی|ورود پول قوی|بررسی برای ورود/.test(s))return"buy";
+ if(/خروج پول|فشار فروش|فعلاً دوری/.test(s))return"sell";
+ if(/انتظار|احتیاط|تأیید|واگرایی|بسته/.test(s))return"wait";
+ if(/مثبت/.test(s))return"buy";
+ return"neutral";}
+function ageBadge(a){
+ if(a===null||a===undefined)return'<span class="na">—</span>';
+ if(a===0)return'<span class="badge fresh">امروز</span>';
+ if(a===1)return'<span class="badge fresh">۱</span>';
+ if(a<=3)return'<span class="badge est">'+a+'</span>';
+ return'<span class="badge stale">'+a+'</span>';}
+function rankCell(v){
+ if(v===null||v===undefined)return'<span class="rank-new">—</span>';
+ if(v===0)return'<span class="muted">۰</span>';
+ if(v>0)return'<span class="rank-up">▲'+v+'</span>';
+ return'<span class="rank-down">▼'+Math.abs(v)+'</span>';}
+function queueBadge(r){
+ const q=r.queue;
+ if(q==="صف خرید"){const s=r.queueStrength!==null?fmt(r.queueStrength,1)+" م.ت":"";return`<span class="badge queue-buy">صف خرید ${s}</span>`;}
+ if(q==="صف فروش"){const s=r.queueStrength!==null?fmt(r.queueStrength,1)+" م.ت":"";return`<span class="badge queue-sell">صف فروش ${s}</span>`;}
+ return"";}
+function flagsBadges(r){
+ if(!r.flags||!r.flags.length)return"";
+ return r.flags.map(f=>'<span class="flag">'+esc(f)+'</span>').join("");}
+function isBigMoney(r){
+ if(!r.live || !r.live.hasClient || !r.live.tradingToday || r.live.ageDays !== 0) return false;
+ const minBS=Number($("sigMinBS").value)||1.5;
+ const minBuySav=Number($("sigMinBuySav").value)||50;
+ if(r.live.buySellRatio===null||r.live.buySellRatio<minBS) return false;
+ if(r.live.netToday===null||r.live.netToday<=0) return false;
+ if(r.live.buySav===null||r.live.buySav<minBuySav) return false;
+ return true;}
+
+function render(){
+ const q=norm($("tableSearch").value);
+ const arr=results.filter(r=>!q||norm(r.symbol).includes(q)||norm(r.name).includes(q)||norm(r.sector).includes(q));
+ arr.sort((a,b)=>{
+  const x=a[sortKey],y=b[sortKey];
+  if(typeof x==="string"||typeof y==="string"){
+   return sortDir==="asc"?String(x??"").localeCompare(String(y??"")):String(y??"").localeCompare(String(x??""));}
+  const xn=x===null||x===undefined?-1e18:Number(x);
+  const yn=y===null||y===undefined?-1e18:Number(y);
+  return sortDir==="asc"?xn-yn:yn-xn;});
+ $("tbody").innerHTML=arr.map((r,i)=>`
+  <tr>
+   <td>${i+1}</td>
+   <td class="symbol" data-code="${esc(r.insCode)}">${esc(r.symbol)}</td>
+   <td style="font-size:10px;color:#475569">${esc(r.sector||"—")}</td>
+   <td><span class="score s${r.score}" title="${esc((r.five?.scoreChecks||[]).map(c=>c.label+":"+(c.pass?"✓":"✗")).join(" | "))}">${r.score}/5</span></td>
+   <td>${rankCell(r.rankChange)}</td>
+   <td>${ageBadge(r.ageDays)}</td>
+   <td><span class="signal ${signalClass(r.liveSignal)}">${esc(r.liveSignal)}</span></td>
+   <td class="num ${(r.netToday??0)>=0?'pos':'neg'}">${fmt(r.netToday,2)}</td>
+   <td class="num">${r.netValueRatio!==null?fmt(r.netValueRatio,3):"—"}</td>
+   <td class="num">${fmt(r.value,2)}</td>
+   <td class="num ${(r.valueVsYesterday??0)>=1?'pos':''}">${r.valueVsYesterday!==null?fmt(r.valueVsYesterday,2)+"×":"—"}</td>
+   <td class="num ${(r.valueVsAvg20??0)>=1.5?'pos':(r.valueVsAvg20??0)<0.7?'neg':''}">${r.valueVsAvg20!==null?fmt(r.valueVsAvg20,2)+"×":"—"}</td>
+   <td class="num ${(r.buySellRatio??0)>=1.5?'pos':(r.buySellRatio??0)<0.8?'neg':''}">${r.buySellRatio!==null?fmt(r.buySellRatio,2)+"×":"—"}</td>
+   <td><span class="signal ${signalClass(r.fiveSignal)}">${esc(r.fiveSignal)}</span></td>
+   <td class="num ${(r.net5??0)>=0?'pos':'neg'}">${fmt(r.net5,2)}</td>
+   <td class="num">${fmt0(r.savane5)}</td>
+   <td>${r.power5!==null?fmt(r.power5,2)+"×":"—"}</td>
+   <td>${r.posDays}/${r.validDays||5}</td>
+   <td>${r.sustain>0?'<span class="badge live">'+r.sustain+'</span>':"—"}</td>
+   <td class="num ${(r.ret5??0)>=0?'pos':'neg'}">${pct(r.ret5)}</td>
+   <td>${queueBadge(r)} ${r.accum?'<span class="badge accum">انباشت</span>':""} ${isBigMoney(r)?'<span class="badge bigmoney">پول درشت</span>':""} ${flagsBadges(r)}</td>
+  </tr>`).join("");
+ $("tbody").querySelectorAll(".symbol").forEach(el=>{
+  el.addEventListener("click",()=>{const r=results.find(x=>x.insCode===el.dataset.code);
+   if(r)showCard(r,true);});});
+ const qb=results.filter(r=>r.queue==="صف خرید").length;
+ const qs=results.filter(r=>r.queue==="صف فروش").length;
+ $("mQueues").textContent=fmt0(qb)+" / "+fmt0(qs);
+ $("summary").textContent=
+  "نمایش "+fmt0(arr.length)+" از "+fmt0(results.length)+
+  " | ۵: "+results.filter(r=>r.score===5).length+
+  " | پول درشت: "+results.filter(isBigMoney).length+
+  " | انباشت: "+results.filter(r=>r.accum).length+
+  " | صف: خرید "+qb+" / فروش "+qs;}
+
+document.querySelectorAll("th[data-sort]").forEach(th=>{
+ th.addEventListener("click",()=>{
+  const k=th.dataset.sort;
+  if(sortKey===k)sortDir=sortDir==="asc"?"desc":"asc";
+  else{sortKey=k;sortDir=(k==="symbol"||k==="sector")?"asc":"desc";}
+  render();});});
+
+document.querySelectorAll("th[data-accum-sort]").forEach(th=>{
+ th.addEventListener("click",()=>{
+  const k=th.dataset.accumSort;
+  if(accumSortKey===k)accumSortDir=accumSortDir==="asc"?"desc":"asc";
+  else{accumSortKey=k;accumSortDir=(k==="symbol"||k==="sector")?"asc":"desc";}
+  renderAccum();});});
+
+function metric(label,value,unit="",cls=""){
+ return`<div class="metric ${cls}"><div class="label">${label}</div>
+  <div class="value">${value}${unit?`<span class="unit">${unit}</span>`:""}</div></div>`;}
+function setSignal(id,s){const e=$(id);e.textContent=s;e.className="signal "+signalClass(s)}
+function showCard(r,scroll){
+ active=r;
+ $("symbolCard").classList.add("show");
+ $("scName").textContent=r.symbol;
+ $("scFull").textContent=(r.name||"")+" · "+(r.sector||"—")+" · "+r.type+" · "+r.insCode;
+ $("scUpdated").textContent="آخرین: "+new Date(r.lastUpdate).toLocaleTimeString("fa-IR");
+ setSignal("scLiveSignal",r.liveSignal);setSignal("scFiveSignal",r.fiveSignal);
+ setSignal("scQueue",r.queue||"—");
+ $("scScore").textContent=r.score+"/5";$("scScore").className="score s"+r.score;
+ if(r.live){const l=r.live;
+  $("scLiveGrid").innerHTML=
+   metric("قیمت",fmt0(l.price),"تومان",l.price?"blue":"na")+
+   metric("تغییر",pct(l.percent),"",l.percent===null?"na":(l.percent>=0?"good":"bad"))+
+   metric("ارزش",fmt(l.value,2),"م.ت",l.value?"":"na")+
+   metric("ارزش/دیروز",r.valueVsYesterday!==null?fmt(r.valueVsYesterday,2)+"×":"—","",(r.valueVsYesterday??0)>=1?"good":"")+
+   metric("ارزش/میانگین۲۰",r.valueVsAvg20!==null?fmt(r.valueVsAvg20,2)+"×":"—","",(r.valueVsAvg20??0)>=1.5?"good":(r.valueVsAvg20??0)<0.7?"bad":"")+
+   metric("خالص امروز",fmt(l.netToday,2),"م.ت",l.netToday===null?"na":(l.netToday>=0?"good":"bad"))+
+   metric("Net/Value",r.netValueRatio!==null?fmt(r.netValueRatio,3):"—","","purple")+
+   metric("سرانه خرید",fmt0(l.buySav),"م.ت",l.buySav===null?"na":"")+
+   metric("سرانه فروش",fmt0(l.sellSav),"م.ت",l.sellSav===null?"na":"")+
+   metric("قدرت",l.power!==null?fmt(l.power,2)+"×":"—","",l.power===null?"na":(l.power>=2?"good":l.power<1?"bad":""))+
+   metric("صف",r.queue||"—","",r.queue.includes("خرید")?"bad":r.queue.includes("فروش")?"bad":"")+
+   metric("ارزش صف",r.queueStrength!==null?fmt(r.queueStrength,1)+" م.ت":"—","","purple")+
+   metric("پرچم‌ها",r.flags&&r.flags.length?r.flags.map(esc).join("، "):"ندارد","")+
+   metric("تازگی",l.ageDays===null?"—":(l.ageDays===0?"امروز":l.ageDays+" روز قبل"),"");
+ }else{$("scLiveGrid").innerHTML=metric("وضعیت","داده موجود نیست","","na");}
+ if(r.five){const f=r.five;
+  $("scFiveGrid").innerHTML=
+   metric("خالص ۵روزه",fmt(f.net5,2),"م.ت",f.net5>=0?"good":"bad")+
+   metric("میانگین روزانه",fmt(f.avg5,2),"م.ت")+
+   metric("سرانه",f.savane5!==null?fmt0(f.savane5):"—","م.ت")+
+   metric("قدرت",f.power5!==null?fmt(f.power5,2)+"×":"—","",f.power5>=2?"good":"")+
+   metric("نسبت خرید/فروش",f.ratio5!==null?fmt(f.ratio5,2)+"×":"—")+
+   metric("روز مثبت",f.posDays,"از "+f.validDays)+
+   metric("امتیاز ۵",f.scoreFive,"از ۵")+
+   metric("سیگنال ۵",esc(f.fiveSignal),"",f.scoreFive>=4?"good":"");
+  $("scDays").innerHTML=f.days.map((d,i)=>`
+   <tr><td>${dateFmt(d.date)}${i===0?" · آخرین":""}${d.valid?"":" · نامعتبر"}</td>
+   <td class="num">${d.buy!==null?fmt(d.buy/B,2):"—"}</td>
+   <td class="num">${d.sell!==null?fmt(d.sell/B,2):"—"}</td>
+   <td class="num ${(d.net??0)>=0?'pos':'neg'}">${d.net!==null?fmt(d.net/B,2):"—"}</td>
+   <td class="num">${d.buySav!==null?fmt(d.buySav,1):"—"}</td>
+   <td class="num">${d.sellSav!==null?fmt(d.sellSav,1):"—"}</td>
+   <td>${d.power!==null?fmt(d.power,2)+"×":"—"}</td></tr>`).join("");
+ }else{$("scFiveGrid").innerHTML=metric("وضعیت","داده نیست","","na");$("scDays").innerHTML="";}
+ const checks=(r.five&&r.five.scoreChecks)||[];
+ $("scChecks").innerHTML=checks.length?checks.map(c=>`
+  <li class="${c.pass?'pass':'fail'}"><span class="k">${esc(c.label)}</span>
+   <span class="v">${c.value===null?"—":fmt(c.value,2)} · وزن ${fmt(c.weight,2)}</span></li>`).join("")
+  :'<li class="fail"><span class="k">داده کافی نیست</span></li>';
+ $("scCaution").textContent="پول درشت و جدال فقط از داده live امروز استفاده می‌کنند. صف از BestLimits تازه خوانده می‌شود.";
+ if(scroll)$("symbolCard").scrollIntoView({behavior:"smooth",block:"start"});}
+function clearCard(){$("symbolCard").classList.remove("show");$("symbolInput").value="";
+ $("searchMsg").textContent="";active=null;if(liveTimer){clearInterval(liveTimer);liveTimer=null}}
+async function lookupSymbol(){
+ const raw=$("symbolInput").value.trim();if(!raw)return;
+ const q=norm(raw);$("searchMsg").textContent="در حال جستجو…";
+ let sym=allSyms.find(s=>norm(s.symbol)===q);
+ if(!sym)sym=allSyms.find(s=>norm(s.symbol).includes(q)||norm(s.name).includes(q));
+ if(!sym){
+  try{
+   const d=await getJSON("/Instrument/GetInstrumentSearch/"+encodeURIComponent(raw),1);
+   const arr=(d.instrumentSearch||[]);
+   const found=[];
+   for(const it of arr){
+    const s=cleanSymbol(it);
+    if(!s.insCode) continue;
+    if(!s.symbol){
+     try{
+      const info=await getJSON("/Instrument/GetInstrumentInfo/"+s.insCode,0);
+      const inf=info?.instrumentInfo||{};
+      s.symbol=String(inf.lVal18AFC||"").trim();
+      s.name=String(inf.lVal30||"").trim();
+      s.insID=String(inf.insID||"");
+      s.flow=nz(inf.flow)||s.flow;
+      s.isTradable=isTradableStock(s);
+      s.needsInfo=false;
+     }catch(e){}
+    }
+    if(s.symbol && s.isTradable) found.push(s);
+   }
+   sym=found.find(s=>norm(s.symbol)===q)||found.find(s=>norm(s.symbol).includes(q)||norm(s.name).includes(q));
+  }catch(e){}
+ }
+ if(!sym){$("searchMsg").textContent="نماد پیدا نشد.";return}
+ $("searchMsg").textContent="دریافت…";
+ try{
+  const mwSnap = await getMarketSnapshot();
+  const r=await analyzeSymbol(sym, mwSnap);
+  const i=results.findIndex(x=>x.insCode===r.insCode);
+  if(i>=0)results[i]=r;else results.unshift(r);
+  showCard(r,true);render();renderSignals();
+  $("searchMsg").textContent="انجام شد.";
+  if(liveTimer)clearInterval(liveTimer);
+  liveTimer=setInterval(refreshActive,30000);
+  }catch(e){$("searchMsg").textContent="خطا: "+e.message;}}
+async function refreshActive(){if(!active)return;
+ try{const sym={insCode:active.insCode,symbol:active.symbol,name:active.name,
+  insID:active.insID,type:active.type,sector:active.sector,groupCode:active.groupCode};
+  const mwSnap = await getMarketSnapshot(true);
+  const r=await analyzeSymbol(sym, mwSnap);
+  const i=results.findIndex(x=>x.insCode===r.insCode);
+  if(i>=0)results[i]=r;active=r;
+  showCard(r,false);render();renderSignals();
+  $("searchMsg").textContent="به‌روزرسانی: "+new Date().toLocaleTimeString("fa-IR");
+ }catch(e){$("searchMsg").textContent="خطا: "+e.message;}}
+
+function moneyRow(r,vFn,clsFn,metaFn){
+ const v=vFn(r);if(v===null||v===undefined)return"";
+ const cls=typeof clsFn==="function"?clsFn(r):(clsFn||"");
+ const meta=metaFn?metaFn(r):`امتیاز ${r.score}/5 · ${esc(r.liveSignal)}`;
+ return`<li data-code="${esc(r.insCode)}"><span class="s">${esc(r.symbol)}</span>
+  <span class="muted">${meta}</span><span class="v ${cls}">${fmt(v,2)}</span></li>`;}
+function renderSmartMoney(){
+ const ids=["moneyInToday","moneyOutToday","moneyValueSpike","moneyQueueBuy","moneyQueueSell","moneyStreak"];
+ if(!results.length){ids.forEach(i=>$(i).innerHTML='<li class="muted">ابتدا اسکن کن.</li>');
+  $("moneyTag").textContent="—";return}
+ $("moneyTag").textContent=todayLabel();
+ const withNet=results.map(r=>({r,v:getTodayNet(r)})).filter(x=>x.v!==null);
+ const topIn=[...withNet].sort((a,b)=>b.v-a.v).slice(0,12).map(x=>x.r);
+ const topOut=[...withNet].sort((a,b)=>a.v-b.v).slice(0,12).map(x=>x.r);
+ const spike=results.filter(r=>r.valueVsAvg20!==null&&r.valueVsAvg20>=2).sort((a,b)=>b.valueVsAvg20-a.valueVsAvg20).slice(0,12);
+ const qBuy=results.filter(r=>r.queue==="صف خرید").slice(0,20);
+ const qSell=results.filter(r=>r.queue==="صف فروش").slice(0,20);
+ const streak=results.filter(r=>r.sustain>=2).sort((a,b)=>b.sustain-a.sustain||(b.net5??0)-(a.net5??0)).slice(0,12);
+ const renderList=(arr,vFn,clsFn,em)=>
+  arr.length?arr.map(r=>moneyRow(r,vFn,clsFn)).join("")||`<li class="muted">${em}</li>`:`<li class="muted">${em}</li>`;
+ $("moneyInToday").innerHTML=renderList(topIn,x=>getTodayNet(x),x=>(getTodayNet(x)??0)>=0?"pos":"neg","—");
+ $("moneyOutToday").innerHTML=renderList(topOut,x=>getTodayNet(x),x=>(getTodayNet(x)??0)>=0?"pos":"neg","—");
+ $("moneyValueSpike").innerHTML=renderList(spike,x=>x.valueVsAvg20,()=>"pos","—");
+ $("moneyQueueBuy").innerHTML=renderList(qBuy,x=>x.queueStrength,()=>"neg","—");
+ $("moneyQueueSell").innerHTML=renderList(qSell,x=>x.queueStrength,()=>"neg","—");
+ $("moneyStreak").innerHTML=streak.length?streak.map(r=>`
+  <li data-code="${esc(r.insCode)}"><span class="s">${esc(r.symbol)}</span>
+   <span class="muted">${r.sustain} روز · ${r.score}/5</span>
+   <span class="v pos">${fmt(r.net5,2)}</span></li>`).join(""):'<li class="muted">—</li>';
+ document.querySelectorAll("#panel-money .money-list li[data-code]").forEach(el=>{
+  el.addEventListener("click",()=>{const r=results.find(x=>x.insCode===el.dataset.code);
+   if(r){showCard(r,false);switchTab("scanner");}});});}
+
+function renderBigMoney(){
+ const tb=$("bmTbody");
+ const ids=["bmIn","bmOut"];
+ if(!results.length){ids.forEach(i=>$(i).innerHTML='<li class="muted">ابتدا اسکن کن.</li>');
+  if(tb)tb.innerHTML='<tr><td colspan="9" class="muted" style="padding:24px">—</td></tr>';return}
+ const minRatio=Number($("bmMinRatio").value)||1.5;
+ const minBuySav=Number($("bmMinBuySav").value)||50;
+ const minValue=Number($("bmMinValue").value)||3;
+ const onlyQueue=$("bmOnlyQueue").checked;
+ const withLive=results.filter(r => r.live && r.live.hasClient && r.live.tradingToday && r.live.ageDays === 0);
+ const arr=withLive.filter(r=>{
+  if(r.live.buySellRatio===null || r.live.buySellRatio < minRatio) return false;
+  if(r.live.netToday===null || r.live.netToday <= 0) return false;
+  if(r.live.buySav===null || r.live.buySav < minBuySav) return false;
+  if(r.value===null || r.value < minValue) return false;
+  if(onlyQueue && !(r.queue.includes("خرید") || r.queue==="نزدیک سقف")) return false;
+  return true;
+ }).sort((a,b)=>b.live.buySellRatio - a.live.buySellRatio);
+ const withNegativeNet = withLive.filter(r=>
+  r.live.buySellRatio !== null && r.live.buySellRatio < (1/minRatio) &&
+  r.live.netToday !== null && r.live.netToday < 0 &&
+  r.value !== null && r.value >= minValue
+ ).sort((a,b)=>a.live.buySellRatio - b.live.buySellRatio);
+ const bmRow=(r)=>`<li data-code="${esc(r.insCode)}">
+   <span class="s">${esc(r.symbol)}</span>
+   <span class="muted">نسبت ${fmt(r.live.buySellRatio,2)}× · ${fmt(r.live.buySav,0)}/${fmt(r.live.sellSav,0)}</span>
+   <span class="v ${r.live.netToday>=0?'pos':'neg'}">${fmt(r.live.netToday,2)}</span></li>`;
+ $("bmIn").innerHTML = arr.length ? arr.slice(0,20).map(bmRow).join("") : '<li class="muted">—</li>';
+ $("bmOut").innerHTML = withNegativeNet.length ? withNegativeNet.slice(0,20).map(bmRow).join("") : '<li class="muted">—</li>';
+ tb.innerHTML = arr.length ? arr.map((r,i)=>`
+  <tr>
+   <td>${i+1}</td>
+   <td class="symbol" data-code="${esc(r.insCode)}">${esc(r.symbol)}</td>
+   <td style="font-size:10px">${esc(r.sector||"—")}</td>
+   <td><span class="score s${r.score}">${r.score}/5</span></td>
+   <td class="num">${fmt0(r.live.buySav)}</td>
+   <td class="num">${fmt0(r.live.sellSav)}</td>
+   <td class="num pos">${fmt(r.live.buySellRatio,2)}×</td>
+   <td class="num pos">${fmt(r.live.netToday,2)}</td>
+   <td>${queueBadge(r)}</td>
+  </tr>`).join("") : '<tr><td colspan="9" class="muted" style="padding:24px">با فیلتر فعلی چیزی نیست (فقط داده امروز).</td></tr>';
+ tb.querySelectorAll(".symbol").forEach(el=>{
+  el.addEventListener("click",()=>{const r=results.find(x=>x.insCode===el.dataset.code);
+   if(r){showCard(r,false);switchTab("scanner");}});});
+ document.querySelectorAll("#panel-bigmoney .money-list li[data-code]").forEach(el=>{
+  el.addEventListener("click",()=>{const r=results.find(x=>x.insCode===el.dataset.code);
+   if(r){showCard(r,false);switchTab("scanner");}});});}
+
+function renderBattle(){
+ const ids=["btStrongBuy","btBuy","btNeutral","btSell"];
+ if(!results.length){ids.forEach(i=>$(i).innerHTML='<li class="muted">ابتدا اسکن کن.</li>');
+  $("btSummary").textContent="";return}
+ const strongTh=Number($("btStrongThreshold").value)||2;
+ const buyTh=Number($("btBuyThreshold").value)||1.2;
+ const sellTh=Number($("btSellThreshold").value)||0.8;
+ const hideInvalid=$("btHideInvalid").checked;
+ const onlyLive=$("btOnlyLive").checked;
+ const sourceData=results.map(r=>{
+  if(onlyLive){
+   if(!r.live || !r.live.hasClient || !r.live.tradingToday || r.live.ageDays!==0 || r.live.power===null) return null;
+   return {r, power: r.live.power, buySav: r.live.buySav, sellSav: r.live.sellSav, source: 'live'};
+  } else {
+   const bs = getLiveBS(r);
+   if(!bs || bs.power===null) return null;
+   return {r, power: bs.power, buySav: bs.buySav, sellSav: bs.sellSav, source: bs.source};
+  }
+ }).filter(Boolean);
+ const withPower = sourceData.filter(x=>{
+  if(hideInvalid && x.sellSav!==null && x.sellSav<1) return false;
+  return true;
+ });
+ const strongBuy=withPower.filter(x=>x.power>=strongTh).sort((a,b)=>b.power-a.power);
+ const buy=withPower.filter(x=>x.power>=buyTh&&x.power<strongTh).sort((a,b)=>b.power-a.power);
+ const neutral=withPower.filter(x=>x.power>=sellTh&&x.power<buyTh).sort((a,b)=>Math.abs(b.power-1)-Math.abs(a.power-1));
+ const sell=withPower.filter(x=>x.power<sellTh).sort((a,b)=>a.power-b.power);
+ $("btStrongCount").textContent=`(${strongBuy.length})`;
+ $("btBuyCount").textContent=`(${buy.length})`;
+ $("btNeutralCount").textContent=`(${neutral.length})`;
+ $("btSellCount").textContent=`(${sell.length})`;
+ const total=withPower.length;
+ const excluded=results.length-total;
+ $("btSummary").innerHTML=
+  `${fmt0(total)} نماد با قدرت معتبر`+
+  (excluded>0?` | ${fmt0(excluded)} بدون قدرت`:"")+
+  (onlyLive?` | فقط امروز`:"")+
+  (hideInvalid?` | حذف سرانه فروش کم`:"");
+ const srcBadgeFn=x=>x.source==='live'?'':x.source==='history'
+  ?' <span class="badge est">ت</span>':' <span class="badge est">۵</span>';
+ const renderList=(arr,cls,em)=>arr.length
+  ?arr.map(({r,power,buySav,sellSav,source})=>{
+    const net=getTodayNet(r);
+    return`<li data-code="${esc(r.insCode)}">
+     <span class="s">${esc(r.symbol)}${srcBadgeFn({source})}</span>
+     <span class="muted">خالص ${fmt(net,1)} · سرانه ${fmt(buySav,0)}/${fmt(sellSav,0)}</span>
+     <span class="v ${cls}">${fmt(power,2)}×</span></li>`;}).join("")
+  :`<li class="muted">${em}</li>`;
+ $("btStrongBuy").innerHTML=renderList(strongBuy,"pos","—");
+ $("btBuy").innerHTML=renderList(buy,"pos","—");
+ $("btNeutral").innerHTML=renderList(neutral,"","—");
+ $("btSell").innerHTML=renderList(sell,"neg","—");
+ document.querySelectorAll("#panel-battle .money-list li[data-code]").forEach(el=>{
+  el.addEventListener("click",()=>{const r=results.find(x=>x.insCode===el.dataset.code);
+   if(r){showCard(r,false);switchTab("scanner");}});});}
+
+function aggSectors(){
+ const map=new Map();
+ for(const r of results){
+  const k=r.sector||"نامشخص";
+  if(!map.has(k))map.set(k,{name:k,count:0,withData:0,positive:0,
+   sumNet:0,knownNet:0,sumNet5:0,knownNet5:0,sumValue:0,knownValue:0,
+   sumPower5:0,knownPower5:0,rows:[]});
+  const g=map.get(k);g.count++;g.rows.push(r);
+  const net=getTodayNet(r);
+  if(net!==null){g.withData++;g.knownNet++;g.sumNet+=net;if(net>0)g.positive++;}
+  if(r.net5!==null){g.sumNet5+=r.net5;g.knownNet5++;}
+  if(r.value!==null){g.sumValue+=r.value;g.knownValue++;}
+  if(r.power5!==null){g.sumPower5+=r.power5;g.knownPower5++;}}
+ return[...map.values()].map(g=>{
+  const avgToday=g.knownNet>0?g.sumNet/g.knownNet:null;
+  const avg5PerDay=g.knownNet5>0?g.sumNet5/g.knownNet5/5:null;
+  const rotation=(avgToday!==null&&avg5PerDay!==null&&Math.abs(avg5PerDay)>0.001)
+   ?avgToday/Math.abs(avg5PerDay):null;
+  return{...g,
+   breadth:g.knownNet>0?(g.positive/g.knownNet)*100:null,
+   netValueRatio:(g.sumValue>0&&g.knownNet>0)?g.sumNet/g.sumValue:null,
+   avgPower5:g.knownPower5>0?g.sumPower5/g.knownPower5:null,
+   rotation,
+   top:[...g.rows].sort((a,b)=>(getTodayNet(b)??-1e18)-(getTodayNet(a)??-1e18)).slice(0,4)};});}
+function sectorBarList(arr,vFn,em){
+ if(!arr.length)return`<li class="muted">${em}</li>`;
+ const maxAbs=Math.max(...arr.map(g=>Math.abs(vFn(g)||0)),1e-9);
+ return arr.map(g=>{const v=Number(vFn(g))||0;
+  const w=Math.min(100,Math.abs(v)/maxAbs*100);
+  const cls=v>=0?"pos":"neg";
+  const fill=v>=0?"linear-gradient(90deg,#22c55e,#15803d)":"linear-gradient(90deg,#f87171,#dc2626)";
+  return`<li style="grid-template-columns:1fr;cursor:pointer" data-sector="${esc(g.name)}">
+   <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+    <span class="s">${esc(g.name)}</span>
+    <span class="v ${cls}">${fmt(v,2)}</span></div>
+   <div style="height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;margin-top:4px">
+    <div style="height:100%;width:${w}%;background:${fill};border-radius:3px"></div></div></li>`;}).join("");}
+function renderSectors(){
+ const tbody=$("sectorTbody");if(!tbody)return;
+ if(!results.length){tbody.innerHTML='<tr><td colspan="12" class="muted" style="padding:24px">—</td></tr>';
+  $("sectorBars").innerHTML='<div class="muted">—</div>';return;}
+ let all=aggSectors();
+ const mc=Math.max(1,nz($("sectorMinCount").value)||1);
+ const onlyPos=$("sectorOnlyPos").checked;
+ all=all.filter(g=>g.count>=mc&&(!onlyPos||g.sumNet>0));
+ const sk=$("sectorSort").value;
+ all.sort((a,b)=>{
+  if(sk==="netToday")return(b.sumNet??0)-(a.sumNet??0);
+  if(sk==="net5")return(b.sumNet5??0)-(a.sumNet5??0);
+  if(sk==="breadth")return(b.breadth??-1)-(a.breadth??-1);
+  if(sk==="value")return(b.sumValue??0)-(a.sumValue??0);
+  if(sk==="netValueRatio")return(b.netValueRatio??-1e9)-(a.netValueRatio??-1e9);
+  if(sk==="rotation")return(b.rotation??-1e9)-(a.rotation??-1e9);
+  if(sk==="count")return b.count-a.count;
+  return 0;});
+ const unknown=results.filter(r=>!r.sector||r.sector==="نامشخص").length;
+ $("sectorProgress").textContent=unknown>0?
+  "بدون صنعت: "+fmt0(unknown)+" از "+fmt0(results.length)+" — «به‌روزرسانی صنایع» را بزن.":"همه مشخص.";
+ tbody.innerHTML=all.length?all.map((g,i)=>{
+  const b=g.breadth,bcls=b===null?"":(b>=60?"high":b<=30?"low":"");
+  const rot=g.rotation;
+  const rotCls=rot===null?"":(rot>=1.5?"rot-up":rot<=0.5?"rot-down":"");
+  const rotTxt=rot===null?"—":fmt(rot,2)+"×";
+  const topStr=g.top.map(r=>esc(r.symbol)).join(" · ");
+  return`<tr>
+   <td>${i+1}</td><td style="font-weight:bold;text-align:right">${esc(g.name)}</td>
+   <td>${fmt0(g.count)}</td><td>${fmt0(g.withData)}</td>
+   <td>${b===null?"—":`<span class="pill2 ${bcls}">${fmt(b,0)}٪</span>`}</td>
+   <td class="num ${g.sumNet>=0?'pos':'neg'}">${g.knownNet?fmt(g.sumNet,2):"—"}</td>
+   <td class="num">${g.netValueRatio!==null?fmt(g.netValueRatio,3):"—"}</td>
+   <td>${rot===null?"—":`<span class="badge ${rotCls}">${rotTxt}</span>`}</td>
+   <td class="num ${g.sumNet5>=0?'pos':'neg'}">${g.knownNet5?fmt(g.sumNet5,2):"—"}</td>
+   <td class="num">${g.knownValue?fmt(g.sumValue,2):"—"}</td>
+   <td>${g.avgPower5!==null?fmt(g.avgPower5,2)+"×":"—"}</td>
+   <td style="font-size:10px;color:#64748b;white-space:normal">${topStr||"—"}</td>
+  </tr>`;}).join(""):'<tr><td colspan="12" class="muted" style="padding:24px">—</td></tr>';
+ const withNet=all.filter(g=>g.knownNet>0);
+ const withNetVal=all.filter(g=>g.netValueRatio!==null&&g.knownNet>=3);
+ const withRot=all.filter(g=>g.rotation!==null&&g.knownNet>=3&&g.rotation>=1.2);
+ const tIn=[...withNet].sort((a,b)=>b.sumNet-a.sumNet).slice(0,8);
+ const tOut=[...withNet].sort((a,b)=>a.sumNet-b.sumNet).slice(0,8);
+ const tNV=[...withNetVal].sort((a,b)=>b.netValueRatio-a.netValueRatio).slice(0,8);
+ const tRot=[...withRot].sort((a,b)=>b.rotation-a.rotation).slice(0,8);
+ $("sectorTopIn").innerHTML=sectorBarList(tIn,g=>g.sumNet,"—");
+ $("sectorTopOut").innerHTML=sectorBarList(tOut,g=>g.sumNet,"—");
+ $("sectorTopNetVal").innerHTML=sectorBarList(tNV,g=>g.netValueRatio*100,"—");
+ $("sectorTopRotation").innerHTML=sectorBarList(tRot,g=>g.rotation,"—");
+ const top=[...withNet].sort((a,b)=>Math.abs(b.sumNet)-Math.abs(a.sumNet)).slice(0,15);
+ $("sectorBars").innerHTML=top.length?top.map(g=>{
+  const maxA=Math.max(...top.map(x=>Math.abs(x.sumNet)),1e-9);
+  const w=Math.min(100,Math.abs(g.sumNet)/maxA*100);
+  const cls=g.sumNet>=0?"pos":"neg";
+  return`<div class="sector-bar-row">
+   <div class="sector-bar-label" title="${esc(g.name)}">${esc(g.name)}</div>
+   <div class="sector-bar-track"><div class="sector-bar-fill ${cls}" style="width:${w}%"></div></div>
+   <div class="sector-bar-value ${cls}">${fmt(g.sumNet,1)}</div></div>`;}).join(""):'<div class="muted">—</div>';
+ document.querySelectorAll("#panel-sectors .money-list li[data-sector]").forEach(el=>{
+  el.addEventListener("click",()=>{$("tableSearch").value=el.dataset.sector;switchTab("scanner");render();});});
+ tbody.querySelectorAll("tr").forEach(tr=>{
+  tr.style.cursor="pointer";
+  tr.addEventListener("click",()=>{
+   const c=tr.querySelector("td:nth-child(2)");if(!c)return;
+   $("tableSearch").value=c.textContent.trim();switchTab("scanner");render();});});}
+async function refetchAllSectors(btn){
+ if(!results.length){status("ابتدا اسکن کن.","warn");return}
+ const targets=results.filter(r=>!r.sector||r.sector==="نامشخص");
+ if(!targets.length){status("همه مشخص.","success");return}
+ if(btn)btn.disabled=true;
+ const CONC=8;
+ let next=0,done=0,got=0;
+ bar(0,targets.length,"دریافت صنایع");
+ async function worker(){
+  while(true){
+   const i=next++;if(i>=targets.length)return;
+   const r=targets[i];
+   try{
+    const sec=await fetchSector(r.insCode);
+    if(sec&&sec.name){r.sector=sec.name;r.groupCode=sec.code;got++;}
+   }catch(e){}
+   done++;
+   if(done%10===0||done===targets.length){
+    bar(done,targets.length,"دریافت صنایع",r.symbol);
+    $("sectorProgress").textContent="به‌روزرسانی: "+fmt0(done)+"/"+fmt0(targets.length)+" موفق: "+fmt0(got);
+   }
+  }
+ }
+ await Promise.all(Array.from({length:CONC},worker));
+ if(btn)btn.disabled=false;
+ hideBar();
+ render();renderSectors();renderAccum();renderSignals();
+ status("صنایع: "+fmt0(got)+" از "+fmt0(targets.length),"success");
+}
+
+function renderAccum(){
+ const tb=$("accumTbody");if(!tb)return;
+ if(!results.length){tb.innerHTML='<tr><td colspan="11" class="muted" style="padding:24px">—</td></tr>';return}
+ const mnv=Number($("accumMinNetVal").value)||0;
+ const mxc=Number($("accumMaxChange").value)||1;
+ const mnval=Number($("accumMinValue").value)||0;
+ const hideLim=$("accumHideLimit").checked;
+ const filtered=results.filter(r=>{
+  if(!r.live||!r.live.hasClient||!r.live.tradingToday||r.live.ageDays!==0)return false;
+  const net=getTodayNet(r);
+  if(net===null||net<=0)return false;
+  if(r.netValueRatio===null||r.netValueRatio<mnv)return false;
+  const p=getTodayPercent(r);
+  if(p===null||Math.abs(p)>mxc)return false;
+  if(r.value===null||r.value<mnval)return false;
+  if(hideLim&&r.flags&&(r.flags.includes("نزدیک سقف")||r.flags.includes("نزدیک کف")||r.flags.includes("دامنه")))return false;
+  return true;});
+ const getAccumV=(r)=>{
+  switch(accumSortKey){
+   case "symbol": return r.symbol||"";
+   case "sector": return r.sector||"";
+   case "score": return r.score||0;
+   case "percent":{const p=getTodayPercent(r);return p===null?-1e18:p;}
+   case "net":{const v=getTodayNet(r);return v===null?-1e18:v;}
+   case "netValueRatio": return r.netValueRatio??-1e18;
+   case "power": return r.power??-1e18;
+   case "net5": return r.net5??-1e18;
+   case "posDays": return r.posDays||0;
+   default: return 0;
+  }
+ };
+ const arr=[...filtered].sort((a,b)=>{
+  const x=getAccumV(a),y=getAccumV(b);
+  if(typeof x==="string"||typeof y==="string"){
+   return accumSortDir==="asc"?String(x).localeCompare(String(y)):String(y).localeCompare(String(x));
+  }
+  const xn=x===null||x===undefined?-1e18:Number(x);
+  const yn=y===null||y===undefined?-1e18:Number(y);
+  return accumSortDir==="asc"?xn-yn:yn-xn;
+ });
+ tb.innerHTML=arr.length?arr.map((r,i)=>{
+  const net=getTodayNet(r),p=getTodayPercent(r);
+  return`<tr>
+   <td>${i+1}</td>
+   <td class="symbol" data-code="${esc(r.insCode)}">${esc(r.symbol)}</td>
+   <td style="font-size:10px">${esc(r.sector||"—")}</td>
+   <td><span class="score s${r.score}">${r.score}/5</span></td>
+   <td class="num ${p>=0?'pos':'neg'}">${pct(p)}</td>
+   <td class="num pos">${fmt(net,2)}</td>
+   <td class="num">${fmt(r.netValueRatio,3)}</td>
+   <td>${r.power!==null?fmt(r.power,2)+"×":"—"}</td>
+   <td class="num ${(r.net5??0)>=0?'pos':'neg'}">${fmt(r.net5,2)}</td>
+   <td>${r.posDays}/${r.validDays||5}</td>
+   <td>${(r.flags||[]).map(f=>'<span class="flag">'+esc(f)+'</span>').join("")}</td>
+  </tr>`;}).join(""):'<tr><td colspan="11" class="muted" style="padding:24px">با فیلتر فعلی چیزی نیست (فقط داده امروز).</td></tr>';
+ tb.querySelectorAll(".symbol").forEach(el=>{
+  el.addEventListener("click",()=>{const r=results.find(x=>x.insCode===el.dataset.code);
+   if(r){showCard(r,false);switchTab("scanner");}});});}
+
+async function runValidation(){
+ const tb=$("valTbody");tb.innerHTML="";
+ $("valSummaryCard").style.display="none";
+ $("valProgress").textContent="در حال خواندن تاریخچه…";
+ const scans=await getRecentScans(parseInt($("valScans").value)||10);
+ if(!scans.length){$("valProgress").textContent="تاریخچه‌ای وجود ندارد.";return}
+ const now=new Date();
+ const validScans=scans.filter(sc=>{
+  const daysAgo=Math.floor((now-new Date(sc.timestamp))/864e5);
+  return daysAgo>=1;});
+ if(!validScans.length){
+  $("valProgress").textContent="همه اسکن‌ها مال امروز هستند. فردا دوباره امتحان کن.";
+  return;}
+ const minScore=parseInt($("valMinScore").value)||4;
+ const rows=[];let done=0;
+ const mwSnap = await getMarketSnapshot();
+ for(const sc of validScans){
+  const date=new Date(sc.timestamp);
+  const top=(sc.results||[]).filter(r=>(r.score||0)>=minScore).slice(0,50);
+  for(const item of top){
+   try{
+    const cur=await analyzeSymbol({insCode:item.insCode,symbol:item.symbol,name:item.name,insID:"",type:""}, mwSnap);
+    const oldPrice=item.price||null;
+    const curPrice=cur.live?.price||null;
+    const ret=(oldPrice&&curPrice)?((curPrice-oldPrice)/oldPrice*100):null;
+    rows.push({date:date.toLocaleDateString("fa-IR"),symbol:item.symbol,score:item.score,
+     oldPrice,curPrice,ret,net:item.netToday});
+   }catch(e){}
+   done++;
+   if(done%5===0)$("valProgress").textContent="بررسی: "+fmt0(done)+" نماد";
+   await sleep(60);}}
+ $("valProgress").textContent="انجام شد: "+fmt0(rows.length)+" ردیف";
+ if(!rows.length){tb.innerHTML='<tr><td colspan="7" class="muted" style="padding:24px">داده‌ای نیست.</td></tr>';return}
+ const withRet=rows.filter(r=>r.ret!==null);
+ const avgRet=withRet.length?withRet.reduce((s,r)=>s+r.ret,0)/withRet.length:null;
+ const hitRate=withRet.length?withRet.filter(r=>r.ret>0).length/withRet.length*100:null;
+ const win=withRet.filter(r=>r.ret>0),loss=withRet.filter(r=>r.ret<0);
+ const avgWinRet=win.length?win.reduce((s,r)=>s+r.ret,0)/win.length:null;
+ const avgLossRet=loss.length?loss.reduce((s,r)=>s+r.ret,0)/loss.length:null;
+ $("valSummaryCard").style.display="block";
+ $("valSummary").innerHTML=
+  metric("تعداد مشاهدات",fmt0(rows.length))+
+  metric("میانگین بازده",avgRet!==null?pct(avgRet):"—","",avgRet!==null?(avgRet>=0?"good":"bad"):"")+
+  metric("نرخ برد",hitRate!==null?fmt(hitRate,1)+"%":"—","",hitRate!==null?(hitRate>=50?"good":"bad"):"")+
+  metric("میانگین سود برنده",avgWinRet!==null?pct(avgWinRet):"—","","good")+
+  metric("میانگین ضرر بازنده",avgLossRet!==null?pct(avgLossRet):"—","","bad");
+ tb.innerHTML=rows.slice(0,200).map(r=>`
+  <tr><td>${r.date}</td>
+   <td class="symbol">${esc(r.symbol)}</td>
+   <td><span class="score s${r.score}">${r.score}</span></td>
+   <td class="num">${r.oldPrice!==null?fmt0(r.oldPrice):"—"}</td>
+   <td class="num">${r.curPrice!==null?fmt0(r.curPrice):"—"}</td>
+   <td class="num ${r.ret===null?"":(r.ret>=0?"pos":"neg")}">${r.ret!==null?pct(r.ret):"—"}</td>
+   <td class="num">${r.net!==null?fmt(r.net,2):"—"}</td>
+  </tr>`).join("");}
+
+async function renderHistory(){
+ const list=await getRecentScans(30);
+ const ul=$("histList");
+ if(!list.length){ul.innerHTML='<li class="muted">هنوز اسکنی ذخیره نشده.</li>';return}
+ ul.innerHTML=list.map(s=>{
+  const t=new Date(s.timestamp);
+  const top=[...(s.results||[])].sort((a,b)=>b.score-a.score).slice(0,5);
+  const topStr=top.map(r=>r.symbol+" ("+r.score+")").join(" · ");
+  return`<li><div><b>${t.toLocaleString("fa-IR")}</b>
+   <div class="h-meta">${s.results.length} نماد · ${s.meta?.errors??0} خطا · ${s.meta?.duration??"?"}ms</div>
+   <div class="h-meta">${esc(topStr)}</div></div></li>`;}).join("");}
+
+function downloadCSV(){
+ if(!results.length)return;
+ const h=["نماد","نام","صنعت","امتیاز","Δ","تازگی","سیگنال امروز",
+  "خالص امروز (م.ت)","Net/Value","ارزش (م.ت)","ارزش/دیروز","ارزش/میانگین۲۰",
+  "سرانه خرید (م.ت)","سرانه فروش (م.ت)","نسبت سرانه","صف","ارزش صف (م.ت)","پرچم‌ها",
+  "سیگنال ۵","خالص ۵ (م.ت)","سرانه۵","قدرت۵","روز مثبت","استمرار","بازده ۵"];
+ const rows=results.map(r=>[r.symbol,r.name,r.sector||"",r.score,r.rankChange??"",r.ageDays??"",
+  r.liveSignal,r.netToday??"",r.netValueRatio??"",r.value??"",
+  r.valueVsYesterday??"",r.valueVsAvg20??"",
+  r.live?.buySav??"",r.live?.sellSav??"",r.buySellRatio??"",
+  r.queue||"",r.queueStrength??"",(r.flags||[]).join("،"),
+  r.fiveSignal,r.net5??"",r.savane5??"",r.power5??"",r.posDays,r.sustain,r.ret5??""]);
+ const csv="\uFEFF"+[h,...rows].map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");
+ const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+ const url=URL.createObjectURL(blob);const a=document.createElement("a");
+ a.href=url;a.download="scanner_v581_"+Date.now()+".csv";a.click();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);}
+
+async function testHealth(){
+ $("diagOut").textContent="در حال تست…\n";
+ const out=[];
+ for(const b of FALLBACKS){
+  const t0=Date.now();
+  try{const c=new AbortController();const t=setTimeout(()=>c.abort(),6000);
+   const r=await fetch(b+"/MarketData/GetMarketOverview/1",{signal:c.signal,cache:"no-store"});
+   clearTimeout(t);
+   out.push(b+" → "+(r.ok?"OK":"FAIL ")+" ["+(Date.now()-t0)+"ms]");
+  }catch(e){out.push(b+" → ERROR: "+e.message);}}
+ $("diagOut").textContent=out.join("\n");}
+async function diagFetch(){
+ const raw=$("diagCode").value.trim();if(!raw)return;
+ let code=raw;
+ const sym=allSyms.find(s=>s.insCode===raw||norm(s.symbol)===norm(raw));
+ if(sym)code=sym.insCode;
+ $("diagOut").textContent="ClosingPriceInfo برای "+code+"…";
+ try{const d=await getJSON("/ClosingPrice/GetClosingPriceInfo/"+code,0);
+  $("diagOut").textContent=JSON.stringify(d,null,2);
+ }catch(e){$("diagOut").textContent="خطا: "+e.message;}}
+async function diagBestLimits(){
+ const raw=$("diagCode").value.trim();if(!raw)return;
+ let code=raw;
+ const sym=allSyms.find(s=>s.insCode===raw||norm(s.symbol)===norm(raw));
+ if(sym)code=sym.insCode;
+ $("diagOut").textContent="BestLimits برای "+code+"…";
+ try{const d=await getJSON("/BestLimits/"+code,0);
+  $("diagOut").textContent=JSON.stringify(d,null,2);
+ }catch(e){$("diagOut").textContent="خطا: "+e.message;}}
+async function diagMarketWatch(){
+ const raw=$("diagCode").value.trim();if(!raw)return;
+ let code=raw;
+ const sym=allSyms.find(s=>s.insCode===raw||norm(s.symbol)===norm(raw));
+ if(sym)code=sym.insCode;
+ $("diagOut").textContent="MarketWatch برای "+code+"…";
+ try{
+  const map = await getMarketSnapshot(true);
+  const item = map.get(String(code));
+  $("diagOut").textContent = item ? JSON.stringify(item, null, 2) : "نماد در snapshot نیست";
+ }catch(e){$("diagOut").textContent="خطا: "+e.message;}}
+async function diagInstrumentInfo(){
+ const raw=$("diagCode").value.trim();if(!raw)return;
+ let code=raw;
+ const sym=allSyms.find(s=>s.insCode===raw||norm(s.symbol)===norm(raw));
+ if(sym)code=sym.insCode;
+ $("diagOut").textContent="InstrumentInfo برای "+code+"…";
+ try{const d=await getJSON("/Instrument/GetInstrumentInfo/"+code,0);
+  $("diagOut").textContent=JSON.stringify(d,null,2);
+ }catch(e){$("diagOut").textContent="خطا: "+e.message;}}
+
+function switchTab(name){
+ document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===name));
+ document.querySelectorAll(".tab-panel").forEach(p=>p.classList.toggle("active",p.id==="panel-"+name));
+ if(name==="signals")renderSignals();
+ if(name==="money")renderSmartMoney();
+ if(name==="bigmoney")renderBigMoney();
+ if(name==="battle")renderBattle();
+ if(name==="sectors")renderSectors();
+ if(name==="accum")renderAccum();
+ if(name==="history")renderHistory();}
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>switchTab(t.dataset.tab)));
+
+window.addEventListener("load",async()=>{
+ loadSectorCache();
+ try{await openDB();}catch(e){}
+ await bootstrapSectorsFromDB();
+ try{await loadHistCache();}catch(e){}
+ try{const old=JSON.parse(localStorage.getItem(LS_SYMS)||"[]");
+  if(Array.isArray(old)&&old.length>20){
+   allSymsRaw=old;
+   allSymsRaw.forEach(s=>{
+    if(s.isTradable===undefined)s.isTradable=isTradableFromClean(s);
+    if(!s.sector||s.sector==="نامشخص"){const c=sectorCache[s.insCode];if(c){s.sector=c.name;s.groupCode=c.code;}}
+   });
+   rebuildSymsView();
+   status("فهرست ذخیره‌شده: "+fmt0(allSyms.length)+" نماد قابل اسکن","success");
+  }else status("برای شروع، فهرست را دریافت کن.");
+ }catch(e){status("برای شروع، فهرست را دریافت کن.");}
+ try{const r=n(localStorage.getItem(LS_RATE));if(r&&r>0)$("usdRate").value=r;}catch(e){}
+ try{
+  if("Notification" in window && Notification.permission === "granted"){
+   $("notifBtn").textContent = "🔔 فعال";
+   $("notifBtn").disabled = true;
+  }
+ }catch(e){}
+ try{
+  if(localStorage.getItem("scanner_autoscan") === "1"){
+   const savedMin = localStorage.getItem("scanner_autoscan_min") || "10";
+   $("autoScanMin").value = savedMin;
+   $("autoScan").checked = true;
+   if(allSyms.length > 0) startAutoScan();
+  }
+ }catch(e){}
+ refreshMarket();
+ marketTimer=setInterval(refreshMarket,60000);
+ // Self-healing: هر ۳۰ ثانیه چک می‌کند اگر تایمر نیست، راه‌اندازی کند
+ setInterval(()=>{
+  try{
+   if(localStorage.getItem("scanner_autoscan") === "1" &&
+      !autoScanTimer && allSyms.length > 0 &&
+      !scanning && !loading){
+    console.log("[autoscan] self-healing: restarting timer");
+    startAutoScan();
+   }
+  }catch(e){}
+ }, 30000);
+});
+</script>
+</body>
+</html>
