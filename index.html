@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+]<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>اسکنر پول هوشمند بورس ایران | v5.9.2</title>
+<title>اسکنر پول هوشمند بورس ایران | v5.9.7</title>
 <style>
 :root{--bg:#f1f5f9;--card:#fff;--ink:#172033;--muted:#64748b;--line:#dbe3ef;
 --blue:#2563eb;--green:#15803d;--red:#dc2626;--purple:#6d28d9;--amber:#b45309;--teal:#0f766e}
@@ -43,8 +43,8 @@ table{border-collapse:collapse;width:100%;white-space:nowrap}
 table.main{min-width:2060px}table.sectors{min-width:1300px}table.validate{min-width:900px}table.bigmoney{min-width:1100px}table.toptab{min-width:1500px}
 th,td{padding:8px 7px;text-align:center;border-bottom:1px solid #edf2f7;font-size:11px}
 thead th{position:sticky;top:0;background:#1e293b;color:white;z-index:1;font-weight:normal}
-th[data-sort],th[data-accum-sort],th[data-top-sort]{cursor:pointer}
-th[data-sort]:hover,th[data-accum-sort]:hover,th[data-top-sort]:hover{background:#334155}
+th[data-sort],th[data-accum-sort],th[data-top-sort],th[data-legal-sort]{cursor:pointer}
+th[data-sort]:hover,th[data-accum-sort]:hover,th[data-top-sort]:hover,th[data-legal-sort]:hover{background:#334155}
 tr:hover td{background:#f8fafc}
 .symbol{color:#1d4ed8;font-weight:bold;cursor:pointer}
 .num{direction:ltr;font-variant-numeric:tabular-nums}
@@ -134,6 +134,8 @@ tr:hover td{background:#f8fafc}
 .sig-col-head .cnt{font-size:14px;background:rgba(255,255,255,.25);padding:1px 8px;border-radius:10px}
 .sig-col.s5 .sig-col-head{background:linear-gradient(90deg,#047857,#059669)}
 .sig-col.strong5 .sig-col-head{background:linear-gradient(90deg,#16a34a,#22c55e)}
+.sig-col.legal .sig-col-head{background:linear-gradient(90deg,#7c2d12,#c2410c)}
+.sig-col.legalSustain .sig-col-head{background:linear-gradient(90deg,#78350f,#b45309)}
 .sig-col.battle .sig-col-head{background:linear-gradient(90deg,#dc2626,#ef4444)}
 .sig-col.bigmoney .sig-col-head{background:linear-gradient(90deg,#d97706,#f59e0b)}
 .sig-col.netval .sig-col-head{background:linear-gradient(90deg,#1d4ed8,#2563eb)}
@@ -156,8 +158,8 @@ tr:hover td{background:#f8fafc}
 
 <div class="top">
  <div><h1>🧠 اسکنر پول هوشمند بورس ایران</h1>
-  <div class="sub">سیگنال · پول درشت · جدال · چرخش صنایع · انباشت · اعتبارسنجی</div></div>
- <span class="pill">v5.9.2 · فهرست کامل</span>
+  <div class="sub">سیگنال · پول درشت · جدال · حقوقی · چرخش صنایع · انباشت · اعتبارسنجی</div></div>
+ <span class="pill">v5.9.7 · فهرست کامل</span>
 </div>
 
 <div class="breadth-bar" id="breadthBar">
@@ -182,6 +184,7 @@ tr:hover td{background:#f8fafc}
  <button class="tab active" data-tab="scanner">🔍 اسکنر</button>
  <button class="tab" data-tab="signals">🎯 سیگنال</button>
  <button class="tab" data-tab="top">🏆 برترین‌های بازار</button>
+ <button class="tab" data-tab="legal">🏛️ حقوقی‌ها</button>
  <button class="tab" data-tab="money">💸 پول هوشمند</button>
  <button class="tab" data-tab="bigmoney">💰 پول درشت</button>
  <button class="tab" data-tab="battle">⚔️ جدال</button>
@@ -262,9 +265,7 @@ tr:hover td{background:#f8fafc}
   <button class="light" onclick="clearHistCache().then(()=>status('کش تاریخچه پاک شد','success'))">🗑 پاک کردن کش</button>
  </div>
  <div class="small-note">
-  <b>دریافت کامل:</b> MarketWatch + جستجوی الفبایی + GetInstrumentInfo برای نمادهای ناقص<br>
-  <b>صف خرید/فروش:</b> از BestLimits تازه (فقط برای نمادهای مشکوک) — MarketWatch قابل‌اعتماد نیست<br>
-  <b>marketCap:</b> اول از MarketWatch، اگر نبود از InstrumentInfo (کش‌شده)
+  <b>صف:</b> از BestLimits تازه · <b>حقوقی:</b> ⚡ روزانه + 📈 استمرار · <b>اعلان:</b> ۳ لایه
  </div>
 </div>
 
@@ -327,15 +328,33 @@ tr:hover td{background:#f8fafc}
  </div>
  <div class="row">
   <label>حداقل Net/Value<input id="sigMinNetVal" type="number" value="0.20" step="0.05" oninput="renderSignals()"></label>
-  <label>حداقل نسبت سرانه (پول درشت)<input id="sigMinBS" type="number" value="1.5" step="0.1" oninput="renderSignals()"></label>
-  <label>حداقل سرانه خرید (م.ت)<input id="sigMinBuySav" type="number" value="50" step="5" oninput="renderSignals()"></label>
-  <label>حداقل جدال (قدرت)<input id="sigMinPower" type="number" value="1.0" step="0.1" oninput="renderSignals()"></label>
-  <label>حداقل سرانه فروش (م.ت)<input id="sigMinSellSav" type="number" value="1" step="0.5" oninput="renderSignals()"></label>
-  <label>حداقل استمرار (روز)<input id="sigMinSustain" type="number" value="3" step="1" oninput="renderSignals()"></label>
+  <label>حداقل نسبت سرانه<input id="sigMinBS" type="number" value="1.5" step="0.1" oninput="renderSignals()"></label>
+  <label>حداقل سرانه خرید<input id="sigMinBuySav" type="number" value="50" step="5" oninput="renderSignals()"></label>
+  <label>حداقل جدال<input id="sigMinPower" type="number" value="1.0" step="0.1" oninput="renderSignals()"></label>
+  <label>حداقل سرانه فروش<input id="sigMinSellSav" type="number" value="1" step="0.5" oninput="renderSignals()"></label>
+  <label>حداقل استمرار<input id="sigMinSustain" type="number" value="3" step="1" oninput="renderSignals()"></label>
   <label>حداقل ارزش غیرعادی<input id="sigMinSpike" type="number" value="2" step="0.5" oninput="renderSignals()"></label>
-  <label>حداقل ارزش معاملات (م.ت)<input id="sigMinValue" type="number" value="2" step="1" oninput="renderSignals()"></label>
-  <label class="filter-chip"><input id="sigOnlyMulti" type="checkbox" onchange="renderSignals()">فقط ۳+ سیگنال</label>
+  <label>حداقل ارزش (م.ت)<input id="sigMinValue" type="number" value="2" step="1" oninput="renderSignals()"></label>
   <label class="filter-chip"><input id="sigOnlyLive" type="checkbox" checked onchange="renderSignals()">فقط داده امروز</label>
+ </div>
+ <div class="row" style="border-top:1px solid var(--line);padding-top:10px;margin-top:4px">
+  <span class="muted" style="font-size:11px;font-weight:bold">🔗 اشتراک سیگنال‌ها:</span>
+  <button class="light" style="font-size:11px;padding:5px 9px" onclick="clearSigPresets()">✕ پاک کردن</button>
+  <button class="light" style="font-size:11px;padding:5px 9px" onclick="applySigPreset('strong')">🔥 قوی</button>
+  <button class="light" style="font-size:11px;padding:5px 9px" onclick="applySigPreset('legal')">🏛️ حقوقی</button>
+  <button class="light" style="font-size:11px;padding:5px 9px" onclick="applySigPreset('quality')">⭐ کیفی</button>
+ </div>
+ <div class="row">
+  <label class="filter-chip"><input id="sigShareScore5" type="checkbox" onchange="onSigShareChange()">⭐ امتیاز ۵ <span class="sig-cnt" data-k="score5" style="font-size:10px;font-weight:bold"></span></label>
+  <label class="filter-chip"><input id="sigShareStrong5" type="checkbox" onchange="onSigShareChange()">🔥 ورود پول قوی <span class="sig-cnt" data-k="strong5" style="font-size:10px;font-weight:bold"></span></label>
+  <label class="filter-chip"><input id="sigShareLegal" type="checkbox" onchange="onSigShareChange()">⚡ حقوقی روزانه <span class="sig-cnt" data-k="legal" style="font-size:10px;font-weight:bold"></span></label>
+  <label class="filter-chip"><input id="sigShareLegalSustain" type="checkbox" onchange="onSigShareChange()">📈 حقوقی بلندمدت <span class="sig-cnt" data-k="legalSustain" style="font-size:10px;font-weight:bold"></span></label>
+  <label class="filter-chip"><input id="sigShareBattle" type="checkbox" onchange="onSigShareChange()">⚔️ جدال قوی <span class="sig-cnt" data-k="battle" style="font-size:10px;font-weight:bold"></span></label>
+  <label class="filter-chip"><input id="sigShareBigMoney" type="checkbox" onchange="onSigShareChange()">💰 پول درشت <span class="sig-cnt" data-k="bigmoney" style="font-size:10px;font-weight:bold"></span></label>
+  <label class="filter-chip"><input id="sigShareNetVal" type="checkbox" onchange="onSigShareChange()">📊 Net/Value <span class="sig-cnt" data-k="netval" style="font-size:10px;font-weight:bold"></span></label>
+  <label class="filter-chip"><input id="sigShareAccum" type="checkbox" onchange="onSigShareChange()">🎯 انباشت <span class="sig-cnt" data-k="accum" style="font-size:10px;font-weight:bold"></span></label>
+  <label class="filter-chip"><input id="sigShareSustain" type="checkbox" onchange="onSigShareChange()">📈 استمرار حقیقی <span class="sig-cnt" data-k="sustain" style="font-size:10px;font-weight:bold"></span></label>
+  <label class="filter-chip"><input id="sigShareSpike" type="checkbox" onchange="onSigShareChange()">⚡ ارزش غیرعادی <span class="sig-cnt" data-k="spike" style="font-size:10px;font-weight:bold"></span></label>
  </div>
  <div class="small-note" id="sigSummary"></div>
 </div>
@@ -344,15 +363,15 @@ tr:hover td{background:#f8fafc}
 
 <div class="tab-panel" id="panel-top">
 <div class="card"><h2>🏆 برترین‌های بازار</h2>
-<div class="muted">بزرگ‌ترین شرکت‌های بازار بر اساس ارزش بازار، رتبه‌بندی شده بر اساس «امتیاز خرید» (ترکیب سیگنال‌ها)</div>
+<div class="muted">بزرگ‌ترین شرکت‌های بازار بر اساس ارزش بازار</div>
 <div class="row">
  <label>تعداد شرکت‌ها<select id="topLimit" onchange="onTopLimitChange()">
-  <option value="50">۵۰ شرکت</option>
-  <option value="70" selected>۷۰ شرکت</option>
-  <option value="100">۱۰۰ شرکت</option>
-  <option value="150">۱۵۰ شرکت</option>
+  <option value="50">۵۰</option>
+  <option value="70" selected>۷۰</option>
+  <option value="100">۱۰۰</option>
+  <option value="150">۱۵۰</option>
  </select></label>
- <label class="filter-chip"><input id="topOnlyBuyable" type="checkbox" onchange="renderTop()">فقط قابل خرید (بدون صف خرید)</label>
+ <label class="filter-chip"><input id="topOnlyBuyable" type="checkbox" onchange="renderTop()">فقط قابل خرید</label>
  <button class="light" onclick="renderTop(true)">🔄 بازخوانی</button>
 </div>
 <div class="small-note" id="topProgress"></div>
@@ -362,18 +381,58 @@ tr:hover td{background:#f8fafc}
  <th>#</th>
  <th data-top-sort="symbol">نماد ↕</th>
  <th data-top-sort="sector">صنعت ↕</th>
- <th data-top-sort="marketCap">ارزش بازار (همت) ↕</th>
+ <th data-top-sort="marketCap">ارزش بازار ↕</th>
  <th data-top-sort="buyScore">امتیاز خرید ↕</th>
  <th data-top-sort="score">امتیاز ↕</th>
- <th data-top-sort="liveSignal">سیگنال امروز ↕</th>
+ <th data-top-sort="liveSignal">سیگنال ↕</th>
  <th data-top-sort="power">قدرت ↕</th>
  <th data-top-sort="netValueRatio">Net/Value ↕</th>
  <th data-top-sort="sustain">استمرار ↕</th>
  <th data-top-sort="net5">۵روزه ↕</th>
  <th>صف</th>
 </tr></thead><tbody id="topTbody"></tbody></table></div>
+</div>
+</div>
+
+<div class="tab-panel" id="panel-legal">
+<div class="card"><h2>🏛️ حقوقی‌ها</h2>
+<div class="muted">⚡ روزانه (خبری) + 📈 استمرار (بلندمدت)</div>
+<div class="row">
+ <label>حداقل خالص حقوقی (B)<input id="legalMinNet" type="number" value="1" step="0.5" oninput="renderLegal()"></label>
+ <label>حداقل نسبت خرید<input id="legalMinRatio" type="number" value="0.55" step="0.05" min="0" max="1" oninput="renderLegal()"></label>
+ <label>حداقل خرید حقوقی (B)<input id="legalMinBuy" type="number" value="3" step="1" oninput="renderLegal()"></label>
+ <label class="filter-chip"><input id="legalOnlySignal" type="checkbox" onchange="renderLegal()">فقط با سیگنال قوی</label>
+ <label class="filter-chip"><input id="legalOnlyLive" type="checkbox" checked onchange="renderLegal()">فقط داده امروز</label>
+</div>
+<div class="small-note" id="legalSummary"></div>
+</div>
+
+<div class="money-grid four">
+ <div class="money-card"><h4>🏆 تجمیع حقوقی</h4><ul class="money-list" id="legalAccum"></ul></div>
+ <div class="money-card"><h4>🛡️ حقوقی در صف فروش می‌خرد</h4><ul class="money-list" id="legalBattle"></ul></div>
+ <div class="money-card"><h4>📰 خرید خبری مشترک</h4><ul class="money-list" id="legalDual"></ul></div>
+ <div class="money-card"><h4>⚠️ توزیع حقوقی</h4><ul class="money-list" id="legalDist"></ul></div>
+</div>
+
+<div class="card"><h3>📋 جدول کامل حقوقی‌ها</h3>
+<div class="tw"><table class="sectors"><thead><tr>
+ <th>#</th>
+ <th data-legal-sort="symbol">نماد ↕</th>
+ <th data-legal-sort="sector">صنعت ↕</th>
+ <th data-legal-sort="legalDaily">⚡ روزانه ↕</th>
+ <th data-legal-sort="legalSustain">📈 استمرار ↕</th>
+ <th data-legal-sort="legalUsage">کاربرد</th>
+ <th data-legal-sort="netLegal">خالص (B) ↕</th>
+ <th data-legal-sort="buyLegal">خرید (B) ↕</th>
+ <th data-legal-sort="sellLegal">فروش (B) ↕</th>
+ <th data-legal-sort="legalBuyRatio">نسبت ↕</th>
+ <th data-legal-sort="legalBuySav">سرانه (B) ↕</th>
+ <th data-legal-sort="legalPower">قدرت ↕</th>
+ <th>سیگنال</th>
+ <th>صف</th>
+</tr></thead><tbody id="legalTbody"></tbody></table></div>
 <div class="small-note" style="margin-top:10px">
- <b>امتیاز خرید</b> = ترکیب امتیاز پایه + قدرت + Net/Value + استمرار + ۵روزه + سیگنال امروز − جریمه صف خرید (۰ تا ۱۰۰)
+ <b>B = میلیارد تومان</b> · <b>⚡ روزانه</b> = خبر امروز · <b>📈 استمرار</b> = خرید پیوسته حقوقی
 </div>
 </div>
 </div>
@@ -393,11 +452,10 @@ tr:hover td{background:#f8fafc}
 
 <div class="tab-panel" id="panel-bigmoney">
 <div class="card"><h2>💰 ورود پول درشت</h2>
-<div class="muted">فقط از داده امروز (live). بدون fallback به تاریخچه.</div>
 <div class="row">
  <label>حداقل نسبت<input id="bmMinRatio" type="number" value="1.5" step="0.1" oninput="renderBigMoney()"></label>
- <label>حداقل سرانه خرید (م.ت)<input id="bmMinBuySav" type="number" value="50" step="5" oninput="renderBigMoney()"></label>
- <label>حداقل ارزش (م.ت)<input id="bmMinValue" type="number" value="3" oninput="renderBigMoney()"></label>
+ <label>حداقل سرانه خرید<input id="bmMinBuySav" type="number" value="50" step="5" oninput="renderBigMoney()"></label>
+ <label>حداقل ارزش<input id="bmMinValue" type="number" value="3" oninput="renderBigMoney()"></label>
  <label class="filter-chip"><input id="bmOnlyQueue" type="checkbox" onchange="renderBigMoney()">فقط صف خرید/نزدیک سقف</label>
 </div></div>
 <div class="money-grid">
@@ -422,10 +480,10 @@ tr:hover td{background:#f8fafc}
 </div>
 <div class="small-note" id="btSummary"></div></div>
 <div class="money-grid four">
- <div class="money-card"><h4>🔥 خریدار مسلط <span class="muted" id="btStrongCount" style="font-size:10px"></span></h4><ul class="money-list" id="btStrongBuy"></ul></div>
- <div class="money-card"><h4>📈 خریدار برتر <span class="muted" id="btBuyCount" style="font-size:10px"></span></h4><ul class="money-list" id="btBuy"></ul></div>
- <div class="money-card"><h4>⚖️ متعادل <span class="muted" id="btNeutralCount" style="font-size:10px"></span></h4><ul class="money-list" id="btNeutral"></ul></div>
- <div class="money-card"><h4>📉 فروشنده مسلط <span class="muted" id="btSellCount" style="font-size:10px"></span></h4><ul class="money-list" id="btSell"></ul></div>
+ <div class="money-card"><h4>🔥 خریدار مسلط <span class="muted" id="btStrongCount"></span></h4><ul class="money-list" id="btStrongBuy"></ul></div>
+ <div class="money-card"><h4>📈 خریدار برتر <span class="muted" id="btBuyCount"></span></h4><ul class="money-list" id="btBuy"></ul></div>
+ <div class="money-card"><h4>⚖️ متعادل <span class="muted" id="btNeutralCount"></span></h4><ul class="money-list" id="btNeutral"></ul></div>
+ <div class="money-card"><h4>📉 فروشنده مسلط <span class="muted" id="btSellCount"></span></h4><ul class="money-list" id="btSell"></ul></div>
 </div>
 </div>
 
@@ -441,7 +499,7 @@ tr:hover td{background:#f8fafc}
   <option value="value">ارزش</option>
   <option value="count">تعداد</option>
  </select></label>
- <label>حداقل تعداد نماد<input id="sectorMinCount" type="number" min="1" value="2" onchange="renderSectors()"></label>
+ <label>حداقل تعداد<input id="sectorMinCount" type="number" min="1" value="2" onchange="renderSectors()"></label>
  <label class="filter-chip"><input id="sectorOnlyPos" type="checkbox" onchange="renderSectors()">فقط با ورود پول مثبت</label>
  <button class="light" onclick="refetchAllSectors(this)">🔄 به‌روزرسانی صنایع</button>
 </div>
@@ -452,11 +510,11 @@ tr:hover td{background:#f8fafc}
  <div class="money-card"><h4>💎 Net/Value بالاتر</h4><ul class="money-list" id="sectorTopNetVal"></ul></div>
  <div class="money-card"><h4>🔄 چرخش مثبت</h4><ul class="money-list" id="sectorTopRotation"></ul></div>
 </div>
-<div class="card"><h3>📊 نمودار خالص پول امروز</h3><div class="sector-bars" id="sectorBars"><div class="muted">هنوز اسکن نشده.</div></div></div>
+<div class="card"><h3>📊 نمودار</h3><div class="sector-bars" id="sectorBars"><div class="muted">هنوز اسکن نشده.</div></div></div>
 <div class="card"><h3>📋 جدول صنایع</h3><div class="tw"><table class="sectors"><thead><tr>
  <th>#</th><th>صنعت</th><th>تعداد</th><th>با داده</th><th>گستردگی</th>
- <th>خالص امروز (م.ت)</th><th>Net/Value</th><th>چرخش</th><th>خالص ۵ر (م.ت)</th>
- <th>ارزش (م.ت)</th><th>میانگین قدرت</th><th>برترین‌ها</th>
+ <th>خالص امروز</th><th>Net/Value</th><th>چرخش</th><th>خالص ۵ر</th>
+ <th>ارزش</th><th>میانگین قدرت</th><th>برترین‌ها</th>
 </tr></thead><tbody id="sectorTbody"></tbody></table></div></div>
 </div>
 
@@ -465,7 +523,7 @@ tr:hover td{background:#f8fafc}
 <div class="row">
  <label>حداقل Net/Value<input id="accumMinNetVal" type="number" value="0.05" step="0.01" oninput="renderAccum()"></label>
  <label>حداکثر |تغییر ٪|<input id="accumMaxChange" type="number" value="1" step="0.5" oninput="renderAccum()"></label>
- <label>حداقل ارزش (م.ت)<input id="accumMinValue" type="number" value="5" oninput="renderAccum()"></label>
+ <label>حداقل ارزش<input id="accumMinValue" type="number" value="5" oninput="renderAccum()"></label>
  <label class="filter-chip"><input id="accumHideLimit" type="checkbox" checked onchange="renderAccum()">حذف نزدیک سقف/کف</label>
 </div></div>
 <div class="card"><h3>📋 نامزدهای انباشت</h3>
@@ -475,7 +533,7 @@ tr:hover td{background:#f8fafc}
  <th data-accum-sort="sector">صنعت ↕</th>
  <th data-accum-sort="score">امتیاز ↕</th>
  <th data-accum-sort="percent">تغییر ٪ ↕</th>
- <th data-accum-sort="net">خالص امروز ↕</th>
+ <th data-accum-sort="net">خالص ↕</th>
  <th data-accum-sort="netValueRatio">Net/Value ↕</th>
  <th data-accum-sort="power">قدرت ↕</th>
  <th data-accum-sort="net5">۵روزه ↕</th>
@@ -485,21 +543,20 @@ tr:hover td{background:#f8fafc}
 </div>
 
 <div class="tab-panel" id="panel-validate">
-<div class="card"><h2>🧪 اعتبارسنجی سیگنال</h2>
+<div class="card"><h2>🧪 اعتبارسنجی</h2>
 <div class="row">
- <button class="light" onclick="runValidation()">▶️ اجرای اعتبارسنجی</button>
+ <button class="light" onclick="runValidation()">▶️ اجرا</button>
  <label>حداقل امتیاز<input id="valMinScore" type="number" value="4" min="1" max="5" style="width:70px"></label>
- <label>تعداد اسکن اخیر<input id="valScans" type="number" value="10" min="1" max="30" style="width:70px"></label>
+ <label>تعداد اسکن<input id="valScans" type="number" value="10" min="1" max="30" style="width:70px"></label>
 </div>
 <div class="small-note" id="valProgress"></div></div>
 <div class="card" id="valSummaryCard" style="display:none">
- <h3>📊 خلاصهٔ عملکرد</h3>
- <div class="metrics" id="valSummary"></div>
+ <h3>📊 خلاصه</h3><div class="metrics" id="valSummary"></div>
 </div>
 <div class="card"><h3>📋 جزئیات</h3>
 <div class="tw"><table class="validate"><thead><tr>
- <th>تاریخ اسکن</th><th>نماد</th><th>امتیاز</th>
- <th>قیمت اسکن (ت)</th><th>قیمت فعلی (ت)</th><th>بازده ٪</th><th>خالص پول (م.ت)</th>
+ <th>تاریخ</th><th>نماد</th><th>امتیاز</th>
+ <th>قیمت اسکن</th><th>قیمت فعلی</th><th>بازده ٪</th><th>خالص</th>
 </tr></thead><tbody id="valTbody"></tbody></table></div></div>
 </div>
 
@@ -523,14 +580,13 @@ tr:hover td{background:#f8fafc}
  <button class="light" onclick="diagInstrumentInfo()">🔍 InstrumentInfo</button>
 </div>
 <pre id="diagOut" style="background:#0f172a;color:#e2e8f0;padding:12px;border-radius:8px;overflow:auto;max-height:500px;font-size:11px;direction:ltr;text-align:left"></pre></div>
-
 <div class="card">
- <h3>🔍 تشخیص فیلترها</h3>
+ <h3>🔍 تشخیص</h3>
  <div class="row">
   <button class="purple" onclick="diagFilters()">📊 چرا نمادها رد می‌شوند؟</button>
-  <button class="light" onclick="showAllSymbols()">👁 نمایش همه بدون فیلتر</button>
-  <button class="light" onclick="diagSearchSym()">🔍 جستجوی نماد در لیست خام</button>
-  <button class="light" onclick="diagMarketCap()">🔍 بررسی marketCap</button>
+  <button class="light" onclick="showAllSymbols()">👁 نمایش همه</button>
+  <button class="light" onclick="diagSearchSym()">🔍 جستجو</button>
+  <button class="light" onclick="diagMarketCap()">💰 بررسی marketCap</button>
  </div>
  <div id="diagFiltersOut" class="diag-box"></div>
 </div>
@@ -541,12 +597,11 @@ tr:hover td{background:#f8fafc}
 
 <script>
 "use strict";
-const API="https://cdn.tsetmc.com/api";
 const FALLBACKS=["https://cdn.tsetmc.com/api","https://tsetmc.com/api"];
 const $=id=>document.getElementById(id);
 const B=1e9,M=1e6;
 const LS_SYMS="scanner_v581_syms",LS_RATE="scanner_v581_rate",LS_SECTORS="scanner_v581_sectors";
-const LS_SHARES="scanner_v592_shares";
+const LS_SHARES="scanner_v592_shares",LS_SIG_SHARE="scanner_sig_share",LS_TOP_LIMIT="scanner_top_limit";
 const DB_NAME="scanner_v581",DB_VERSION=2;
 
 const norm=s=>String(s||"").replace(/[يى]/g,"ی").replace(/ك/g,"ک").replace(/\s+/g,"").trim().toLowerCase();
@@ -564,10 +619,19 @@ let stopped=false,scanning=false,loading=false,liveTimer=null;
 let sortKey="score",sortDir="desc",marketTimer=null,marketCapRaw=0,db=null;
 let accumSortKey="netValueRatio",accumSortDir="desc";
 let topSortKey="buyScore",topSortDir="desc";
+let legalSortKey="legalDaily",legalSortDir="desc";
 let sectorCache={},_sectorSaveTimer=null;
 let sharesCache={},_sharesSaveTimer=null;
 let autoScanTimer=null;
 let _topRendering=false;
+let sigShareKeys = new Set();
+const SIG_SHARE_MAP = {
+ score5:"sigShareScore5",strong5:"sigShareStrong5",
+ legal:"sigShareLegal",legalSustain:"sigShareLegalSustain",
+ battle:"sigShareBattle",bigmoney:"sigShareBigMoney",
+ netval:"sigShareNetVal",accum:"sigShareAccum",
+ sustain:"sigShareSustain",spike:"sigShareSpike"
+};
 
 function status(s,t=""){const e=$("status");if(e){e.textContent=s;e.className=t}}
 function bar(done,total,stage,current=""){
@@ -637,17 +701,10 @@ async function loadHistCache(){
    rq.onsuccess=()=>res(rq.result||[]);rq.onerror=()=>rej(rq.error);
   });
   const now = Date.now();
-  for(const e of all){
-   if(now - e.ts < HIST_TTL_MS) histCacheMap.set(e.key, e);
-  }
+  for(const e of all){ if(now - e.ts < HIST_TTL_MS) histCacheMap.set(e.key, e); }
   if(all.length > histCacheMap.size){
-   try{
-    const tx=db.transaction("histCache","readwrite");
-    const st=tx.objectStore("histCache");
-    for(const e of all){
-     if(now - e.ts >= HIST_TTL_MS) st.delete(e.key);
-    }
-   }catch(e){}
+   try{const tx=db.transaction("histCache","readwrite");const st=tx.objectStore("histCache");
+    for(const e of all){ if(now - e.ts >= HIST_TTL_MS) st.delete(e.key); }}catch(e){}
   }
   histCacheLoaded = true;
  }catch(e){ histCacheLoaded = true; }
@@ -657,43 +714,56 @@ function getCachedHistSync(insCode, type){
  const key = insCode + ":" + type;
  const entry = histCacheMap.get(key);
  if(!entry) return null;
- if(Date.now() - entry.ts > HIST_TTL_MS){
-  histCacheMap.delete(key);
-  return null;
- }
+ if(Date.now() - entry.ts > HIST_TTL_MS){ histCacheMap.delete(key); return null; }
  return entry.data;
 }
-
 function setCachedHistFireAndForget(insCode, type, data){
  const key = insCode + ":" + type;
  const entry = { key, insCode, type, data, ts: Date.now() };
  histCacheMap.set(key, entry);
- if(db){
-  try{
-   const tx=db.transaction("histCache","readwrite");
-   tx.objectStore("histCache").put(entry);
-  }catch(e){}
- }
+ if(db){ try{ const tx=db.transaction("histCache","readwrite"); tx.objectStore("histCache").put(entry); }catch(e){} }
 }
-
 async function clearHistCache(){
  histCacheMap.clear();
- try{
-  if(!db)await openDB();
-  const tx=db.transaction("histCache","readwrite");
-  tx.objectStore("histCache").clear();
- }catch(e){}
+ try{ if(!db)await openDB(); const tx=db.transaction("histCache","readwrite"); tx.objectStore("histCache").clear(); }catch(e){}
 }
 
-function loadSharesCache(){
- try{ sharesCache = JSON.parse(localStorage.getItem(LS_SHARES) || "{}") || {}; }
- catch(e){ sharesCache = {}; }
-}
+function loadSharesCache(){ try{ sharesCache = JSON.parse(localStorage.getItem(LS_SHARES) || "{}") || {}; }catch(e){ sharesCache = {}; } }
 function saveSharesCacheDebounced(){
  if(_sharesSaveTimer) clearTimeout(_sharesSaveTimer);
- _sharesSaveTimer = setTimeout(() => {
-  try{ localStorage.setItem(LS_SHARES, JSON.stringify(sharesCache)); }catch(e){}
- }, 1500);
+ _sharesSaveTimer = setTimeout(() => { try{ localStorage.setItem(LS_SHARES, JSON.stringify(sharesCache)); }catch(e){} }, 1500);
+}
+
+function loadSigShare(){
+ try{
+  const saved = JSON.parse(localStorage.getItem(LS_SIG_SHARE) || "[]") || [];
+  sigShareKeys = new Set(saved);
+  Object.keys(SIG_SHARE_MAP).forEach(k => { const el = $(SIG_SHARE_MAP[k]); if(el) el.checked = saved.includes(k); });
+ }catch(e){}
+}
+function saveSigShare(){ try{ localStorage.setItem(LS_SIG_SHARE, JSON.stringify([...sigShareKeys])); }catch(e){} }
+function onSigShareChange(){
+ sigShareKeys.clear();
+ Object.keys(SIG_SHARE_MAP).forEach(k => { const el = $(SIG_SHARE_MAP[k]); if(el && el.checked) sigShareKeys.add(k); });
+ saveSigShare(); renderSignals();
+}
+function clearSigPresets(){
+ Object.keys(SIG_SHARE_MAP).forEach(k => { const el = $(SIG_SHARE_MAP[k]); if(el) el.checked = false; });
+ sigShareKeys.clear(); saveSigShare(); renderSignals();
+}
+function applySigPreset(name){
+ const map = { strong:["score5","strong5","bigmoney"], legal:["legal","legalSustain"], quality:["score5","sustain","bigmoney"] };
+ const set = map[name] || [];
+ Object.keys(SIG_SHARE_MAP).forEach(k => { const el = $(SIG_SHARE_MAP[k]); if(el) el.checked = set.includes(k); });
+ sigShareKeys = new Set(set); saveSigShare(); renderSignals();
+}
+function updateSigCounts(baseFiltered){
+ document.querySelectorAll(".sig-cnt").forEach(el => {
+  const k = el.dataset.k;
+  const cnt = baseFiltered.filter(e => e.sig.some(s => s.key === k)).length;
+  el.textContent = cnt > 0 ? `(${cnt})` : "";
+  el.style.color = cnt > 0 ? "#15803d" : "#94a3b8";
+ });
 }
 
 function todayTehranKey(){const p=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Tehran",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
@@ -729,7 +799,6 @@ async function getJSON(path,retries=1){const bases=await checkHealth();let err;
  throw err||Error("connect error");}
 
 function readNum(o,ks){for(const k of ks){const v=n(o?.[k]);if(v!==null)return v}return null}
-function readText(o,ks){for(const k of ks){const v=o?.[k];if(v!==undefined&&v!==null&&String(v).trim())return String(v).trim()}return""}
 function firstNonZero(o,ks){for(const k of ks){const v=n(o?.[k]);if(v!==null&&v!==0)return v}return null}
 function unwrap(d,key){const v=d?.[key];return Array.isArray(v)?v[0]||{}:v||d||{}}
 
@@ -780,19 +849,15 @@ function isTradableFromClean(s){
  if(s.isTradable!==undefined && !s.needsInfo)return s.isTradable;
  return rejectionReason(s)===null;
 }
-
 function cleanSymbol(it){
  const flow=nz(it.flow);
  const insCode=String(it.insCode||it.instrumentID||"");
  const sym=String(it.lva||it.lVal18AFC||it.symbol||"").trim();
  const nm=String(it.lvc||it.lVal30||it.name||"").trim();
  const insID=String(it.insID||it.instrumentID||"");
- return {
-  insCode: insCode, symbol: sym, name: nm, insID: insID, flow: flow,
+ return { insCode, symbol: sym, name: nm, insID, flow,
   type: flow===2?"فرابورس":(flow===3||flow===4)?"بازار پایه":"بورس",
-  isTradable: !sym ? undefined : isTradableStock(it),
-  needsInfo: !sym
- };
+  isTradable: !sym ? undefined : isTradableStock(it), needsInfo: !sym };
 }
 
 function rebuildSymsView(){
@@ -808,98 +873,69 @@ function rebuildSymsView(){
  $("mCountNote").textContent=fmt0(removed)+" از "+fmt0(allSymsRaw.length)+" حذف شد";
  $("scanBtn").disabled=!allSyms.length;
  try{
-  if(allSyms.length > 0 && !autoScanTimer && localStorage.getItem("scanner_autoscan") === "1"){
-   console.log("[autoscan] restarting timer from rebuildSymsView");
-   startAutoScan();
-  }
+  if(allSyms.length > 0 && !autoScanTimer && localStorage.getItem("scanner_autoscan") === "1"){ startAutoScan(); }
  }catch(e){}
  if(results.length){
   const good=new Set(allSyms.map(s=>s.insCode));
   const b=results.length;
   results=results.filter(r=>good.has(r.insCode));
-  if(results.length!==b){render();renderSmartMoney();renderSectors();renderAccum();renderBigMoney();renderBattle();renderSignals();renderTop();}}
+  if(results.length!==b){render();renderSmartMoney();renderSectors();renderAccum();renderBigMoney();renderBattle();renderSignals();renderTop();renderLegal();}}
 }
-function showAllSymbols(){
- const cb=$("excludeDerivatives");
- if(cb){cb.checked=false;rebuildSymsView();status("همه نمادها: "+fmt0(allSyms.length),"success");}
-}
+function showAllSymbols(){const cb=$("excludeDerivatives");if(cb){cb.checked=false;rebuildSymsView();status("همه نمادها: "+fmt0(allSyms.length),"success");}}
 function diagFilters(){
  if(!allSymsRaw.length){$("diagFiltersOut").innerHTML="اول فهرست را دریافت کن";return;}
  const reasons={};let tradable=0;
  for(const s of allSymsRaw){const r=rejectionReason(s);if(r===null)tradable++;else reasons[r]=(reasons[r]||0)+1;}
  const sorted=Object.entries(reasons).sort((a,b)=>b[1]-a[1]);
- let html=`<div><b>کل خام:</b> ${fmt0(allSymsRaw.length)} | <b>قابل اسکن:</b> ${fmt0(tradable)} | <b>رد شده:</b> ${fmt0(allSymsRaw.length-tradable)}</div><hr>`;
- html+='<div><b>دلایل رد:</b></div><ul style="list-style:none;padding:0">';
- for(const [k,v] of sorted){html+=`<li>${esc(k)}: <b>${fmt0(v)}</b> نماد</li>`;}
- html+='</ul>';
- $("diagFiltersOut").innerHTML=html;
+ let html=`<div><b>کل:</b> ${fmt0(allSymsRaw.length)} | <b>قابل اسکن:</b> ${fmt0(tradable)} | <b>رد شده:</b> ${fmt0(allSymsRaw.length-tradable)}</div><hr>`;
+ html+='<div><b>دلایل:</b></div><ul style="list-style:none;padding:0">';
+ for(const [k,v] of sorted){html+=`<li>${esc(k)}: <b>${fmt0(v)}</b></li>`;}
+ html+='</ul>';$("diagFiltersOut").innerHTML=html;
 }
 function diagSearchSym(){
- const raw=prompt("نماد مورد نظر:");if(!raw)return;
+ const raw=prompt("نماد:");if(!raw)return;
  const found=allSymsRaw.find(s=>s.symbol===raw);
- if(found){$("diagFiltersOut").innerHTML="<b>پیدا شد:</b><br>"+JSON.stringify(found,null,2)+"<br><b>دلیل رد:</b> "+(rejectionReason(found)||"هیچ (قابل اسکن)");}
- else{$("diagFiltersOut").innerHTML="<b>در لیست خام نیست.</b>";}
+ if(found){$("diagFiltersOut").innerHTML="<b>پیدا شد:</b><br>"+JSON.stringify(found,null,2)+"<br><b>دلیل رد:</b> "+(rejectionReason(found)||"هیچ");}
+ else{$("diagFiltersOut").innerHTML="<b>پیدا نشد.</b>";}
 }
 function diagMarketCap(){
  if(!results.length){$("diagFiltersOut").innerHTML="ابتدا اسکن کن";return;}
  const withCap = results.filter(r=>r.marketCap && r.marketCap > 0);
  const sorted = [...withCap].sort((a,b)=>(b.marketCap||0)-(a.marketCap||0));
- const top10 = sorted.slice(0,10).map(r=>({sym:r.symbol, mc:Number(r.marketCap.toFixed(1)), price:r.live?.price}));
- 
- // چک کردن سهم‌های بزرگ
- const bigNames = ["فولاد","وبملت","وبصادر","وغدیر","شپنا","خساپا","فملی","شتران","فارس","کگل"];
- const bigCheck = bigNames.map(name => {
-  const r = results.find(x => x.symbol === name);
-  if(!r) return {sym:name, status:"not in results"};
-  if(!r.marketCap) return {sym:name, status:"no marketCap", price:r.live?.price, value:r.value};
-  return {sym:name, mc:Number(r.marketCap.toFixed(1)), price:r.live?.price, value:r.value};
- });
- 
+ const top10 = sorted.slice(0,10).map(r=>({sym:r.symbol, mc:Number(r.marketCap.toFixed(1))}));
  let html=`<div><b>با marketCap:</b> ${fmt0(withCap.length)} | <b>sharesCache:</b> ${fmt0(Object.keys(sharesCache).length)}</div>`;
- html+=`<div><b>۱۰ بزرگ marketCap:</b></div><pre style="font-size:10px;background:#fff;padding:8px;border-radius:5px;direction:ltr;text-align:left;max-height:250px;overflow:auto">${esc(JSON.stringify(top10,null,2))}</pre>`;
- html+=`<div><b>وضعیت سهم‌های بزرگ:</b></div><pre style="font-size:10px;background:#fff;padding:8px;border-radius:5px;direction:ltr;text-align:left;max-height:250px;overflow:auto">${esc(JSON.stringify(bigCheck,null,2))}</pre>`;
+ html+=`<pre style="font-size:10px;background:#fff;padding:8px;border-radius:5px;direction:ltr;text-align:left;max-height:250px;overflow:auto">${esc(JSON.stringify(top10,null,2))}</pre>`;
  $("diagFiltersOut").innerHTML=html;
 }
 
 async function loadSymbols(){
  if(scanning||loading)return;loading=true;
  $("loadBtn").disabled=true;$("scanBtn").disabled=true;
- status("در حال دریافت فهرست کامل…");
+ status("در حال دریافت فهرست…");
  try{
   const map=new Map();
   const pt=Array.from({length:9},(_,i)=>`paperTypes[${i}]=${i+1}`).join("&");
   const url=`/ClosingPrice/GetMarketWatch?market=0&${pt}&withBestLimits=false&hEven=0&RefID=0`;
-  try{
-   const d=await getJSON(url,2);
-   for(const it of (d.marketwatch||[])){
-    const s=cleanSymbol(it);
-    if(s.insCode && s.symbol) map.set(s.insCode,s);
-   }
+  try{const d=await getJSON(url,2);
+   for(const it of (d.marketwatch||[])){const s=cleanSymbol(it);if(s.insCode && s.symbol) map.set(s.insCode,s);}
   }catch(e){console.warn("MarketWatch failed:",e.message);}
   status("MarketWatch: "+fmt0(map.size)+" | جستجوی الفبایی…");
   const letters="اآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهی0123456789";
   let i=0;
   for(const ch of letters){
    if(stopped)break;
-   try{
-    const q=await getJSON("/Instrument/GetInstrumentSearch/"+encodeURIComponent(ch),0);
-    for(const it of (q.instrumentSearch||[])){
-     const s=cleanSymbol(it);
-     if(!s.insCode) continue;
-     if(map.has(s.insCode)) continue;
-     map.set(s.insCode, s);
-    }
+   try{const q=await getJSON("/Instrument/GetInstrumentSearch/"+encodeURIComponent(ch),0);
+    for(const it of (q.instrumentSearch||[])){const s=cleanSymbol(it);if(!s.insCode) continue;if(map.has(s.insCode)) continue;map.set(s.insCode, s);}
    }catch(e){}
    bar(++i,letters.length,"جستجو",ch);
    await sleep(60);
   }
   const needInfo=[...map.values()].filter(s=>!s.symbol);
-  status("دریافت اطلاعات "+fmt0(needInfo.length)+" نماد از "+fmt0(map.size)+"…");
+  status("دریافت info: "+fmt0(needInfo.length)+" از "+fmt0(map.size));
   let infoDone=0, infoOk=0;
   for(const s of needInfo){
    if(stopped)break;
-   try{
-    const d=await getJSON("/Instrument/GetInstrumentInfo/"+s.insCode,0);
+   try{const d=await getJSON("/Instrument/GetInstrumentInfo/"+s.insCode,0);
     const info=d?.instrumentInfo||d?.data||{};
     const sym=String(info.lVal18AFC||info.symbol||"").trim();
     const nm=String(info.lVal30||info.name||"").trim();
@@ -916,7 +952,7 @@ async function loadSymbols(){
     }
    }catch(e){}
    infoDone++;
-   if(infoDone%20===0||infoDone===needInfo.length){bar(infoDone,needInfo.length,"دریافت info",s.symbol||s.insCode);}
+   if(infoDone%20===0||infoDone===needInfo.length){bar(infoDone,needInfo.length,"info",s.symbol||s.insCode);}
    await sleep(30);
   }
   if(infoOk>0) saveSectorCacheDebounced();
@@ -927,73 +963,45 @@ async function loadSymbols(){
    if(!s.sector||s.sector==="نامشخص"){const sc=sectorCache[s.insCode];if(sc){s.sector=sc.name;s.groupCode=sc.code;}}
    if(!s.zTitad && sharesCache[s.insCode]) s.zTitad = sharesCache[s.insCode];
   });
-  if(allSymsRaw.length<20) throw Error("فهرست کافی دریافت نشد.");
+  if(allSymsRaw.length<20) throw Error("فهرست کافی نیست.");
   rebuildSymsView();
   try{localStorage.setItem(LS_SYMS,JSON.stringify(allSymsRaw));}catch(e){}
-  status("فهرست کامل: "+fmt0(allSymsRaw.length)+" نماد خام، "+fmt0(allSyms.length)+" قابل اسکن (info: "+fmt0(infoOk)+"/"+fmt0(needInfo.length)+")","success");
+  status("فهرست: "+fmt0(allSymsRaw.length)+" خام، "+fmt0(allSyms.length)+" قابل اسکن","success");
  }catch(e){
-  try{
-   const old=JSON.parse(localStorage.getItem(LS_SYMS)||"[]");
-   if(old.length>20){
-    allSymsRaw=old;
-    allSymsRaw.forEach(s=>{if(s.isTradable===undefined)s.isTradable=isTradableFromClean(s)});
-    rebuildSymsView();
-    status("اتصال ناموفق؛ کش: "+fmt0(allSyms.length)+" نماد","warn");
-   }else status("خطا: "+e.message,"error");
+  try{const old=JSON.parse(localStorage.getItem(LS_SYMS)||"[]");
+   if(old.length>20){allSymsRaw=old;allSymsRaw.forEach(s=>{if(s.isTradable===undefined)s.isTradable=isTradableFromClean(s)});rebuildSymsView();status("کش: "+fmt0(allSyms.length)+" نماد","warn");}
+   else status("خطا: "+e.message,"error");
   }catch(_){status("خطا: "+e.message,"error");}
- }finally{
-  loading=false;
-  $("loadBtn").disabled=false;
-  $("scanBtn").disabled=!allSyms.length;
-  hideBar();
- }
+ }finally{loading=false;$("loadBtn").disabled=false;$("scanBtn").disabled=!allSyms.length;hideBar();}
 }
 
 function loadSectorCache(){
  sectorCache={};
- const keys=[LS_SECTORS,"scanner_v58_sectors","scanner_v57_sectors","scanner_v56_sectors","scanner_v55_sectors","scanner_v54_sectors","scanner_v53_sectors"];
+ const keys=[LS_SECTORS,"scanner_v58_sectors","scanner_v57_sectors","scanner_v56_sectors","scanner_v55_sectors"];
  for(const k of keys){
-  try{
-   const v=JSON.parse(localStorage.getItem(k)||"{}")||{};
-   for(const [code,s] of Object.entries(v)){
-    if(!sectorCache[code] && s && s.name){sectorCache[code]=s;}
-   }
+  try{const v=JSON.parse(localStorage.getItem(k)||"{}")||{};
+   for(const [code,s] of Object.entries(v)){if(!sectorCache[code] && s && s.name){sectorCache[code]=s;}}
   }catch(e){}
  }
  try{localStorage.setItem(LS_SECTORS,JSON.stringify(sectorCache));}catch(e){}
 }
-
 async function bootstrapSectorsFromDB(){
- try{
-  if(!db)await openDB();
-  const scans=await getRecentScans(30);
-  let added=0;
-  for(const sc of scans){
-   for(const r of (sc.results||[])){
-    if(r.sector && r.sector!=="نامشخص" && r.insCode && !sectorCache[r.insCode]){
-     sectorCache[r.insCode]={name:r.sector,code:null};added++;
-    }
-   }
-  }
+ try{if(!db)await openDB();
+  const scans=await getRecentScans(30);let added=0;
+  for(const sc of scans){for(const r of (sc.results||[])){if(r.sector && r.sector!=="نامشخص" && r.insCode && !sectorCache[r.insCode]){sectorCache[r.insCode]={name:r.sector,code:null};added++;}}}
   if(added>0){try{localStorage.setItem(LS_SECTORS,JSON.stringify(sectorCache));}catch(e){}}
  }catch(e){}
 }
-
 function saveSectorCacheDebounced(){if(_sectorSaveTimer)clearTimeout(_sectorSaveTimer);
  _sectorSaveTimer=setTimeout(()=>{try{localStorage.setItem(LS_SECTORS,JSON.stringify(sectorCache))}catch(e){}},2500)}
 
 async function fetchShares(insCode){
  if(!insCode) return null;
  if(sharesCache[insCode] > 0) return sharesCache[insCode];
- try{
-  const d = await getJSON("/Instrument/GetInstrumentInfo/"+insCode, 0);
+ try{const d = await getJSON("/Instrument/GetInstrumentInfo/"+insCode, 0);
   const info = d?.instrumentInfo || d?.data || {};
   const zTitad = nz(readNum(info, ["zTitad","totalShares","sharesCount","baseVol"]));
-  if(zTitad > 0){
-   sharesCache[insCode] = zTitad;
-   saveSharesCacheDebounced();
-   return zTitad;
-  }
+  if(zTitad > 0){ sharesCache[insCode] = zTitad; saveSharesCacheDebounced(); return zTitad; }
  }catch(e){}
  return null;
 }
@@ -1001,22 +1009,12 @@ async function fetchShares(insCode){
 async function ensureMarketCap(targetCount, onProgress){
  const withCap = results.filter(r => r.marketCap && r.marketCap > 0);
  if(withCap.length >= targetCount) return withCap.length;
-
- // ✅ اصلاح: اولویت‌بندی بر اساس ارزش معاملات (شرکت‌های بزرگ) — نه امتیاز
  const missing = results
    .filter(r => (!r.marketCap || r.marketCap <= 0) && r.live && r.live.price > 0)
-   .sort((a,b) => {
-     const av = a.value || 0;
-     const bv = b.value || 0;
-     if(Math.abs(bv - av) > 1) return bv - av;
-     return (b.score || 0) - (a.score || 0);
-   })
+   .sort((a,b) => { const av=a.value||0,bv=b.value||0; if(Math.abs(bv-av)>1) return bv-av; return (b.score||0)-(a.score||0); })
    .slice(0, Math.max(targetCount * 5, 400));
-
  if(!missing.length) return withCap.length;
-
- const CONC = 8;
- let next = 0, done = 0, got = 0;
+ const CONC = 8;let next=0,done=0,got=0;
  async function worker(){
   while(true){
    const i = next++; if(i >= missing.length) return;
@@ -1049,7 +1047,8 @@ async function fetchSector(insCode){
    if(nm){const val={code:c,name:String(nm).trim()};sectorCache[insCode]=val;saveSectorCacheDebounced();return val;}
   }
  }catch(e){}
- return null;}
+ return null;
+}
 
 function getTodayNet(r){
  if(r.netToday!==null&&r.netToday!==undefined)return r.netToday;
@@ -1093,7 +1092,29 @@ function dailyMetrics(hist){
  if(!Array.isArray(hist)||!hist.length)return null;
  let rows=[...hist];
  const today=todayTehranKey();
- if(rows.length&&dateKey(rows[0].recDate)===today)rows=rows.slice(1);
+ let todayLegal = null;
+ if(rows.length && dateKey(rows[0].recDate)===today){
+  const t = rows[0];
+  const tbn = n(t.buy_N_Value);
+  const tsn = n(t.sell_N_Value);
+  if(tbn !== null || tsn !== null){
+   const bn = tbn || 0;
+   const sn = tsn || 0;
+   if(bn > 0 || sn > 0){
+    const bnc = nz(t.buy_N_Count || t.buy_CountN || t.buyN_Count);
+    const snc = nz(t.sell_N_Count || t.sell_CountN || t.sellN_Count);
+    const buyB = bn / 10 / 1e9;
+    const sellB = sn / 10 / 1e9;
+    const netB = (bn - sn) / 10 / 1e9;
+    const ratio = (bn + sn > 0) ? bn / (bn + sn) : null;
+    const buySavB = (bnc > 0 && bn > 0) ? (bn / 10 / bnc) / 1e9 : null;
+    const sellSavB = (snc > 0 && sn > 0) ? (sn / 10 / snc) / 1e9 : null;
+    const power = (buySavB && sellSavB && sellSavB > 0) ? buySavB / sellSavB : null;
+    todayLegal = { netLegal: netB, buyLegal: buyB, sellLegal: sellB, legalBuyRatio: ratio, legalBuySav: buySavB, legalSellSav: sellSavB, legalPower: power };
+   }
+  }
+  rows = rows.slice(1);
+ }
  const rec=rows.slice(0,5);
  if(!rec.length)return null;
  const days=rec.map(d=>{
@@ -1103,7 +1124,10 @@ function dailyMetrics(hist){
   const buy=ok?buyRaw/10:null,sell=ok?sellRaw/10:null,net=ok?buy-sell:null;
   const bSav=(buy!==null&&bc>0)?buy/bc/M:null,sSav=(sell!==null&&sc>0)?sell/sc/M:null;
   const pw=(bSav!==null&&sSav!==null&&sSav>0)?bSav/sSav:null;
-  return{date:d.recDate,buy,sell,net,buySav:bSav,sellSav:sSav,power:pw,valid:ok};});
+  const buyNRaw=n(d.buy_N_Value),sellNRaw=n(d.sell_N_Value);
+  const okN=buyNRaw!==null&&sellNRaw!==null&&(buyNRaw>0||sellNRaw>0);
+  const netN=okN?(buyNRaw-sellNRaw)/10:null;
+  return{date:d.recDate,buy,sell,net,buySav:bSav,sellSav:sSav,power:pw,netN,valid:ok};});
  const vd=days.filter(d=>d.valid);
  if(!vd.length)return null;
  const tb=vd.reduce((s,d)=>s+d.buy,0),ts=vd.reduce((s,d)=>s+d.sell,0);
@@ -1115,9 +1139,17 @@ function dailyMetrics(hist){
  const pw=(sav!==null&&sSav!==null&&sSav>0)?sav/sSav:null;
  const ratio=ts>0?tb/ts:(tb>0?5:null);
  const scoreInfo=score5Ex(net/B,sav,pw,ratio,pos,vd.length);
+ const vdN = days.filter(d => d.netN !== null);
+ let sustainN = 0;
+ for(const d of days){ if(d.netN !== null && d.netN > 0) sustainN++; else break; }
+ const sumN3 = vdN.slice(0, 3).reduce((s,d)=>s+d.netN, 0);
+ const avgN3 = vdN.length >= 3 ? sumN3 / 3 / 1e9 : null;
+ const last3both = vdN.slice(0, 3).filter(d => d.netN > 0 && d.net !== null && d.net > 0).length;
  return{days,validDays:vd.length,net5:net/B,avg5:net/B/vd.length,posDays:pos,
   savane5:sav,power5:pw,ratio5:ratio,scoreFive:scoreInfo.score,scoreChecks:scoreInfo.checks,
-  fiveSignal:signal5(net/B,pw,pos,ratio,vd.length)};}
+  fiveSignal:signal5(net/B,pw,pos,ratio,vd.length),
+  sustainN, avgN3, last3both, todayLegal};}
+
 function score5Ex(net,sav,pw,ratio,pos,vd){
  const checks=[];let p=0;
  let w=0;if(net!==null&&net>0)w=net>=100?1:net>=30?.7:.35;
@@ -1133,6 +1165,7 @@ function score5Ex(net,sav,pw,ratio,pos,vd){
  let score=Math.max(1,Math.min(5,Math.round(p)));
  if(net!==null&&net<0)score=Math.min(score,2);
  return{score,checks,raw:p};}
+
 function signal5(net,pw,pos,ratio,vd){
  if(vd<3)return"داده ناکافی";
  if(net>=30&&pw!==null&&pw>=2&&pos>=3&&ratio!==null&&ratio>=1.2)return"ورود پول قوی";
@@ -1187,18 +1220,16 @@ async function getLive(sym, mwSnap){
  const mwPdv  = mwItem?.pdv  || 0;
  const mwPcl  = mwItem?.pcl  || 0;
  const needBL = mwPMax > 0 && (
-   mwPdv === 0 ||
-   mwPdv >= mwPMax ||
+   mwPdv === 0 || mwPdv >= mwPMax ||
    (mwPMin > 0 && mwPdv > 0 && mwPdv <= mwPMin) ||
-   mwPcl >= mwPMax ||
-   (mwPMin > 0 && mwPcl > 0 && mwPcl <= mwPMin)
+   mwPcl >= mwPMax || (mwPMin > 0 && mwPcl > 0 && mwPcl <= mwPMin)
  );
  const [pRes,cRes,blRes]=await Promise.allSettled([
   getJSON("/ClosingPrice/GetClosingPriceInfo/"+sym.insCode,1),
   getJSON("/ClientType/GetClientType/"+sym.insCode+"/1/0",1),
   needBL ? getBestLimits(sym.insCode) : Promise.resolve(null)
  ]);
- if(pRes.status!=="fulfilled")throw Error("قیمت لحظه‌ای دریافت نشد");
+ if(pRes.status!=="fulfilled")throw Error("قیمت دریافت نشد");
  const p=unwrap(pRes.value,"closingPriceInfo");
  const c=cRes.status==="fulfilled"?unwrap(cRes.value,"clientType"):{};
  const bl=blRes.status==="fulfilled"?blRes.value:null;
@@ -1209,7 +1240,6 @@ async function getLive(sym, mwSnap){
  const volume=nz(readNum(p,["qTotTran5J","tvol"]));
  const valueRaw=nz(readNum(p,["qTotCap","tval"]));
  const trades=nz(readNum(p,["zTotTran","tno"]));
- // zTitad: اول MarketWatch، بعد sym.zTitad (از allSymsRaw)، بعد sharesCache
  const zTitad = nz(mwItem?.zTitad) || nz(sym.zTitad) || nz(sharesCache[sym.insCode]) || 0;
  const marketCapHmt = (zTitad > 0 && last > 0) ? (zTitad * last / 1e13) : null;
  const pMax = mwPMax || nz(readNum(p,["pMax"]));
@@ -1226,6 +1256,20 @@ async function getLive(sym, mwSnap){
  const svol=nz(readNum(c,["sell_I_Volume","sellIVolume"]));
  const bc=nz(readNum(c,["buy_I_Count","buy_CountI","buyI_Count"]));
  const sc=nz(readNum(c,["sell_I_Count","sell_CountI","sellI_Count"]));
+ const bn=nz(readNum(c,["buy_N_Value","buyNValue"]));
+ const sn=nz(readNum(c,["sell_N_Value","sellNValue"]));
+ const bnc=nz(readNum(c,["buy_N_Count","buy_CountN","buyN_Count"]));
+ const snc=nz(readNum(c,["sell_N_Count","sell_CountN","sellN_Count"]));
+ const buyN_t = bn / 10;
+ const sellN_t = sn / 10;
+ const buyLegalB = buyN_t / 1e9;
+ const sellLegalB = sellN_t / 1e9;
+ const netLegalB = (bn - sn) / 10 / 1e9;
+ const legalBuyRatio = (bn + sn > 0) ? bn / (bn + sn) : null;
+ const legalBuySavB = (bnc > 0 && buyN_t > 0) ? (buyN_t / bnc) / 1e9 : null;
+ const legalSellSavB = (snc > 0 && sellN_t > 0) ? (sellN_t / snc) / 1e9 : null;
+ const legalPower = (legalBuySavB && legalSellSavB && legalSellSavB > 0) ? legalBuySavB / legalSellSavB : null;
+
  let buy=null,sell=null,net=null,estimated=false,hasClient=false;
  if(bv>0||sv>0){buy=bv/10;sell=sv/10;net=(bv-sv)/10;hasClient=true;estimated=false;}
  else if((bvol>0||svol>0)&&last>0){buy=bvol*last/10;sell=svol*last/10;net=buy-sell;hasClient=true;estimated=true;}
@@ -1237,11 +1281,8 @@ async function getLive(sym, mwSnap){
  if(bl){
   const bl_pd1 = bl.pd1||0, bl_qd1 = bl.qd1||0;
   const bl_po1 = bl.po1||0, bl_qo1 = bl.qo1||0;
-  if(bl_pd1 > 0 && pMax > 0 && bl_pd1 >= pMax && bl_qd1 > 0){
-   queue = "صف خرید"; queueStrength = (bl_pd1 * bl_qd1) / 1e7;
-  } else if(bl_po1 > 0 && pMin > 0 && bl_po1 <= pMin && bl_qo1 > 0){
-   queue = "صف فروش"; queueStrength = (bl_po1 * bl_qo1) / 1e7;
-  }
+  if(bl_pd1 > 0 && pMax > 0 && bl_pd1 >= pMax && bl_qd1 > 0){ queue = "صف خرید"; queueStrength = (bl_pd1 * bl_qd1) / 1e7; }
+  else if(bl_po1 > 0 && pMin > 0 && bl_po1 <= pMin && bl_qo1 > 0){ queue = "صف فروش"; queueStrength = (bl_po1 * bl_qo1) / 1e7; }
  }
 
  let liveSignal="داده ناکافی",reason="داده حقیقی کافی نیست.";
@@ -1261,6 +1302,8 @@ async function getLive(sym, mwSnap){
   else{liveSignal="انتظار";reason="نشانه‌ها هم‌جهت نیستند.";}}
  return{price,close:close>0?close/10:null,percent,volume,value:valueT,trades,
   marketCap:marketCapHmt,zTitad,
+  netLegal:netLegalB,buyLegal:buyLegalB,sellLegal:sellLegalB,
+  legalBuyRatio,legalBuySav:legalBuySavB,legalSellSav:legalSellSavB,legalPower,
   netToday:net!==null?net/B:null,buySav,sellSav,power,buySellRatio:power,
   liveSignal,liveReason:reason,estimated,hasClient,tradingToday,
   queue,queueStrength,date:p.dEven||p.recDate||"",ageDays,
@@ -1277,10 +1320,7 @@ async function getFive(sym){
 async function getHistoryPrice(sym){
  try{
   let d = getCachedHistSync(sym.insCode, "prices");
-  if(!d){
-   d = await getJSON("/ClosingPrice/GetClosingPriceDailyList/"+sym.insCode+"/30",1);
-   setCachedHistFireAndForget(sym.insCode, "prices", d);
-  }
+  if(!d){ d = await getJSON("/ClosingPrice/GetClosingPriceDailyList/"+sym.insCode+"/30",1); setCachedHistFireAndForget(sym.insCode, "prices", d); }
   const a=d.closingPriceDaily||[];
   if(!a.length)return{ret5:null,price:null,value:null,valueYesterday:null,valueAvg20:null,avgVolume20:null,days:0};
   const px=x=>{const p=n(x?.pClosing);if(p!==null&&p>0)return p;const dr=n(x?.pDrCotVal);return dr!==null&&dr>0?dr:null;};
@@ -1338,6 +1378,135 @@ function computeFlags(r){
  if(r.ageDays!==null&&r.ageDays>5)flags.push("داده کهنه");
  return flags;}
 
+function computeSustain(five){
+ if(!five||!five.days||!five.days.length)return 0;
+ let c=0;for(const d of five.days){if(d.valid&&d.net!==null&&d.net>0)c++;else break;}return c;}
+
+function computeLegalDaily(r){
+ if(!r || !r.live) return null;
+ const netLegal = r.live.netLegal;
+ const buyL = r.live.buyLegal;
+ const sellL = r.live.sellLegal;
+ const hasLegalData = (netLegal !== null && netLegal !== undefined && netLegal !== 0) || (buyL && buyL > 0) || (sellL && sellL > 0);
+ if(!hasLegalData) return null;
+
+ let s = 30;
+
+ if(r.value && r.value > 0 && netLegal !== null && netLegal !== undefined){
+  s += Math.max(-25, Math.min(25, (netLegal / r.value) * 500));
+ } else if(netLegal !== null && netLegal !== undefined){
+  s += Math.max(-25, Math.min(25, netLegal * 3));
+ }
+
+ const netReal = r.live.netToday;
+ if(netReal !== null && r.value && r.value > 0){
+  s += Math.max(-15, Math.min(15, (netReal / r.value) * 300));
+ }
+
+ const ratio = r.live.legalBuyRatio;
+ if(ratio !== null){
+  s += Math.max(-15, Math.min(15, (ratio - 0.5) * 30));
+ }
+
+ if(r.valueVsAvg20 !== null && r.valueVsAvg20 > 1){
+  s += Math.min(10, (r.valueVsAvg20 - 1) * 5);
+ }
+
+ if(r.queue === "صف فروش" && netLegal > 0 && ratio !== null && ratio >= 0.60) s += 10;
+
+ const sav = r.live.legalBuySav;
+ if(sav !== null && sav > 0) s += Math.min(5, sav * 1.2);
+
+ if(r.queue === "صف خرید") s = Math.max(0, s - 20);
+ if(netLegal !== null && netLegal < -2 && ratio !== null && ratio < 0.35) s = Math.max(0, s - 30);
+ if(netLegal !== null && netLegal > 0 && netReal !== null && netReal < -1) s = Math.max(0, s - 8);
+
+ if(buyL !== null && buyL !== undefined){
+  if(buyL >= 10) s += 10;
+  else if(buyL >= 5) s += 6;
+  else if(buyL >= 3) s += 3;
+ }
+
+ return Math.max(0, Math.min(100, Math.round(s)));
+}
+
+function computeLegalSustain(r){
+ if(!r || !r.five) return null;
+ const f = r.five;
+ const sustainN = f.sustainN || 0;
+ const avgN3 = f.avgN3;
+ const last3both = f.last3both || 0;
+ if(sustainN === 0 && (avgN3 === null || avgN3 <= 0)) return 0;
+ let s = 20;
+ s += Math.min(40, sustainN * 12);
+ if(avgN3 !== null && avgN3 > 0) s += Math.min(20, Math.sqrt(avgN3) * 6);
+ s += Math.min(15, last3both * 5);
+ if(avgN3 !== null && avgN3 >= 2) s += 5;
+ return Math.max(0, Math.min(100, Math.round(s)));
+}
+
+function getLegalUsage(r){
+ const d = r.legalDaily ?? computeLegalDaily(r);
+ const s = r.legalSustain ?? computeLegalSustain(r);
+ if(d === null && s === null) return {text:"—", cls:"neutral"};
+ const dOK = d !== null && d >= 70;
+ const sOK = s !== null && s >= 70;
+ if(dOK && sOK) return {text:"⚡📈 هر دو", cls:"pos"};
+ if(dOK) return {text:"⚡ روزانه", cls:"buy"};
+ if(sOK) return {text:"📈 بلندمدت", cls:"wait"};
+ return {text:"—", cls:"neutral"};
+}
+
+function computeLegalSignal(r){
+ const sig = [];
+ if(!r.live) return sig;
+ const netLegal = r.live.netLegal;
+ const buyLegal = r.live.buyLegal;
+ const ratio = r.live.legalBuyRatio;
+ const netReal = r.live.netToday;
+ if(netLegal === null || netLegal === undefined) return sig;
+
+ // تجمیع حقوقی (طلایی)
+ if(netLegal >= 1 && buyLegal !== null && buyLegal >= 3 && ratio !== null && ratio >= 0.65 && r.queue !== "صف خرید"){
+  sig.push({key:"accum", label:`تجمیع حقوقی ${fmt(netLegal,1)}B`, type:"gold"});
+ }
+
+ // حقوقی در صف فروش می‌خرد (بنفش)
+ if(r.queue === "صف فروش" && netLegal > 0 && ratio !== null && ratio >= 0.55){
+  sig.push({key:"battle", label:`خرید حقوقی در صف فروش`, type:"purple"});
+ }
+
+ // 📰 خرید خبری مشترک — بازتعریف‌شده (حقوقی + حجم غیرعادی)
+ if(netLegal >= 0.5 && ratio !== null && ratio >= 0.50 &&
+    r.value !== null && r.value >= 2 &&
+    r.valueVsAvg20 !== null && r.valueVsAvg20 >= 1.3){
+  sig.push({key:"dual", label:`خرید خبری مشترک`, type:"green"});
+ }
+
+ // توزیع حقوقی (قرمز)
+ if(netLegal < -2 && ratio !== null && ratio < 0.35){
+  sig.push({key:"dist", label:`توزیع حقوقی ${fmt(netLegal,1)}B`, type:"red"});
+ }
+
+ return sig;
+}
+
+function computeLegalScore(r){
+ if(!r || !r.live) return null;
+ const net = r.live.netLegal;
+ if(net === null || net === undefined) return null;
+ let s = 40;
+ s += Math.max(-40, Math.min(40, net * 6));
+ const buy = r.live.buyLegal;
+ if(buy !== null && buy > 0) s += Math.min(15, Math.sqrt(buy) * 2);
+ const ratio = r.live.legalBuyRatio;
+ if(ratio !== null) s += (ratio - 0.5) * 30;
+ const sav = r.live.legalBuySav;
+ if(sav !== null && sav > 0) s += Math.min(8, sav * 1.5);
+ if(net > 0 && r.live.netToday !== null && r.live.netToday > 0) s += 8;
+ return Math.max(0, Math.min(100, Math.round(s)));
+}
+
 async function analyzeSymbol(sym, mwSnap){
  let fs=sym.sector||"نامشخص",fc=sym.groupCode??null;
  if(!fs||fs==="نامشخص"){const cached=sectorCache[sym.insCode];if(cached){fs=cached.name;fc=cached.code;}}
@@ -1345,6 +1514,22 @@ async function analyzeSymbol(sym, mwSnap){
  const live=lr.status==="fulfilled"?lr.value:null;
  const five=fr.status==="fulfilled"?fr.value:null;
  const hp=pr.status==="fulfilled"?pr.value:{ret5:null,price:null,value:null,valueYesterday:null,valueAvg20:null,avgVolume20:null,days:0};
+
+ // Fallback: اگر endpoint امروز داده حقوقی نداشت، از تاریخچه استفاده کن
+ if(live && five && five.todayLegal){
+  const legalMissing = (live.netLegal === null || live.netLegal === undefined || live.netLegal === 0) &&
+                       (live.buyLegal === null || live.buyLegal === undefined || live.buyLegal === 0);
+  if(legalMissing){
+   live.netLegal = five.todayLegal.netLegal;
+   live.buyLegal = five.todayLegal.buyLegal;
+   live.sellLegal = five.todayLegal.sellLegal;
+   live.legalBuyRatio = five.todayLegal.legalBuyRatio;
+   live.legalBuySav = five.todayLegal.legalBuySav;
+   live.legalSellSav = five.todayLegal.legalSellSav;
+   live.legalPower = five.todayLegal.legalPower;
+  }
+ }
+
  const value=(live&&live.value!==null&&live.value>0)?live.value:(hp.value!==null?hp.value:null);
  const valueVsYesterday=(value!==null&&hp.valueYesterday&&hp.valueYesterday>0)?value/hp.valueYesterday:null;
  const valueVsAvg20=(value!==null&&hp.valueAvg20&&hp.valueAvg20>0)?value/hp.valueAvg20:null;
@@ -1357,6 +1542,9 @@ async function analyzeSymbol(sym, mwSnap){
   valueAvg20:hp.valueAvg20,valueVsYesterday,valueVsAvg20,avgVolume20:hp.avgVolume20,
   netValueRatio,ageDays:live?live.ageDays:null,score,combined,
   marketCap:live?live.marketCap:null,
+  netLegal:live?live.netLegal:null,buyLegal:live?live.buyLegal:null,sellLegal:live?live.sellLegal:null,
+  legalBuyRatio:live?live.legalBuyRatio:null,legalBuySav:live?live.legalBuySav:null,
+  legalSellSav:live?live.legalSellSav:null,legalPower:live?live.legalPower:null,
   netToday:live?live.netToday:null,power:live?live.power:null,
   buySellRatio:live?live.buySellRatio:null,
   liveSignal:live?live.liveSignal:"داده ناکافی",
@@ -1369,10 +1557,13 @@ async function analyzeSymbol(sym, mwSnap){
   lastUpdate:Date.now()};
  r.accum=isAccumulation(r);
  r.flags=computeFlags(r);
+ r.legalScore = computeLegalScore(r);
+ r.legalDaily = computeLegalDaily(r);
+ r.legalSustain = computeLegalSustain(r);
+ r.legalUsage = getLegalUsage(r);
+ r.sustainN = five ? five.sustainN : 0;
+ r.avgN3 = five ? five.avgN3 : null;
  return r;}
-function computeSustain(five){
- if(!five||!five.days||!five.days.length)return 0;
- let c=0;for(const d of five.days){if(d.valid&&d.net!==null&&d.net>0)c++;else break;}return c;}
 
 function computeBreadth(){
  let up=0,down=0,flat=0,noData=0;
@@ -1445,10 +1636,7 @@ function renderDiff(diff){
  $("diffWeakened").innerHTML = renderList(diff.weakened, "—", x =>
   `<li data-code="${esc(x.insCode)}"><span class="s">${esc(x.symbol)}</span><span class="muted">${x.from}/5 → ${x.to}/5</span><span class="v neg">▼${Math.abs(x.delta)}</span></li>`);
  card.querySelectorAll("li[data-code]").forEach(el => {
-  el.addEventListener("click", () => {
-   const r = results.find(x => x.insCode === el.dataset.code);
-   if(r){ showCard(r, false); switchTab("scanner"); }
-  });
+  el.addEventListener("click", () => { const r = results.find(x => x.insCode === el.dataset.code); if(r){ showCard(r, false); switchTab("scanner"); } });
  });
 }
 
@@ -1462,7 +1650,7 @@ function showToast(title, body){
   toast.addEventListener("click", () => toast.remove());
   document.body.appendChild(toast);
   setTimeout(() => { try{ toast.remove(); }catch(e){} }, 8000);
- }catch(e){ console.error("toast error:", e); }
+ }catch(e){}
 }
 
 function playBeep(){
@@ -1503,21 +1691,20 @@ function sendNotification(title, body){
 }
 
 function requestNotif(){
- if(!("Notification" in window)){status("مرورگر از نوتیفیکیشن پشتیبانی نمی‌کند","warn");return;}
- if(Notification.permission === "granted"){$("notifBtn").textContent = "🔔 فعال";$("notifBtn").disabled = true;status("نوتیفیکیشن از قبل فعال است","success");sendNotification("اسکنر پول هوشمند", "نوتیفیکیشن فعال است ✅");return;}
- if(Notification.permission === "denied"){status("نوتیفیکیشن رد شده — از تنظیمات مرورگر فعال کنید","warn");return;}
+ if(!("Notification" in window)){status("مرورگر پشتیبانی نمی‌کند","warn");return;}
+ if(Notification.permission === "granted"){$("notifBtn").textContent = "🔔 فعال";$("notifBtn").disabled = true;status("نوتیفیکیشن فعال است","success");sendNotification("اسکنر", "نوتیفیکیشن فعال است ✅");return;}
+ if(Notification.permission === "denied"){status("نوتیفیکیشن رد شده","warn");return;}
  Notification.requestPermission().then(perm => {
-  if(perm === "granted"){$("notifBtn").textContent = "🔔 فعال";$("notifBtn").disabled = true;status("نوتیفیکیشن فعال شد ✅","success");sendNotification("اسکنر پول هوشمند", "از این پس سیگنال‌های جدید اطلاع داده می‌شوند");}
-  else {status("نوتیفیکیشن رد شد","warn");}
+  if(perm === "granted"){$("notifBtn").textContent = "🔔 فعال";$("notifBtn").disabled = true;status("نوتیفیکیشن فعال شد ✅","success");sendNotification("اسکنر", "از این پس سیگنال‌های جدید اطلاع داده می‌شوند");}
+  else {status("رد شد","warn");}
  });
 }
 
-function onAutoScanToggle(){const on = $("autoScan").checked;if(on) startAutoScan();else { stopAutoScan(); status("⏱ اسکن خودکار خاموش شد"); }}
+function onAutoScanToggle(){const on = $("autoScan").checked;if(on) startAutoScan();else { stopAutoScan(); status("⏱ خاموش شد"); }}
 function onAutoScanIntervalChange(){if($("autoScan").checked) startAutoScan();}
-
 function startAutoScan(){
  stopAutoScan();
- if(!allSyms.length){status("ابتدا فهرست را دریافت کن","warn");$("autoScan").checked = false;try{ localStorage.setItem("scanner_autoscan","0"); }catch(e){}return;}
+ if(!allSyms.length){status("ابتدا فهرست","warn");$("autoScan").checked = false;try{ localStorage.setItem("scanner_autoscan","0"); }catch(e){}return;}
  const mins = Math.max(3, Math.min(60, parseInt($("autoScanMin").value) || 10));
  autoScanTimer = setInterval(async () => {
   if(scanning || loading || !allSyms.length) return;
@@ -1525,14 +1712,9 @@ function startAutoScan(){
  }, mins * 60 * 1000);
  try{ localStorage.setItem("scanner_autoscan","1"); }catch(e){}
  try{ localStorage.setItem("scanner_autoscan_min",String(mins)); }catch(e){}
- status(`⏱ اسکن خودکار هر ${mins} دقیقه فعال شد`,"success");
- console.log("[autoscan] started, timer:", autoScanTimer, "every", mins, "min");
+ status(`⏱ اسکن خودکار هر ${mins} دقیقه`,"success");
 }
-
-function stopAutoScan(){
- if(autoScanTimer){clearInterval(autoScanTimer);autoScanTimer=null;}
- try{ localStorage.setItem("scanner_autoscan","0"); }catch(e){}
-}
+function stopAutoScan(){ if(autoScanTimer){clearInterval(autoScanTimer);autoScanTimer=null;} try{ localStorage.setItem("scanner_autoscan","0"); }catch(e){} }
 
 function computeBuyScore(r){
  let s = 0;
@@ -1547,14 +1729,21 @@ function computeBuyScore(r){
  else if(r.liveSignal === "مثبت با احتیاط") s += 2;
  if(r.queue === "صف خرید") s = Math.max(0, s - 25);
  if(["خروج پول","فشار فروش"].includes(r.liveSignal)) s = Math.max(0, s - 20);
- return Math.round(s);
+ const ds = r.legalDaily ?? computeLegalDaily(r);
+ if(ds !== null){
+  if(ds >= 80) s += 8;
+  else if(ds >= 70) s += 4;
+  else if(ds <= 30) s = Math.max(0, s - 10);
+ }
+ const ss = r.legalSustain ?? computeLegalSustain(r);
+ if(ss !== null){
+  if(ss >= 80) s += 7;
+  else if(ss >= 70) s += 3;
+ }
+ return Math.round(Math.max(0, Math.min(100, s)));
 }
 
-function onTopLimitChange(){
- const v = $("topLimit")?.value || "70";
- try{ localStorage.setItem("scanner_top_limit", v); }catch(e){}
- renderTop();
-}
+function onTopLimitChange(){ const v = $("topLimit")?.value || "70"; try{ localStorage.setItem(LS_TOP_LIMIT, v); }catch(e){} renderTop(); }
 
 async function renderTop(forceRefresh){
  const tbody = $("topTbody");
@@ -1562,31 +1751,29 @@ async function renderTop(forceRefresh){
  const progress = $("topProgress");
  if(!results.length){
   tbody.innerHTML = '<tr><td colspan="12" class="muted" style="padding:24px">ابتدا اسکن کن</td></tr>';
-  if(progress) progress.textContent = "برای دیدن برترین‌های بازار، ابتدا 🔍 اسکن را بزن";
+  if(progress) progress.textContent = "برای دیدن برترین‌ها، ابتدا 🔍 اسکن";
   return;
  }
  if(_topRendering) return;
  _topRendering = true;
  try{
   const limit = parseInt($("topLimit")?.value) || 70;
-  if(progress) progress.textContent = `در حال دریافت ارزش بازار (${limit} شرکت)...`;
+  if(progress) progress.textContent = `در حال دریافت ارزش بازار (${limit})...`;
 
   await ensureMarketCap(limit + 20, (done, total, got) => {
-   if(progress) progress.textContent = `📊 دریافت ارزش بازار: ${fmt0(done)}/${fmt0(total)} · موفق: ${fmt0(got)}`;
+   if(progress) progress.textContent = `📊 ${fmt0(done)}/${fmt0(total)} · موفق: ${fmt0(got)}`;
   });
 
   let withCap = results.filter(r => r.marketCap !== null && r.marketCap > 0);
   if(!withCap.length){
-   tbody.innerHTML = '<tr><td colspan="12" class="muted" style="padding:24px">داده ارزش بازار موجود نیست — یک اسکن جدید بزن</td></tr>';
-   if(progress) progress.textContent = "⚠️ داده marketCap موجود نیست — دکمه 🔄 را بزن یا اسکن جدید";
+   tbody.innerHTML = '<tr><td colspan="12" class="muted" style="padding:24px">داده ارزش بازار موجود نیست</td></tr>';
+   if(progress) progress.textContent = "⚠️ marketCap نیست — دکمه 🔄";
    return;
   }
   withCap.sort((a,b) => (b.marketCap || 0) - (a.marketCap || 0));
   let top = withCap.slice(0, limit);
   top.forEach(r => { r.buyScore = computeBuyScore(r); });
-  if($("topOnlyBuyable")?.checked){
-   top = top.filter(r => r.queue !== "صف خرید");
-  }
+  if($("topOnlyBuyable")?.checked){ top = top.filter(r => r.queue !== "صف خرید"); }
   const ranked = [...top].sort((a,b) => {
    if(a.buyScore !== b.buyScore) return b.buyScore - a.buyScore;
    if((a.score || 0) !== (b.score || 0)) return (b.score || 0) - (a.score || 0);
@@ -1639,34 +1826,181 @@ async function renderTop(forceRefresh){
    </tr>`;
   }).join("");
   tbody.querySelectorAll(".symbol").forEach(el => {
-   el.addEventListener("click", () => {
-    const r = results.find(x => x.insCode === el.dataset.code);
-    if(r){ showCard(r, false); switchTab("scanner"); }
-   });
+   el.addEventListener("click", () => { const r = results.find(x => x.insCode === el.dataset.code); if(r){ showCard(r, false); switchTab("scanner"); } });
   });
   const best = ranked[0];
   const top3 = ranked.slice(0, 3).map(r => r.symbol).join("، ");
   const capCount = results.filter(r=>r.marketCap>0).length;
   if(progress){
-   progress.innerHTML = `<b>${fmt0(top.length)}</b> شرکت برتر · بازار‌Cap موجود: ${fmt0(capCount)} · ` +
-    (best ? `🏆 برترین: <b>${esc(best.symbol)}</b> (${best.buyScore}/100) · ` : "") +
+   progress.innerHTML = `<b>${fmt0(top.length)}</b> شرکت · Cap: ${fmt0(capCount)} · ` +
+    (best ? `🏆 <b>${esc(best.symbol)}</b> (${best.buyScore}) · ` : "") +
     (top3 ? `سه برتر: ${esc(top3)}` : "");
   }
- } finally {
-  _topRendering = false;
- }
+ } finally { _topRendering = false; }
 }
+
+function renderLegal(){
+ const tbody = $("legalTbody");
+ if(!tbody) return;
+ if(!results.length){
+  tbody.innerHTML = '<tr><td colspan="14" class="muted" style="padding:24px">ابتدا اسکن کن</td></tr>';
+  ["legalAccum","legalBattle","legalDual","legalDist"].forEach(id => $(id).innerHTML = '<li class="muted">—</li>');
+  $("legalSummary").textContent = "";return;
+ }
+ const minNet = Number($("legalMinNet").value) || 0;
+ const minRatio = Number($("legalMinRatio").value) || 0;
+ const minBuy = Number($("legalMinBuy").value) || 0;
+ const onlySignal = $("legalOnlySignal").checked;
+ const onlyLive = $("legalOnlyLive").checked;
+
+ const enriched = results.map(r => {
+  const hasData = r.live && (
+   (r.live.buyLegal || 0) > 0 || (r.live.sellLegal || 0) > 0 ||
+   (r.live.netLegal !== null && r.live.netLegal !== undefined && r.live.netLegal !== 0)
+  );
+  const isLive = r.live && r.live.ageDays === 0 && r.live.hasClient;
+  return { r, signals: hasData ? computeLegalSignal(r) : [], hasData, isLive };
+ }).filter(x => x.hasData && (!onlyLive || x.isLive));
+
+ const accumList = enriched.filter(x => x.signals.some(s => s.key === "accum")).map(x => x.r);
+ const battleList = enriched.filter(x => x.signals.some(s => s.key === "battle")).map(x => x.r);
+ const dualList = enriched.filter(x => x.signals.some(s => s.key === "dual")).map(x => x.r);
+ const distList = enriched.filter(x => x.signals.some(s => s.key === "dist")).map(x => x.r);
+
+ const renderSigList = (arr, isPos) => {
+  if(!arr.length) return '<li class="muted">—</li>';
+  return arr.sort((a,b) => isPos ? (b.live.netLegal - a.live.netLegal) : (a.live.netLegal - b.live.netLegal))
+   .slice(0, 15)
+   .map(r => `<li data-code="${esc(r.insCode)}">
+     <span class="s">${esc(r.symbol)}</span>
+     <span class="muted">${r.live.legalBuyRatio !== null ? fmt(r.live.legalBuyRatio,2) : "—"} · خرید ${fmt(r.live.buyLegal,1)}B</span>
+     <span class="v ${isPos ? 'pos' : 'neg'}">${fmt(r.live.netLegal,1)}B</span>
+   </li>`).join("");
+ };
+ $("legalAccum").innerHTML = renderSigList(accumList, true);
+ $("legalBattle").innerHTML = renderSigList(battleList, true);
+ $("legalDual").innerHTML = renderSigList(dualList, true);
+ $("legalDist").innerHTML = renderSigList(distList, false);
+
+ let filtered = enriched.filter(x => {
+  const r = x.r;
+  if(minNet > 0 && (r.live.netLegal === null || r.live.netLegal < minNet)) return false;
+  if(minBuy > 0 && (r.live.buyLegal === null || r.live.buyLegal < minBuy)) return false;
+  if(minRatio > 0 && (r.live.legalBuyRatio === null || r.live.legalBuyRatio < minRatio)) return false;
+  if(onlySignal && x.signals.length === 0) return false;
+  return true;
+ });
+
+ const getSortVal = (r) => {
+  switch(legalSortKey){
+   case "symbol": return r.symbol || "";
+   case "sector": return r.sector || "";
+   case "legalDaily": return r.legalDaily ?? computeLegalDaily(r) ?? -1e18;
+   case "legalSustain": return r.legalSustain ?? computeLegalSustain(r) ?? -1e18;
+   case "legalUsage": {
+    const u = r.legalUsage || getLegalUsage(r);
+    return u.text === "⚡📈 هر دو" ? 4 : u.text === "⚡ روزانه" ? 3 : u.text === "📈 بلندمدت" ? 2 : 1;
+   }
+   case "netLegal": return r.live.netLegal ?? -1e18;
+   case "buyLegal": return r.live.buyLegal ?? -1e18;
+   case "sellLegal": return r.live.sellLegal ?? -1e18;
+   case "legalBuyRatio": return r.live.legalBuyRatio ?? -1e18;
+   case "legalBuySav": return r.live.legalBuySav ?? -1e18;
+   case "legalPower": return r.live.legalPower ?? -1e18;
+   default: return r.legalDaily ?? -1e18;
+  }
+ };
+
+ filtered.sort((a,b) => {
+  const x = getSortVal(a.r), y = getSortVal(b.r);
+  if(typeof x === "string" || typeof y === "string"){
+   return legalSortDir === "asc" ? String(x).localeCompare(String(y)) : String(y).localeCompare(String(x));
+  }
+  return legalSortDir === "asc" ? x - y : y - x;
+ });
+
+ tbody.innerHTML = filtered.length ? filtered.map((x, i) => {
+  const r = x.r;
+  const sigs = x.signals;
+  const sigHtml = sigs.length
+   ? sigs.map(s => {
+      const cls = s.type === "gold" ? "badge bigmoney"
+                : s.type === "purple" ? "badge accum"
+                : s.type === "green" ? "badge live"
+                : s.type === "red" ? "badge queue-sell" : "badge";
+      return `<span class="${cls}" style="margin:1px">${esc(s.label)}</span>`;
+     }).join("")
+   : "—";
+  const netCls = (r.live.netLegal ?? 0) >= 0 ? "pos" : "neg";
+  const ratioCls = (r.live.legalBuyRatio ?? 0) >= 0.55 ? "pos" : (r.live.legalBuyRatio ?? 0) < 0.45 ? "neg" : "";
+
+  const dScore = r.legalDaily ?? computeLegalDaily(r);
+  const sScore = r.legalSustain ?? computeLegalSustain(r);
+  const u = r.legalUsage || getLegalUsage(r);
+  const dCls = dScore === null ? "" : dScore >= 70 ? "pos" : dScore <= 30 ? "neg" : "";
+  const dBg = dScore === null ? "" : dScore >= 70 ? "background:#dcfce7" : dScore <= 30 ? "background:#fee2e2" : "";
+  const sCls = sScore === null ? "" : sScore >= 70 ? "pos" : sScore <= 30 ? "neg" : "";
+  const sBg = sScore === null ? "" : sScore >= 70 ? "background:#dcfce7" : sScore <= 30 ? "background:#fee2e2" : "";
+  const sustainDays = r.sustainN || 0;
+  const sustainText = sScore === null ? "—" : (sScore + "/100" + (sustainDays > 0 ? " (" + sustainDays + "ر)" : ""));
+
+  return `<tr>
+   <td>${i+1}</td>
+   <td class="symbol" data-code="${esc(r.insCode)}">${esc(r.symbol)}</td>
+   <td style="font-size:10px">${esc(r.sector || "—")}</td>
+   <td class="num ${dCls}" style="font-weight:bold;${dBg}">${dScore !== null ? dScore + "/100" : "—"}</td>
+   <td class="num ${sCls}" style="font-weight:bold;${sBg}">${sustainText}</td>
+   <td><span class="signal ${u.cls}" style="font-size:10px">${u.text}</span></td>
+   <td class="num ${netCls}" style="font-weight:bold">${fmt(r.live.netLegal, 1)}</td>
+   <td class="num pos">${fmt(r.live.buyLegal, 1)}</td>
+   <td class="num neg">${fmt(r.live.sellLegal, 1)}</td>
+   <td class="num ${ratioCls}">${r.live.legalBuyRatio !== null ? fmt(r.live.legalBuyRatio, 2) : "—"}</td>
+   <td class="num">${r.live.legalBuySav !== null ? fmt(r.live.legalBuySav, 2) : "—"}</td>
+   <td class="num">${r.live.legalPower !== null ? fmt(r.live.legalPower, 2) + "×" : "—"}</td>
+   <td style="text-align:right;white-space:normal;font-size:10px">${sigHtml}</td>
+   <td>${queueBadge(r)}</td>
+  </tr>`;
+ }).join("") : '<tr><td colspan="14" class="muted" style="padding:24px">با فیلتر فعلی چیزی نیست</td></tr>';
+
+ tbody.querySelectorAll(".symbol").forEach(el => {
+  el.addEventListener("click", () => { const r = results.find(x => x.insCode === el.dataset.code); if(r){ showCard(r, false); switchTab("scanner"); } });
+ });
+ document.querySelectorAll("#panel-legal .money-list li[data-code]").forEach(el => {
+  el.addEventListener("click", () => { const r = results.find(x => x.insCode === el.dataset.code); if(r){ showCard(r, false); switchTab("scanner"); } });
+ });
+
+ const totalLegal = enriched.length;
+ const posLegal = enriched.filter(x => (x.r.live.netLegal ?? 0) > 0).length;
+ const negLegal = enriched.filter(x => (x.r.live.netLegal ?? 0) < 0).length;
+ const withSignal = enriched.filter(x => x.signals.length > 0).length;
+
+ $("legalSummary").innerHTML =
+  `کل: <b>${fmt0(totalLegal)}</b> | ` +
+  `خریدار: <b class="pos">${fmt0(posLegal)}</b> | ` +
+  `فروشنده: <b class="neg">${fmt0(negLegal)}</b> | ` +
+  `با سیگنال: <b>${fmt0(withSignal)}</b> | ` +
+  `🏆 ${fmt0(accumList.length)} | 🛡️ ${fmt0(battleList.length)} | 🤝 ${fmt0(dualList.length)} | ⚠️ ${fmt0(distList.length)}`;
+}
+
+document.querySelectorAll("th[data-legal-sort]").forEach(th => {
+ th.addEventListener("click", () => {
+  const k = th.dataset.legalSort;
+  if(legalSortKey === k) legalSortDir = legalSortDir === "asc" ? "desc" : "asc";
+  else { legalSortKey = k; legalSortDir = "desc"; }
+  renderLegal();
+ });
+});
 
 async function runScan(){
  if(scanning||loading)return;
- if(!allSyms.length){status("ابتدا فهرست را دریافت کن.","warn");return;}
+ if(!allSyms.length){status("ابتدا فهرست","warn");return;}
  scanning=true;stopped=false;results=[];
  $("scanBtn").disabled=true;$("loadBtn").disabled=true;$("stopBtn").disabled=false;$("csvBtn").disabled=true;
  const started=Date.now();
  try{
-  status("بارگذاری کش تاریخچه…");
+  status("بارگذاری کش…");
   try{ await loadHistCache(); }catch(e){}
-  status("دریافت Snapshot بازار…");
+  status("دریافت Snapshot…");
   const mwSnap = await getMarketSnapshot(true);
   status("شروع تحلیل "+fmt0(allSyms.length)+" نماد (هم‌زمانی "+($("concurrency").value||8)+")…");
   const max=Math.max(50,Math.min(3000,parseInt($("topN").value)||500));
@@ -1680,7 +2014,7 @@ async function runScan(){
    sorted.forEach((r,i)=>lastRankMap.set(r.insCode,i+1));}
   let next=0,done=0,errors=0;
   const out=new Array(syms.length);
-  bar(0,syms.length,"تحلیل نمادها");
+  bar(0,syms.length,"تحلیل");
   async function worker(){
    while(!stopped){
     const i=next++;if(i>=syms.length)return;
@@ -1706,9 +2040,10 @@ async function runScan(){
     return true;});}
   await saveScanToDB(results,{duration:Date.now()-started,scanned:results.length,errors});
   render();renderSmartMoney();renderSectors();renderAccum();renderBigMoney();renderBattle();renderBreadth();renderSignals();
-  try{ renderTop(); }catch(e){ console.warn("renderTop error:",e); }
+  try{ renderLegal(); }catch(e){ console.warn("renderLegal:",e); }
+  try{ renderTop(); }catch(e){ console.warn("renderTop:",e); }
   let diff = null;
-  try{ diff = computeDiff(lastResults, results); }catch(e){ console.warn("diff error:",e); }
+  try{ diff = computeDiff(lastResults, results); }catch(e){}
   renderDiff(diff);
   try{
    const liveCount = results.filter(r => r.live && r.live.ageDays === 0).length;
@@ -1755,6 +2090,34 @@ function computeSignals(r){
  if(r.sustain>=minSus) sig.push({key:"sustain",label:`استمرار ${r.sustain}ر`});
  const minSp=Number($("sigMinSpike").value)||2;
  if(r.valueVsAvg20!==null && r.valueVsAvg20>=minSp){sig.push({key:"spike",label:`ارزش ${fmt(r.valueVsAvg20,1)}×`});}
+
+ // سیگنال حقوقی روزانه (⚡)
+ const dScore = r.legalDaily ?? computeLegalDaily(r);
+ if(dScore !== null && dScore >= 50){
+  const nL = r.live?.netLegal || 0;
+  const nR = r.live?.netToday;
+  const ratio = r.live?.legalBuyRatio;
+  const parts = [];
+  if(nL >= 1 && nR !== null && nR >= 0.5 && r.valueVsAvg20 !== null && r.valueVsAvg20 >= 1.2 && ratio !== null && ratio >= 0.55 && r.queue !== "صف خرید"){
+   parts.push("خبری");
+  }
+  if(r.queue === "صف فروش" && nL > 0 && ratio !== null && ratio >= 0.55){
+   parts.push("صف‌فروش");
+  }
+  if(parts.length === 0 && nL >= 1 && r.queue !== "صف خرید"){
+   parts.push(`حقوقی ${fmt(nL,1)}B`);
+  }
+  if(parts.length > 0){
+   sig.push({key:"legal", label:`${parts.join("+")} (${dScore})`});
+  }
+ }
+
+ // سیگنال استمرار حقوقی (📈)
+ const sScore = r.legalSustain ?? computeLegalSustain(r);
+ const sDays = r.sustainN || 0;
+ if(sScore !== null && sScore >= 70 && sDays >= 3){
+  sig.push({key:"legalSustain", label:`استمرار ${sDays}ر (${sScore})`});
+ }
  return sig;}
 
 function renderSignals(){
@@ -1764,7 +2127,6 @@ function renderSignals(){
  const queueMode=$("sigQueueMode").value;
  const minValue=Number($("sigMinValue").value)||2;
  const minSellSav=Number($("sigMinSellSav").value)||1;
- const onlyMulti=$("sigOnlyMulti").checked;
  const onlyLive=$("sigOnlyLive").checked;
  const enriched=results.map(r=>{
   const sig=computeSignals(r);
@@ -1775,22 +2137,70 @@ function renderSignals(){
   const bs=getLiveBS(r);
   const sellSavOk=!bs || bs.sellSav===null || bs.sellSav>=minSellSav;
   return {r,sig,queueBlocked,valueOk,sellSavOk,liveOk};});
- let filtered=enriched.filter(e=>e.valueOk&&!e.queueBlocked&&e.sellSavOk&&e.liveOk&&e.sig.length>0);
- if(onlyMulti) filtered=filtered.filter(e=>e.sig.length>=3);
- const keys=["score5","strong5","battle","bigmoney","netval","accum","sustain","spike"];
- const labels={score5:"⭐ امتیاز ۵",strong5:"🔥 ورود پول قوی ۵ر",battle:"⚔️ جدال قوی",bigmoney:"💰 پول درشت",netval:"📊 Net/Value",accum:"🎯 انباشت",sustain:"📈 استمرار",spike:"⚡ ارزش غیرعادی"};
+ let baseFiltered=enriched.filter(e=>e.valueOk&&!e.queueBlocked&&e.sellSavOk&&e.liveOk&&e.sig.length>0);
+ let filtered=baseFiltered;
+ if(sigShareKeys.size > 0){
+  filtered=filtered.filter(e => {
+   for(const k of sigShareKeys){
+    if(!e.sig.some(s => s.key === k)) return false;
+   }
+   return true;
+  });
+ }
+ try{ updateSigCounts(baseFiltered); }catch(e){}
+ const allKeys=["score5","strong5","legal","legalSustain","battle","bigmoney","netval","accum","sustain","spike"];
+ const allLabels={score5:"⭐ امتیاز ۵",strong5:"🔥 ورود پول قوی ۵ر",
+  legal:"⚡ حقوقی روزانه",legalSustain:"📈 حقوقی بلندمدت",
+  battle:"⚔️ جدال قوی",bigmoney:"💰 پول درشت",netval:"📊 Net/Value",
+  accum:"🎯 انباشت",sustain:"📈 استمرار حقیقی",spike:"⚡ ارزش غیرعادی"};
+ const keys = sigShareKeys.size > 0 ? allKeys.filter(k => sigShareKeys.has(k)) : allKeys;
+ const labels = allLabels;
  const grouped={};
- for(const k of keys) grouped[k]=[];
- for(const e of filtered){for(const s of e.sig){if(grouped[s.key]) grouped[s.key].push(e.r);}}
- for(const k of keys){grouped[k].sort((a,b)=>b.score-a.score||((b.net5??-1e9)-(a.net5??-1e9)));}
+ for(const k of allKeys) grouped[k]=[];
+ for(const e of filtered){
+  for(const s of e.sig){if(grouped[s.key]) grouped[s.key].push(e.r);}}
+ for(const k of allKeys){
+  if(k === "legal"){
+   grouped[k].sort((a,b)=>{
+    const la = a.legalDaily ?? computeLegalDaily(a) ?? -1;
+    const lb = b.legalDaily ?? computeLegalDaily(b) ?? -1;
+    return lb - la;
+   });
+  } else if(k === "legalSustain"){
+   grouped[k].sort((a,b)=>{
+    const la = a.legalSustain ?? computeLegalSustain(a) ?? -1;
+    const lb = b.legalSustain ?? computeLegalSustain(b) ?? -1;
+    return lb - la;
+   });
+  } else {
+   grouped[k].sort((a,b)=>b.score-a.score||((b.net5??-1e9)-(a.net5??-1e9)));
+  }
+ }
  kanban.innerHTML=keys.map(k=>{
   const arr=grouped[k];
   return`<div class="sig-col ${k}"><div class="sig-col-head"><span>${labels[k]}</span><span class="cnt">${fmt0(arr.length)}</span></div>
-   <ul class="sig-col-body">${arr.length?arr.map(r=>{let qb="";if(r.queue==="صف خرید") qb=' <span class="badge queue-buy" style="font-size:8px">صف</span>';return`<li data-code="${esc(r.insCode)}"><span class="s">${esc(r.symbol)}${qb}</span><span class="meta">امتیاز ${r.score}/5</span></li>`;}).join(""):'<div class="sig-col-empty">—</div>'}</ul></div>`;
+   <ul class="sig-col-body">${arr.length?arr.map(r=>{
+    let qb="";
+    if(r.queue==="صف خرید") qb=' <span class="badge queue-buy" style="font-size:8px">صف</span>';
+    let meta = `امتیاز ${r.score}/5`;
+    if(k === "legal"){
+     const ds = r.legalDaily ?? computeLegalDaily(r);
+     meta = `⚡ ${ds ?? "—"}/100`;
+    } else if(k === "legalSustain"){
+     const ss = r.legalSustain ?? computeLegalSustain(r);
+     const sd = r.sustainN || 0;
+     meta = `📈 ${ss ?? "—"}/100 · ${sd}ر`;
+    }
+    return`<li data-code="${esc(r.insCode)}"><span class="s">${esc(r.symbol)}${qb}</span><span class="meta">${meta}</span></li>`;
+   }).join(""):'<div class="sig-col-empty">—</div>'}</ul></div>`;
  }).join("");
  const queueLabelTxt={heavy:"حذف صف خرید",none:"بدون فیلتر صف"}[queueMode];
  const removed=enriched.filter(e=>e.queueBlocked).length;
- sumEl.innerHTML=`از ${fmt0(results.length)} نماد، <b>${fmt0(filtered.length)}</b> سیگنال دارند | فیلتر صف: <b>${queueLabelTxt}</b>| فقط امروز: <b>${onlyLive?"فعال":"غیرفعال"}</b>`+(removed>0?` — <span class="neg">${fmt0(removed)} حذف شد</span>`:"");
+ const shareLabel = sigShareKeys.size > 0 ? `اشتراک ${sigShareKeys.size} سیگنال` : "همه";
+ sumEl.innerHTML=
+  `از ${fmt0(results.length)} نماد، <b>${fmt0(filtered.length)}</b> | ` +
+  `🔗 <b>${shareLabel}</b> | صف: <b>${queueLabelTxt}</b> | امروز: <b>${onlyLive?"فعال":"غیرفعال"}</b>` +
+  (removed>0?` — <span class="neg">${fmt0(removed)} حذف</span>`:"");
  kanban.querySelectorAll("li[data-code]").forEach(el=>{
   el.addEventListener("click",()=>{const r=results.find(x=>x.insCode===el.dataset.code);if(r){showCard(r,false);switchTab("scanner");}});});}
 
@@ -1904,35 +2314,32 @@ function showCard(r,scroll){
  setSignal("scLiveSignal",r.liveSignal);setSignal("scFiveSignal",r.fiveSignal);setSignal("scQueue",r.queue||"—");
  $("scScore").textContent=r.score+"/5";$("scScore").className="score s"+r.score;
  if(r.live){const l=r.live;
+  const ds = r.legalDaily ?? computeLegalDaily(r);
+  const ss = r.legalSustain ?? computeLegalSustain(r);
   $("scLiveGrid").innerHTML=
    metric("قیمت",fmt0(l.price),"تومان",l.price?"blue":"na")+
    metric("تغییر",pct(l.percent),"",l.percent===null?"na":(l.percent>=0?"good":"bad"))+
    metric("ارزش",fmt(l.value,2),"م.ت",l.value?"":"na")+
-   metric("ارزش/دیروز",r.valueVsYesterday!==null?fmt(r.valueVsYesterday,2)+"×":"—","",(r.valueVsYesterday??0)>=1?"good":"")+
-   metric("ارزش/میانگین۲۰",r.valueVsAvg20!==null?fmt(r.valueVsAvg20,2)+"×":"—","",(r.valueVsAvg20??0)>=1.5?"good":(r.valueVsAvg20??0)<0.7?"bad":"")+
    metric("خالص امروز",fmt(l.netToday,2),"م.ت",l.netToday===null?"na":(l.netToday>=0?"good":"bad"))+
    metric("Net/Value",r.netValueRatio!==null?fmt(r.netValueRatio,3):"—","","purple")+
-   metric("سرانه خرید",fmt0(l.buySav),"م.ت",l.buySav===null?"na":"")+
-   metric("سرانه فروش",fmt0(l.sellSav),"م.ت",l.sellSav===null?"na":"")+
    metric("قدرت",l.power!==null?fmt(l.power,2)+"×":"—","",l.power===null?"na":(l.power>=2?"good":l.power<1?"bad":""))+
    metric("ارزش بازار",l.marketCap?fmt(l.marketCap,0)+" همت":"—","")+
+   metric("حقوقی روزانه",ds!==null?ds+"/100":"—","",ds===null?"na":(ds>=70?"good":ds<=30?"bad":""))+
+   metric("حقوقی استمرار",ss!==null?ss+"/100":"—","",ss===null?"na":(ss>=70?"good":ss<=30?"bad":""))+
+   metric("خالص حقوقی",l.netLegal!==null&&l.netLegal!==undefined?fmt(l.netLegal,2)+" B":"—","")+
    metric("صف",r.queue||"—","",r.queue.includes("خرید")?"bad":r.queue.includes("فروش")?"bad":"")+
-   metric("ارزش صف",r.queueStrength!==null?fmt(r.queueStrength,1)+" م.ت":"—","","purple")+
-   metric("پرچم‌ها",r.flags&&r.flags.length?r.flags.map(esc).join("، "):"ندارد","")+
    metric("تازگی",l.ageDays===null?"—":(l.ageDays===0?"امروز":l.ageDays+" روز قبل"),"");
  }else{$("scLiveGrid").innerHTML=metric("وضعیت","داده موجود نیست","","na");}
  if(r.five){const f=r.five;
   $("scFiveGrid").innerHTML=
    metric("خالص ۵روزه",fmt(f.net5,2),"م.ت",f.net5>=0?"good":"bad")+
-   metric("میانگین روزانه",fmt(f.avg5,2),"م.ت")+
    metric("سرانه",f.savane5!==null?fmt0(f.savane5):"—","م.ت")+
    metric("قدرت",f.power5!==null?fmt(f.power5,2)+"×":"—","",f.power5>=2?"good":"")+
-   metric("نسبت خرید/فروش",f.ratio5!==null?fmt(f.ratio5,2)+"×":"—")+
    metric("روز مثبت",f.posDays,"از "+f.validDays)+
    metric("امتیاز ۵",f.scoreFive,"از ۵")+
    metric("سیگنال ۵",esc(f.fiveSignal),"",f.scoreFive>=4?"good":"");
   $("scDays").innerHTML=f.days.map((d,i)=>`
-   <tr><td>${dateFmt(d.date)}${i===0?" · آخرین":""}${d.valid?"":" · نامعتبر"}</td>
+   <tr><td>${dateFmt(d.date)}${i===0?" · آخرین":""}</td>
    <td class="num">${d.buy!==null?fmt(d.buy/B,2):"—"}</td>
    <td class="num">${d.sell!==null?fmt(d.sell/B,2):"—"}</td>
    <td class="num ${(d.net??0)>=0?'pos':'neg'}">${d.net!==null?fmt(d.net/B,2):"—"}</td>
@@ -1945,59 +2352,34 @@ function showCard(r,scroll){
   <li class="${c.pass?'pass':'fail'}"><span class="k">${esc(c.label)}</span>
    <span class="v">${c.value===null?"—":fmt(c.value,2)} · وزن ${fmt(c.weight,2)}</span></li>`).join("")
   :'<li class="fail"><span class="k">داده کافی نیست</span></li>';
- $("scCaution").textContent="پول درشت و جدال فقط از داده live امروز استفاده می‌کنند. صف از BestLimits تازه خوانده می‌شود.";
+ $("scCaution").textContent="حقوقی از تاریخچه در صورت نبود داده live.";
  if(scroll)$("symbolCard").scrollIntoView({behavior:"smooth",block:"start"});}
 function clearCard(){$("symbolCard").classList.remove("show");$("symbolInput").value="";$("searchMsg").textContent="";active=null;if(liveTimer){clearInterval(liveTimer);liveTimer=null}}
 async function lookupSymbol(){
  const raw=$("symbolInput").value.trim();if(!raw)return;
- const q=norm(raw);$("searchMsg").textContent="در حال جستجو…";
+ const q=norm(raw);$("searchMsg").textContent="جستجو…";
  let sym=allSyms.find(s=>norm(s.symbol)===q);
  if(!sym)sym=allSyms.find(s=>norm(s.symbol).includes(q)||norm(s.name).includes(q));
- if(!sym){
-  try{
-   const d=await getJSON("/Instrument/GetInstrumentSearch/"+encodeURIComponent(raw),1);
-   const arr=(d.instrumentSearch||[]);
-   const found=[];
-   for(const it of arr){
-    const s=cleanSymbol(it);
-    if(!s.insCode) continue;
-    if(!s.symbol){
-     try{
-      const info=await getJSON("/Instrument/GetInstrumentInfo/"+s.insCode,0);
-      const inf=info?.instrumentInfo||{};
-      s.symbol=String(inf.lVal18AFC||"").trim();
-      s.name=String(inf.lVal30||"").trim();
-      s.insID=String(inf.insID||"");
-      s.flow=nz(inf.flow)||s.flow;
-      s.isTradable=isTradableStock(s);
-      s.needsInfo=false;
-     }catch(e){}
-    }
-    if(s.symbol && s.isTradable) found.push(s);
-   }
-   sym=found.find(s=>norm(s.symbol)===q)||found.find(s=>norm(s.symbol).includes(q)||norm(s.name).includes(q));
-  }catch(e){}
- }
- if(!sym){$("searchMsg").textContent="نماد پیدا نشد.";return}
+ if(!sym){$("searchMsg").textContent="پیدا نشد";return}
  $("searchMsg").textContent="دریافت…";
  try{
   const mwSnap = await getMarketSnapshot();
   const r=await analyzeSymbol(sym, mwSnap);
   const i=results.findIndex(x=>x.insCode===r.insCode);
   if(i>=0)results[i]=r;else results.unshift(r);
-  showCard(r,true);render();renderSignals();
+  showCard(r,true);render();renderSignals();renderLegal();
   $("searchMsg").textContent="انجام شد.";
   if(liveTimer)clearInterval(liveTimer);
   liveTimer=setInterval(refreshActive,30000);
-  }catch(e){$("searchMsg").textContent="خطا: "+e.message;}}
+ }catch(e){$("searchMsg").textContent="خطا: "+e.message;}}
 async function refreshActive(){if(!active)return;
  try{const sym={insCode:active.insCode,symbol:active.symbol,name:active.name,insID:active.insID,type:active.type,sector:active.sector,groupCode:active.groupCode};
   const mwSnap = await getMarketSnapshot(true);
   const r=await analyzeSymbol(sym, mwSnap);
   const i=results.findIndex(x=>x.insCode===r.insCode);
   if(i>=0)results[i]=r;active=r;
-  showCard(r,false);render();renderSignals();
-  $("searchMsg").textContent="به‌روزرسانی: "+new Date().toLocaleTimeString("fa-IR");
+  showCard(r,false);render();renderSignals();renderLegal();
+  $("searchMsg").textContent="به‌روز: "+new Date().toLocaleTimeString("fa-IR");
  }catch(e){$("searchMsg").textContent="خطا: "+e.message;}}
 
 function moneyRow(r,vFn,clsFn,metaFn){
@@ -2066,7 +2448,7 @@ function renderBigMoney(){
    <td class="num pos">${fmt(r.live.buySellRatio,2)}×</td>
    <td class="num pos">${fmt(r.live.netToday,2)}</td>
    <td>${queueBadge(r)}</td>
-  </tr>`).join("") : '<tr><td colspan="9" class="muted" style="padding:24px">با فیلتر فعلی چیزی نیست (فقط داده امروز).</td></tr>';
+  </tr>`).join("") : '<tr><td colspan="9" class="muted" style="padding:24px">با فیلتر فعلی چیزی نیست.</td></tr>';
  tb.querySelectorAll(".symbol").forEach(el=>{
   el.addEventListener("click",()=>{const r=results.find(x=>x.insCode===el.dataset.code);if(r){showCard(r,false);switchTab("scanner");}});});
  document.querySelectorAll("#panel-bigmoney .money-list li[data-code]").forEach(el=>{
@@ -2101,12 +2483,12 @@ function renderBattle(){
  $("btSellCount").textContent=`(${sell.length})`;
  const total=withPower.length;
  const excluded=results.length-total;
- $("btSummary").innerHTML=`${fmt0(total)} نماد با قدرت معتبر`+(excluded>0?` | ${fmt0(excluded)} بدون قدرت`:"")+(onlyLive?` | فقط امروز`:"")+(hideInvalid?` | حذف سرانه فروش کم`:"");
+ $("btSummary").innerHTML=`${fmt0(total)} معتبر`+(excluded>0?` | ${fmt0(excluded)} بدون قدرت`:"")+(onlyLive?` | فقط امروز`:"")+(hideInvalid?` | حذف سرانه کم`:"");
  const srcBadgeFn=x=>x.source==='live'?'':x.source==='history'?' <span class="badge est">ت</span>':' <span class="badge est">۵</span>';
  const renderList=(arr,cls,em)=>arr.length
   ?arr.map(({r,power,buySav,sellSav,source})=>{
     const net=getTodayNet(r);
-    return`<li data-code="${esc(r.insCode)}"><span class="s">${esc(r.symbol)}${srcBadgeFn({source})}</span><span class="muted">خالص ${fmt(net,1)} · سرانه ${fmt(buySav,0)}/${fmt(sellSav,0)}</span><span class="v ${cls}">${fmt(power,2)}×</span></li>`;}).join("")
+    return`<li data-code="${esc(r.insCode)}"><span class="s">${esc(r.symbol)}${srcBadgeFn({source})}</span><span class="muted">خالص ${fmt(net,1)} · ${fmt(buySav,0)}/${fmt(sellSav,0)}</span><span class="v ${cls}">${fmt(power,2)}×</span></li>`;}).join("")
   :`<li class="muted">${em}</li>`;
  $("btStrongBuy").innerHTML=renderList(strongBuy,"pos","—");
  $("btBuy").innerHTML=renderList(buy,"pos","—");
@@ -2157,7 +2539,7 @@ function renderSectors(){
   if(sk==="count")return b.count-a.count;
   return 0;});
  const unknown=results.filter(r=>!r.sector||r.sector==="نامشخص").length;
- $("sectorProgress").textContent=unknown>0?"بدون صنعت: "+fmt0(unknown)+" از "+fmt0(results.length)+" — «به‌روزرسانی صنایع» را بزن.":"همه مشخص.";
+ $("sectorProgress").textContent=unknown>0?"بدون صنعت: "+fmt0(unknown)+" از "+fmt0(results.length):"همه مشخص.";
  tbody.innerHTML=all.length?all.map((g,i)=>{
   const b=g.breadth,bcls=b===null?"":(b>=60?"high":b<=30?"low":"");
   const rot=g.rotation;
@@ -2204,20 +2586,20 @@ async function refetchAllSectors(btn){
  if(!targets.length){status("همه مشخص.","success");return}
  if(btn)btn.disabled=true;
  const CONC=8;let next=0,done=0,got=0;
- bar(0,targets.length,"دریافت صنایع");
+ bar(0,targets.length,"صنایع");
  async function worker(){
   while(true){
    const i=next++;if(i>=targets.length)return;
    const r=targets[i];
    try{const sec=await fetchSector(r.insCode);if(sec&&sec.name){r.sector=sec.name;r.groupCode=sec.code;got++;}}catch(e){}
    done++;
-   if(done%10===0||done===targets.length){bar(done,targets.length,"دریافت صنایع",r.symbol);$("sectorProgress").textContent="به‌روزرسانی: "+fmt0(done)+"/"+fmt0(targets.length)+" موفق: "+fmt0(got);}
+   if(done%10===0||done===targets.length){bar(done,targets.length,"صنایع",r.symbol);$("sectorProgress").textContent=fmt0(done)+"/"+fmt0(targets.length)+" موفق: "+fmt0(got);}
   }
  }
  await Promise.all(Array.from({length:CONC},worker));
  if(btn)btn.disabled=false;
  hideBar();
- render();renderSectors();renderAccum();renderSignals();renderTop();
+ render();renderSectors();renderAccum();renderSignals();renderTop();renderLegal();
  status("صنایع: "+fmt0(got)+" از "+fmt0(targets.length),"success");
 }
 
@@ -2273,7 +2655,7 @@ function renderAccum(){
    <td class="num ${(r.net5??0)>=0?'pos':'neg'}">${fmt(r.net5,2)}</td>
    <td>${r.posDays}/${r.validDays||5}</td>
    <td>${(r.flags||[]).map(f=>'<span class="flag">'+esc(f)+'</span>').join("")}</td>
-  </tr>`;}).join(""):'<tr><td colspan="11" class="muted" style="padding:24px">با فیلتر فعلی چیزی نیست (فقط داده امروز).</td></tr>';
+  </tr>`;}).join(""):'<tr><td colspan="11" class="muted" style="padding:24px">با فیلتر فعلی چیزی نیست.</td></tr>';
  tb.querySelectorAll(".symbol").forEach(el=>{
   el.addEventListener("click",()=>{const r=results.find(x=>x.insCode===el.dataset.code);if(r){showCard(r,false);switchTab("scanner");}});});}
 
@@ -2282,10 +2664,10 @@ async function runValidation(){
  $("valSummaryCard").style.display="none";
  $("valProgress").textContent="در حال خواندن تاریخچه…";
  const scans=await getRecentScans(parseInt($("valScans").value)||10);
- if(!scans.length){$("valProgress").textContent="تاریخچه‌ای وجود ندارد.";return}
+ if(!scans.length){$("valProgress").textContent="تاریخچه نیست.";return}
  const now=new Date();
- const validScans=scans.filter(sc=>{const daysAgo=Math.floor((now-new Date(sc.timestamp))/864e5);return daysAgo>=1;});
- if(!validScans.length){$("valProgress").textContent="همه اسکن‌ها مال امروز هستند. فردا دوباره امتحان کن.";return;}
+ const validScans=scans.filter(sc=>{const d=Math.floor((now-new Date(sc.timestamp))/864e5);return d>=1;});
+ if(!validScans.length){$("valProgress").textContent="همه امروز است. فردا امتحان کن.";return;}
  const minScore=parseInt($("valMinScore").value)||4;
  const rows=[];let done=0;
  const mwSnap = await getMarketSnapshot();
@@ -2301,10 +2683,10 @@ async function runValidation(){
     rows.push({date:date.toLocaleDateString("fa-IR"),symbol:item.symbol,score:item.score,oldPrice,curPrice,ret,net:item.netToday});
    }catch(e){}
    done++;
-   if(done%5===0)$("valProgress").textContent="بررسی: "+fmt0(done)+" نماد";
+   if(done%5===0)$("valProgress").textContent="بررسی: "+fmt0(done);
    await sleep(60);}}
- $("valProgress").textContent="انجام شد: "+fmt0(rows.length)+" ردیف";
- if(!rows.length){tb.innerHTML='<tr><td colspan="7" class="muted" style="padding:24px">داده‌ای نیست.</td></tr>';return}
+ $("valProgress").textContent="انجام: "+fmt0(rows.length)+" ردیف";
+ if(!rows.length){tb.innerHTML='<tr><td colspan="7" class="muted" style="padding:24px">داده نیست.</td></tr>';return}
  const withRet=rows.filter(r=>r.ret!==null);
  const avgRet=withRet.length?withRet.reduce((s,r)=>s+r.ret,0)/withRet.length:null;
  const hitRate=withRet.length?withRet.filter(r=>r.ret>0).length/withRet.length*100:null;
@@ -2313,11 +2695,11 @@ async function runValidation(){
  const avgLossRet=loss.length?loss.reduce((s,r)=>s+r.ret,0)/loss.length:null;
  $("valSummaryCard").style.display="block";
  $("valSummary").innerHTML=
-  metric("تعداد مشاهدات",fmt0(rows.length))+
+  metric("مشاهدات",fmt0(rows.length))+
   metric("میانگین بازده",avgRet!==null?pct(avgRet):"—","",avgRet!==null?(avgRet>=0?"good":"bad"):"")+
   metric("نرخ برد",hitRate!==null?fmt(hitRate,1)+"%":"—","",hitRate!==null?(hitRate>=50?"good":"bad"):"")+
-  metric("میانگین سود برنده",avgWinRet!==null?pct(avgWinRet):"—","","good")+
-  metric("میانگین ضرر بازنده",avgLossRet!==null?pct(avgLossRet):"—","","bad");
+  metric("میانگین سود",avgWinRet!==null?pct(avgWinRet):"—","","good")+
+  metric("میانگین ضرر",avgLossRet!==null?pct(avgLossRet):"—","","bad");
  tb.innerHTML=rows.slice(0,200).map(r=>`
   <tr><td>${r.date}</td>
    <td class="symbol">${esc(r.symbol)}</td>
@@ -2345,17 +2727,19 @@ function downloadCSV(){
  const h=["نماد","نام","صنعت","امتیاز","Δ","تازگی","سیگنال امروز",
   "خالص امروز (م.ت)","Net/Value","ارزش (م.ت)","ارزش/دیروز","ارزش/میانگین۲۰",
   "سرانه خرید (م.ت)","سرانه فروش (م.ت)","نسبت سرانه","صف","ارزش صف (م.ت)","پرچم‌ها",
-  "سیگنال ۵","خالص ۵ (م.ت)","سرانه۵","قدرت۵","روز مثبت","استمرار","بازده ۵","ارزش بازار (همت)"];
+  "سیگنال ۵","خالص ۵ (م.ت)","سرانه۵","قدرت۵","روز مثبت","استمرار","بازده ۵","ارزش بازار (همت)",
+  "حقوقی روزانه","حقوقی استمرار","خالص حقوقی (B)","خرید حقوقی (B)","فروش حقوقی (B)","نسبت خرید حقوقی"];
  const rows=results.map(r=>[r.symbol,r.name,r.sector||"",r.score,r.rankChange??"",r.ageDays??"",
   r.liveSignal,r.netToday??"",r.netValueRatio??"",r.value??"",
   r.valueVsYesterday??"",r.valueVsAvg20??"",
   r.live?.buySav??"",r.live?.sellSav??"",r.buySellRatio??"",
   r.queue||"",r.queueStrength??"",(r.flags||[]).join("،"),
-  r.fiveSignal,r.net5??"",r.savane5??"",r.power5??"",r.posDays,r.sustain,r.ret5??"",r.marketCap??""]);
+  r.fiveSignal,r.net5??"",r.savane5??"",r.power5??"",r.posDays,r.sustain,r.ret5??"",r.marketCap??"",
+  r.legalDaily??"",r.legalSustain??"",r.live?.netLegal??"",r.live?.buyLegal??"",r.live?.sellLegal??"",r.live?.legalBuyRatio??""]);
  const csv="\uFEFF"+[h,...rows].map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");
  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
  const url=URL.createObjectURL(blob);const a=document.createElement("a");
- a.href=url;a.download="scanner_v592_"+Date.now()+".csv";a.click();
+ a.href=url;a.download="scanner_v597_"+Date.now()+".csv";a.click();
  setTimeout(()=>URL.revokeObjectURL(url),1000);}
 
 async function testHealth(){
@@ -2374,28 +2758,28 @@ async function diagFetch(){
  let code=raw;
  const sym=allSyms.find(s=>s.insCode===raw||norm(s.symbol)===norm(raw));
  if(sym)code=sym.insCode;
- $("diagOut").textContent="ClosingPriceInfo برای "+code+"…";
+ $("diagOut").textContent="ClosingPriceInfo…";
  try{const d=await getJSON("/ClosingPrice/GetClosingPriceInfo/"+code,0);$("diagOut").textContent=JSON.stringify(d,null,2);}catch(e){$("diagOut").textContent="خطا: "+e.message;}}
 async function diagBestLimits(){
  const raw=$("diagCode").value.trim();if(!raw)return;
  let code=raw;
  const sym=allSyms.find(s=>s.insCode===raw||norm(s.symbol)===norm(raw));
  if(sym)code=sym.insCode;
- $("diagOut").textContent="BestLimits برای "+code+"…";
+ $("diagOut").textContent="BestLimits…";
  try{const d=await getJSON("/BestLimits/"+code,0);$("diagOut").textContent=JSON.stringify(d,null,2);}catch(e){$("diagOut").textContent="خطا: "+e.message;}}
 async function diagMarketWatch(){
  const raw=$("diagCode").value.trim();if(!raw)return;
  let code=raw;
  const sym=allSyms.find(s=>s.insCode===raw||norm(s.symbol)===norm(raw));
  if(sym)code=sym.insCode;
- $("diagOut").textContent="MarketWatch برای "+code+"…";
- try{const map = await getMarketSnapshot(true);const item = map.get(String(code));$("diagOut").textContent = item ? JSON.stringify(item, null, 2) : "نماد در snapshot نیست";}catch(e){$("diagOut").textContent="خطا: "+e.message;}}
+ $("diagOut").textContent="MarketWatch…";
+ try{const map = await getMarketSnapshot(true);const item = map.get(String(code));$("diagOut").textContent = item ? JSON.stringify(item, null, 2) : "نماد نیست";}catch(e){$("diagOut").textContent="خطا: "+e.message;}}
 async function diagInstrumentInfo(){
  const raw=$("diagCode").value.trim();if(!raw)return;
  let code=raw;
  const sym=allSyms.find(s=>s.insCode===raw||norm(s.symbol)===norm(raw));
  if(sym)code=sym.insCode;
- $("diagOut").textContent="InstrumentInfo برای "+code+"…";
+ $("diagOut").textContent="InstrumentInfo…";
  try{const d=await getJSON("/Instrument/GetInstrumentInfo/"+code,0);
   const info = d?.instrumentInfo || d?.data || {};
   const zTitad = nz(readNum(info, ["zTitad","totalShares","sharesCount","baseVol"]));
@@ -2407,6 +2791,7 @@ function switchTab(name){
  document.querySelectorAll(".tab-panel").forEach(p=>p.classList.toggle("active",p.id==="panel-"+name));
  if(name==="signals")renderSignals();
  if(name==="top")renderTop();
+ if(name==="legal")renderLegal();
  if(name==="money")renderSmartMoney();
  if(name==="bigmoney")renderBigMoney();
  if(name==="battle")renderBattle();
@@ -2418,6 +2803,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>swit
 window.addEventListener("load",async()=>{
  loadSectorCache();
  loadSharesCache();
+ loadSigShare();
  try{await openDB();}catch(e){}
  await bootstrapSectorsFromDB();
  try{await loadHistCache();}catch(e){}
@@ -2430,7 +2816,7 @@ window.addEventListener("load",async()=>{
     if(!s.zTitad && sharesCache[s.insCode]) s.zTitad = sharesCache[s.insCode];
    });
    rebuildSymsView();
-   status("فهرست ذخیره‌شده: "+fmt0(allSyms.length)+" نماد قابل اسکن","success");
+   status("فهرست: "+fmt0(allSyms.length)+" نماد قابل اسکن","success");
   }else status("برای شروع، فهرست را دریافت کن.");
  }catch(e){status("برای شروع، فهرست را دریافت کن.");}
  try{const r=n(localStorage.getItem(LS_RATE));if(r&&r>0)$("usdRate").value=r;}catch(e){}
@@ -2441,7 +2827,7 @@ window.addEventListener("load",async()=>{
   }
  }catch(e){}
  try{
-  const savedTopLimit = localStorage.getItem("scanner_top_limit");
+  const savedTopLimit = localStorage.getItem(LS_TOP_LIMIT);
   if(savedTopLimit && $("topLimit")) $("topLimit").value = savedTopLimit;
  }catch(e){}
  try{
@@ -2459,7 +2845,6 @@ window.addEventListener("load",async()=>{
    if(localStorage.getItem("scanner_autoscan") === "1" &&
       !autoScanTimer && allSyms.length > 0 &&
       !scanning && !loading){
-    console.log("[autoscan] self-healing: restarting timer");
     startAutoScan();
    }
   }catch(e){}
