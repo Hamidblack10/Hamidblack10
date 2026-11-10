@@ -1256,16 +1256,27 @@ async function getLive(sym, mwSnap){
  const svol=nz(readNum(c,["sell_I_Volume","sellIVolume"]));
  const bc=nz(readNum(c,["buy_I_Count","buy_CountI","buyI_Count"]));
  const sc=nz(readNum(c,["sell_I_Count","sell_CountI","sellI_Count"]));
- const bn=nz(readNum(c,["buy_N_Value","buyNValue"]));
+  const bn=nz(readNum(c,["buy_N_Value","buyNValue"]));
  const sn=nz(readNum(c,["sell_N_Value","sellNValue"]));
+ const bn_vol=nz(readNum(c,["buy_N_Volume","buyNVolume"]));
+ const sn_vol=nz(readNum(c,["sell_N_Volume","sellNVolume"]));
  const bnc=nz(readNum(c,["buy_N_Count","buy_CountN","buyN_Count"]));
  const snc=nz(readNum(c,["sell_N_Count","sell_CountN","sellN_Count"]));
- const buyN_t = bn / 10;
- const sellN_t = sn / 10;
+
+ // اگر Value داشت → مستقیم، اگر نداشت → تخمین از Volume × Price
+ let buyN_t = 0, sellN_t = 0;
+ if(bn > 0 || sn > 0){
+  buyN_t = bn / 10;
+  sellN_t = sn / 10;
+ } else if((bn_vol > 0 || sn_vol > 0) && last > 0){
+  buyN_t = bn_vol * last / 10;
+  sellN_t = sn_vol * last / 10;
+ }
+
  const buyLegalB = buyN_t / 1e9;
  const sellLegalB = sellN_t / 1e9;
- const netLegalB = (bn - sn) / 10 / 1e9;
- const legalBuyRatio = (bn + sn > 0) ? bn / (bn + sn) : null;
+ const netLegalB = (buyN_t - sellN_t) / 1e9;
+ const legalBuyRatio = (buyN_t + sellN_t > 0) ? buyN_t / (buyN_t + sellN_t) : null;
  const legalBuySavB = (bnc > 0 && buyN_t > 0) ? (buyN_t / bnc) / 1e9 : null;
  const legalSellSavB = (snc > 0 && sellN_t > 0) ? (sellN_t / snc) / 1e9 : null;
  const legalPower = (legalBuySavB && legalSellSavB && legalSellSavB > 0) ? legalBuySavB / legalSellSavB : null;
@@ -2853,5 +2864,4 @@ window.addEventListener("load",async()=>{
 </script>
 </body>
 </html>
-
 
